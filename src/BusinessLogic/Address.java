@@ -11,8 +11,6 @@ package BusinessLogic;
  */
 public class Address
 {
-    
-    //SUUUUUUUUUP
     private int addressID;
     private String city;
     private String suburb;
