@@ -222,6 +222,8 @@ public class ManageRequests_Staff extends javax.swing.JFrame
     
     private void cmbViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbViewActionPerformed
     {//GEN-HEADEREND:event_cmbViewActionPerformed
+        ClearRequestDetailsTable();
+        
         switch (cmbView.getSelectedIndex())
         {
             case 0:
