@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
  */
 public class DataHandler
 {
+    // Testing testing
     static Connection con;
     static PreparedStatement pst;
     static Statement st;
