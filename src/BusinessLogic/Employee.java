@@ -9,7 +9,7 @@ package BusinessLogic;
  *
  * @author Nicky
  */
-public class Employee
+public abstract class Employee
 {    
     private String id;
     private String name;
@@ -88,6 +88,11 @@ public class Employee
     {
         this.login = login;
     }
+    
+    public Employee()
+    {
+        
+    }
 
     public Employee(String id, String name, String surname, String cellNo, String email, Address address, Login login)
     {
@@ -99,7 +104,4 @@ public class Employee
         this.address = address;
         this.login = login;
     }
-    
-    
-    
 }

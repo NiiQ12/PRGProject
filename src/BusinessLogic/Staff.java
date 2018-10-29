@@ -9,7 +9,6 @@ import DataAccess.DataHandler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -30,13 +29,7 @@ public class Staff extends Employee
     {
         this.department = department;
     }
-
-    public Staff(String staffID, Department department, String name, String surname, String cellNo, String email, Address address, Login login)
-    {
-        super(staffID, name, surname, cellNo, email, address, login);
-        this.department = department;
-    }
-
+    
     public static ArrayList<Staff> GetStaffFromDatabase() throws SQLException, ClassNotFoundException
     {
         ArrayList<Staff> staffMembers = new ArrayList<>();
@@ -76,5 +69,16 @@ public class Staff extends Employee
     public void UpdateStaffMember() throws ClassNotFoundException, SQLException
     {
         DataHandler.UpdateStaff(loggedInStaffID, this.department.getDepartmentID(), this.getName(), this.getSurname(), this.getCellNo(), this.getEmail(), this.getAddress().getAddressID(), this.getAddress().getCity(), this.getAddress().getSuburb(), this.getAddress().getStreet(), this.getAddress().getPort(), this.getLogin().getLoginID(), this.getLogin().getUsername(), this.getLogin().getPassword());
+    }
+
+    public Staff()
+    {
+        super();
+    }
+    
+    public Staff(String staffID, Department department, String name, String surname, String cellNo, String email, Address address, Login login)
+    {
+        super(staffID, name, surname, cellNo, email, address, login);
+        this.department = department;
     }
 }
