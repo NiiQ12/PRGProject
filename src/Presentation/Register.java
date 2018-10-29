@@ -351,7 +351,7 @@ public class Register extends javax.swing.JFrame
             {
                 Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             Login form = new Login();
             form.setVisible(true);
             this.setVisible(false);
@@ -361,22 +361,26 @@ public class Register extends javax.swing.JFrame
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
     {//GEN-HEADEREND:event_formWindowActivated
         panel.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.7f));
-        
-        try
-        {
-            List<String> departments = Department.GetDepartmentsFromDatabase();
 
-            for (int i = 0; i < departments.size(); i++)
+        if (cmbDepartment.getItemCount() == 0)
+        {
+            try
             {
-                cmbDepartment.addItem(departments.get(i));
+                List<String> departments = Department.GetDepartmentsFromDatabase();
+
+                for (int i = 0; i < departments.size(); i++)
+                {
+                    cmbDepartment.addItem(departments.get(i));
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_formWindowActivated
 
     /**
