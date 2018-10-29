@@ -23,7 +23,6 @@ import javax.swing.JOptionPane;
  */
 public class DataHandler
 {
-    //Hello from Nicky
     static Connection con;
     static PreparedStatement pst;
     static Statement st;
