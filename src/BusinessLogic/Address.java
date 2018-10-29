@@ -5,6 +5,9 @@
  */
 package BusinessLogic;
 
+import DataAccess.DataHandler;
+import java.sql.SQLException;
+
 /**
  *
  * @author Hendriko
@@ -76,6 +79,13 @@ public class Address
         this.port = port;
     }
 
+    public static int GetAddressID(String city, String suburb, String street, String port) throws SQLException, ClassNotFoundException
+    {
+        int addressID = DataHandler.GetAddressID(city, suburb, street, port);
+        
+        return addressID;
+    }
+    
     @Override
     public String toString()
     {

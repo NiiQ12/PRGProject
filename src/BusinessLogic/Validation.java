@@ -178,15 +178,19 @@ public class Validation
 
         for (int i = 0; i < street.length(); i++)
         {
-            if (!(Character.isLetter(street.charAt(i))))
+            if (!(Character.isLetterOrDigit(street.charAt(i))))
             {
                 count++;
+                if (street.charAt(i) == ' ')
+                {
+                    count--;
+                }
             }
         }
 
         if (count > 0)
         {
-            errors.add("Street can only contain letters");
+            errors.add("Street can only contain letters or numbers");
         }
     }
 

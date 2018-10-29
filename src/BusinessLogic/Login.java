@@ -96,6 +96,13 @@ public class Login
         return isAvailable;
     }
     
+    public static int GetLoginID(String username, String password) throws ClassNotFoundException, SQLException
+    {
+        int loginID = DataHandler.GetLoginID(username, password);
+        
+        return loginID;
+    }
+    
     @Override
     public String toString()
     {

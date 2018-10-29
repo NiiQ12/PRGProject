@@ -23,6 +23,11 @@ import javax.swing.JOptionPane;
 public class ManageAccount extends javax.swing.JFrame
 {
 
+    private String oldUsername = "";
+    private int addressID = 0;
+    private int loginID = 0;
+    private int count = 0;
+
     /**
      * Creates new form Register
      */
@@ -276,9 +281,6 @@ public class ManageAccount extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnUpdateAccountActionPerformed
         Validation.ClearErrors();
 
-        String staffID = txtID.getText();
-        Validation.IsValidStaffID(staffID);
-
         String name = txtName.getText();
         Validation.IsValidName(name);
 
@@ -316,8 +318,9 @@ public class ManageAccount extends javax.swing.JFrame
 
         try
         {
-            if (BusinessLogic.Login.CheckLogin(username))
+            if (!(txtUsername.getText().equals(oldUsername)))
             {
+                BusinessLogic.Login.CheckLogin(username);
                 errors.add("Username Has Already Been Taken");
             }
         } catch (SQLException ex)
@@ -338,13 +341,11 @@ public class ManageAccount extends javax.swing.JFrame
             JOptionPane.showMessageDialog(null, errorMessage, "Some Fields Are Incorrect", JOptionPane.WARNING_MESSAGE);
         } else
         {
-            Staff staff = new Staff(staffID, new Department(department, ""), name, surname, cellNo, email, new Address(0, city, suburb, street, port), new BusinessLogic.Login(0, username, password));
+            Staff staff = new Staff(txtID.getText(), new Department(department, ""), name, surname, cellNo, email, new Address(addressID, city, suburb, street, port), new BusinessLogic.Login(loginID, username, password));
 
             try
             {
-                //====================================================
-                staff.AddNewStaffMember();
-                //====================================================
+                staff.UpdateStaffMember();
             } catch (ClassNotFoundException ex)
             {
                 Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
@@ -352,7 +353,7 @@ public class ManageAccount extends javax.swing.JFrame
             {
                 Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             Login form = new Login();
             form.setVisible(true);
             this.setVisible(false);
@@ -362,21 +363,68 @@ public class ManageAccount extends javax.swing.JFrame
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
     {//GEN-HEADEREND:event_formWindowActivated
         panel.setBackground(new Color(0.0f, 0.0f, 0.0f, 0.7f));
-        
+
+        Staff staff = null;
+
         try
         {
-            List<String> departments = Department.GetDepartmentsFromDatabase();
-
-            for (int i = 0; i < departments.size(); i++)
-            {
-                cmbDepartment.addItem(departments.get(i));
-            }
+            staff = Staff.GetStaffFromDatabase(Staff.loggedInStaffID);
         } catch (SQLException ex)
         {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageAccount.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex)
         {
-            Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ManageAccount.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (cmbDepartment.getItemCount() == 0)
+        {
+            try
+            {
+                List<String> departments = Department.GetDepartmentsFromDatabase();
+
+                for (int i = 0; i < departments.size(); i++)
+                {
+                    cmbDepartment.addItem(departments.get(i));
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        if (staff != null)
+        {
+            if ((txtName.getText().isEmpty()) && (txtSurname.getText().isEmpty()) && (txtCellNo.getText().isEmpty()) && (txtEmail.getText().isEmpty()) && (txtUsername.getText().isEmpty()) && (txtPassword.getText().isEmpty()) && (txtCity.getText().isEmpty()) && (txtSuburb.getText().isEmpty()) && (txtStreet.getText().isEmpty()) && (txtPort.getText().isEmpty()))
+            {
+
+                oldUsername = staff.getLogin().getUsername();
+                loginID = staff.getLogin().getLoginID();
+                addressID = staff.getAddress().getAddressID();
+
+                for (int i = 0; i < cmbDepartment.getItemCount(); i++)
+                {
+                    if (staff.getDepartment().getDescription().equals(cmbDepartment.getItemAt(i)))
+                    {
+                        cmbDepartment.setSelectedIndex(i);
+                    }
+                }
+
+                txtID.setText(staff.getId());
+                txtName.setText(staff.getName());
+                txtSurname.setText(staff.getSurname());
+                txtCellNo.setText(staff.getCellNo());
+                txtEmail.setText(staff.getEmail());
+                txtUsername.setText(staff.getLogin().getUsername());
+                txtPassword.setText(staff.getLogin().getPassword());
+                txtCity.setText(staff.getAddress().getCity());
+                txtSuburb.setText(staff.getAddress().getSuburb());
+                txtStreet.setText(staff.getAddress().getStreet());
+                txtPort.setText(staff.getAddress().getPort());
+            }
         }
     }//GEN-LAST:event_formWindowActivated
 

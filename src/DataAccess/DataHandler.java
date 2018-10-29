@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
  */
 public class DataHandler
 {
+
     // Testing testing testing
     static Connection con;
     static PreparedStatement pst;
@@ -64,7 +65,7 @@ public class DataHandler
             {
                 lst.add(rs.getString(1));
                 lst.add(EmployeeType.Admin);
-            } 
+            }
         }
 
         return lst;
@@ -84,6 +85,23 @@ public class DataHandler
         {
             return false;
         }
+    }
+    
+    public static int GetLoginID(String username, String password) throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+        
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT LoginID FROM login WHERE Username = '"+ username +"' AND Password = '"+ password +"'");
+        
+        int loginID = 0;
+        
+        if (rs.next())
+        {
+            loginID = rs.getInt("LoginID");
+        }
+        
+        return loginID;
     }
     // </editor-fold>
 
@@ -163,8 +181,6 @@ public class DataHandler
         }
 
         return rs;
-
-        // Close connection in class method
     }
 
     public static ResultSet GetLastStationeryCode() throws ClassNotFoundException, SQLException
@@ -283,7 +299,48 @@ public class DataHandler
         rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID");
 
         return rs;
-        // Close connection in class method
+    }
+
+    public static ResultSet GetStaff(String id) throws SQLException, ClassNotFoundException
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID WHERE staff.StaffID = '" + id + "'");
+
+        return rs;
+    }
+
+    public static void UpdateStaff(String staffID, int departmentID, String name, String surname, String cellNo, String email, int addressID, String city, String suburb, String street, String port, int loginID, String username, String password) throws SQLException, ClassNotFoundException
+    {
+        ConnectToDatabase();
+
+        pst = con.prepareStatement("UPDATE staff SET DepartmentID = ?, Name = ?, Surname = ?, CellNo = ?, Email = ? WHERE StaffID = ?");
+        pst.setInt(1, departmentID);
+        pst.setString(2, name);
+        pst.setString(3, surname);
+        pst.setString(4, cellNo);
+        pst.setString(5, email);
+        pst.setString(6, staffID);
+        pst.executeUpdate();
+
+        pst = con.prepareStatement("UPDATE address SET City = ?, Suburb = ?, Street = ?, Port = ? WHERE AddressID = ?");
+        pst.setString(1, city);
+        pst.setString(2, suburb);
+        pst.setString(3, street);
+        pst.setString(4, port);
+        pst.setInt(5, addressID);
+        pst.executeUpdate();
+
+        pst = con.prepareStatement("UPDATE login SET Username = ?, Password = ? WHERE LoginID = ?");
+        pst.setString(1, username);
+        pst.setString(2, password);
+        pst.setInt(3, loginID);
+        pst.executeUpdate();
+
+        JOptionPane.showMessageDialog(null, "Profile successfully updated!", "Success!", JOptionPane.INFORMATION_MESSAGE);
+
+        CloseConnection();
     }
     // </editor-fold>
 
@@ -299,6 +356,7 @@ public class DataHandler
     }
 
     // </editor-fold>
+    
     // <editor-fold desc="Requests">   
     public static void AddRequest(String staffID, Date requestDate) throws SQLException, ClassNotFoundException // REGISTER
     {
@@ -327,4 +385,24 @@ public class DataHandler
         pst.executeUpdate();
     }
     // </editor-fold>
+
+    // <editor-fold desc="Address"> 
+    public static int GetAddressID(String city, String suburb, String street, String port) throws SQLException, ClassNotFoundException
+    {
+        ConnectToDatabase();
+        
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT AddressID FROM address WHERE City = '" + city + "' AND Suburb = '" + suburb + "' AND Street = '" + street + "' AND Port = '" + port + "'");
+
+        int addressID = 0;
+
+        if (rs.next())
+        {
+            addressID = rs.getInt("AddressID");
+        }
+        
+        return addressID;
+    }
+
+    // </editor-fold> 
 }
