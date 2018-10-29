@@ -413,9 +413,7 @@ public class RequestStationery extends javax.swing.JFrame
                 requestDetails.add(new RequestDetail(stationery.getStationeryCode(), stationery.getQuantity()));
             }
             
-            java.util.Date today = new java.util.Date();
-            
-            Request request = new Request(Staff.loggedInStaffID, new Date(today.getDate()), requestDetails);
+            Request request = new Request(Staff.loggedInStaffID, requestDetails);
             
             try
             {

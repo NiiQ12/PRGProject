@@ -9,6 +9,7 @@ import DataAccess.DataHandler;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -119,10 +120,14 @@ public class Request
         
     }
 
-    public Request(String staffID, Date requestDate, List<RequestDetail> requestDetails)
+    public Request(String staffID, List<RequestDetail> requestDetails)
     {
         this.staffID = staffID;
-        this.requestDate = requestDate;
+        
+        long millis = System.currentTimeMillis();        
+        Date date = new Date(millis);
+        
+        this.requestDate = date;
         this.requestDetails = requestDetails;
     }
     
