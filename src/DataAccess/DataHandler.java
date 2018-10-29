@@ -6,6 +6,8 @@
 package DataAccess;
 
 import BusinessLogic.EmployeeType;
+import BusinessLogic.RequestType;
+import BusinessLogic.Staff;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -23,8 +25,6 @@ import javax.swing.JOptionPane;
  */
 public class DataHandler
 {
-
-    // Testing testing testing
     static Connection con;
     static PreparedStatement pst;
     static Statement st;
@@ -383,6 +383,50 @@ public class DataHandler
         pst.setInt(2, stationeryCode);
         pst.setInt(3, quantity);
         pst.executeUpdate();
+    }
+
+    public static ResultSet GetRequestDetails(RequestType rt) throws SQLException, ClassNotFoundException // REGISTER
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+
+        switch (rt)
+        {
+            case All:
+                rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = " + Staff.loggedInStaffID);
+                break;
+            case Completed:
+                rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = '" + Staff.loggedInStaffID + "' AND request.accepted IS NOT NULL");
+                break;
+            case Uncompleted:
+                rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = '" + Staff.loggedInStaffID + "' AND request.accepted IS NULL");
+                break;
+        }
+
+        return rs;
+    }
+
+    public static ResultSet GetRequests(RequestType rt) throws SQLException, ClassNotFoundException // REGISTER
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+
+        switch (rt)
+        {
+            case All:
+                rs = st.executeQuery("SELECT * FROM request WHERE StaffID = " + Staff.loggedInStaffID);
+                break;
+            case Completed:
+                rs = st.executeQuery("SELECT * FROM request WHERE StaffID = '" + Staff.loggedInStaffID + "' AND accepted IS NOT NULL");
+                break;
+            case Uncompleted:
+                rs = st.executeQuery("SELECT * FROM request WHERE StaffID = '" + Staff.loggedInStaffID + "' AND accepted IS NULL");
+                break;
+        }
+
+        return rs;
     }
     // </editor-fold>
 

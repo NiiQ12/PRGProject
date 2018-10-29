@@ -9,6 +9,7 @@ import DataAccess.DataHandler;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -113,16 +114,36 @@ public class Request
         
         DataHandler.CloseConnection();
     }
+    
+    public static List<Request> GetRequests(RequestType rt) throws SQLException, ClassNotFoundException
+    {
+        List<Request> requests = new ArrayList<>();
+        
+        ResultSet rs = DataHandler.GetRequests(rt);
+        
+        List<RequestDetail> requestDetails = RequestDetail.GetRequestDetails(rt);
+        
+        while (rs.next())
+        {            
+            requests.add(new Request(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDate(5), rs.getBoolean(6), requestDetails));
+        }
+        
+        return requests;
+    }
 
     public Request()
     {
         
     }
 
-    public Request(String staffID, Date requestDate, List<RequestDetail> requestDetails)
+    public Request(String staffID, List<RequestDetail> requestDetails)
     {
         this.staffID = staffID;
-        this.requestDate = requestDate;
+        
+        long millis = System.currentTimeMillis();        
+        Date date = new Date(millis);
+        
+        this.requestDate = date;
         this.requestDetails = requestDetails;
     }
     
