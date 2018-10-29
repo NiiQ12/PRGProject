@@ -17,8 +17,7 @@ import javax.swing.JOptionPane;
  */
 public class Staff extends Employee
 {
-
-    public static String loggedInStaffID;
+    public static String loggedInStaffID = "";
 
     private Department department;
 

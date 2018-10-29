@@ -11,7 +11,7 @@ package BusinessLogic;
  */
 public class Administrator extends Employee
 {
-    public static String loggedInAdminID;
+    public static String loggedInAdminID = "";
     
     public Administrator(String id, String name, String surname, String cellNo, String email, Address address, Login login)
     {

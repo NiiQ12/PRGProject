@@ -125,7 +125,7 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         jScrollPane2.setViewportView(tblRequests);
 
         getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(30, 110, 590, 140);
+        jScrollPane2.setBounds(20, 110, 600, 140);
 
         tblRequestDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
@@ -162,7 +162,7 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         jScrollPane1.setViewportView(tblRequestDetails);
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(30, 260, 590, 140);
+        jScrollPane1.setBounds(20, 260, 600, 140);
 
         btnRejectRequest.setText("REJECT REQUEST");
         btnRejectRequest.setActionCommand("REMOVE ITEM");
@@ -175,7 +175,7 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             }
         });
         getContentPane().add(btnRejectRequest);
-        btnRejectRequest.setBounds(30, 410, 180, 35);
+        btnRejectRequest.setBounds(20, 410, 180, 35);
 
         btnAcceptRequest.setActionCommand("REMOVE ITEM");
         btnAcceptRequest.setLabel("ACCEPT REQUEST");
