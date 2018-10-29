@@ -128,7 +128,20 @@ public class Request
             requests.add(new Request(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDate(5), rs.getBoolean(6), requestDetails));
         }
         
-        return requests;
+        DataHandler.CloseConnection();
+        
+        return requests;        
+    }
+    
+    public void CancelRequest() throws SQLException, ClassNotFoundException
+    {
+        for (RequestDetail requestDetail : this.requestDetails)
+        {
+            System.out.println(requestDetail.getStationeryCode());
+            requestDetail.UpdateCancelledRequestDetailQuantity(requestDetail.getId(), requestDetail.getQuantity());
+        }
+        
+        DataHandler.DeleteRequest(this.requestID);
     }
 
     public Request()

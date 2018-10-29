@@ -37,12 +37,12 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         jLabel3 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblRequests = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
+        tblRequests = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
         tblRequestDetails = new javax.swing.JTable();
-        btnRemoveItem = new javax.swing.JButton();
-        btnClearItems = new javax.swing.JButton();
+        btnRejectRequest = new javax.swing.JButton();
+        btnAcceptRequest = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -90,17 +90,17 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             },
             new String []
             {
-                "Code", "Category", "Description", "Quantity"
+                "RequestID", "AdminID", "RequestDate", "ReceiveDate", "Accepted"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -113,12 +113,19 @@ public class ManageRequests_Admin extends javax.swing.JFrame
                 return canEdit [columnIndex];
             }
         });
-        tblRequests.setName("tblRequests"); // NOI18N
+        tblRequests.setName("tblStationery"); // NOI18N
         tblRequests.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(tblRequests);
+        tblRequests.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                tblRequestsMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblRequests);
 
-        getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(30, 260, 590, 140);
+        getContentPane().add(jScrollPane2);
+        jScrollPane2.setBounds(30, 110, 590, 140);
 
         tblRequestDetails.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
@@ -127,17 +134,17 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             },
             new String []
             {
-                "Code", "Category", "Description", "Quantity"
+                "RequestID", "Code", "Category", "Description", "Quantity"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -150,37 +157,38 @@ public class ManageRequests_Admin extends javax.swing.JFrame
                 return canEdit [columnIndex];
             }
         });
-        tblRequestDetails.setName("tblStationery"); // NOI18N
+        tblRequestDetails.setName("tblRequestDetails"); // NOI18N
         tblRequestDetails.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane2.setViewportView(tblRequestDetails);
+        jScrollPane1.setViewportView(tblRequestDetails);
 
-        getContentPane().add(jScrollPane2);
-        jScrollPane2.setBounds(30, 110, 590, 140);
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(30, 260, 590, 140);
 
-        btnRemoveItem.setActionCommand("REMOVE ITEM");
-        btnRemoveItem.setLabel("ACCEPT REQUEST");
-        btnRemoveItem.setName("btnAcceptRequest"); // NOI18N
-        btnRemoveItem.addActionListener(new java.awt.event.ActionListener()
+        btnRejectRequest.setText("REJECT REQUEST");
+        btnRejectRequest.setActionCommand("REMOVE ITEM");
+        btnRejectRequest.setName("btnRejectRequest"); // NOI18N
+        btnRejectRequest.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                btnRemoveItemActionPerformed(evt);
+                btnRejectRequestActionPerformed(evt);
             }
         });
-        getContentPane().add(btnRemoveItem);
-        btnRemoveItem.setBounds(250, 410, 180, 35);
+        getContentPane().add(btnRejectRequest);
+        btnRejectRequest.setBounds(30, 410, 180, 35);
 
-        btnClearItems.setLabel("X");
-        btnClearItems.setName("btnCancelRequest"); // NOI18N
-        btnClearItems.addActionListener(new java.awt.event.ActionListener()
+        btnAcceptRequest.setActionCommand("REMOVE ITEM");
+        btnAcceptRequest.setLabel("ACCEPT REQUEST");
+        btnAcceptRequest.setName("btnAcceptRequest"); // NOI18N
+        btnAcceptRequest.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                btnClearItemsActionPerformed(evt);
+                btnAcceptRequestActionPerformed(evt);
             }
         });
-        getContentPane().add(btnClearItems);
-        btnClearItems.setBounds(30, 410, 40, 35);
+        getContentPane().add(btnAcceptRequest);
+        btnAcceptRequest.setBounds(440, 410, 180, 35);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BG.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
@@ -202,15 +210,20 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRemoveItemActionPerformed
-    {//GEN-HEADEREND:event_btnRemoveItemActionPerformed
+    private void btnRejectRequestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRejectRequestActionPerformed
+    {//GEN-HEADEREND:event_btnRejectRequestActionPerformed
 
-    }//GEN-LAST:event_btnRemoveItemActionPerformed
+    }//GEN-LAST:event_btnRejectRequestActionPerformed
 
-    private void btnClearItemsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClearItemsActionPerformed
-    {//GEN-HEADEREND:event_btnClearItemsActionPerformed
-       
-    }//GEN-LAST:event_btnClearItemsActionPerformed
+    private void tblRequestsMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_tblRequestsMouseClicked
+    {//GEN-HEADEREND:event_tblRequestsMouseClicked
+        
+    }//GEN-LAST:event_tblRequestsMouseClicked
+
+    private void btnAcceptRequestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAcceptRequestActionPerformed
+    {//GEN-HEADEREND:event_btnAcceptRequestActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAcceptRequestActionPerformed
 
     /**
      * @param args the command line arguments
@@ -265,9 +278,9 @@ public class ManageRequests_Admin extends javax.swing.JFrame
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAcceptRequest;
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnClearItems;
-    private javax.swing.JButton btnRemoveItem;
+    private javax.swing.JButton btnRejectRequest;
     private javax.swing.JComboBox<String> cmbSort;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

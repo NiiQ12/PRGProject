@@ -92,6 +92,11 @@ public class RequestDetail
         return requestDetails;
     }
     
+    public void UpdateCancelledRequestDetailQuantity(int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
+    {
+        DataHandler.UpdateCancelledRequestDetailQuantity(this.stationeryCode, this.quantity);
+    }
+    
     public RequestDetail()
     {
         

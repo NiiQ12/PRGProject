@@ -256,7 +256,52 @@ public class ManageRequests_Staff extends javax.swing.JFrame
 
     private void btnCancelRequestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnCancelRequestActionPerformed
     {//GEN-HEADEREND:event_btnCancelRequestActionPerformed
-
+        int rowIndex = tblRequests.getSelectedRow();
+        
+        if (rowIndex >= 0)
+        {
+            if (tblRequests.getValueAt(rowIndex, 1) == null)
+            {
+                int requestID = (int) tblRequests.getValueAt(rowIndex, 0);
+                
+                int answer = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel request " + requestID + "?");
+                
+                if (answer == JOptionPane.OK_OPTION)
+                {
+                    try
+                    {
+                        Request requestToCancel = new Request();
+                        
+                        for (Request request : requests)
+                        {
+                            if (request.getRequestID() == requestID)
+                            {
+                                requestToCancel = request;
+                            }
+                        }
+                        
+                        requestToCancel.setRequestDetails(requestDetails);
+                        
+                        requestToCancel.CancelRequest();
+                        
+                        SetRequestsTableValues();                        
+                        ClearRequestDetailsTable();
+                    } catch (SQLException ex)
+                    {
+                        Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex)
+                    {
+                        Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "This request has already been completed!");
+            }
+        } else
+        {
+            JOptionPane.showMessageDialog(null, "Select a request to be cancelled!");
+        }
     }//GEN-LAST:event_btnCancelRequestActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
@@ -351,6 +396,12 @@ public class ManageRequests_Staff extends javax.swing.JFrame
             
             model.addRow(rowData);
         }
+    }
+    
+    private void ClearRequestDetailsTable()
+    {
+        DefaultTableModel model = (DefaultTableModel) tblRequestDetails.getModel();
+        model.setRowCount(0);
     }
     
     /**

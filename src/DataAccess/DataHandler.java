@@ -428,6 +428,33 @@ public class DataHandler
 
         return rs;
     }
+    
+    public static void UpdateCancelledRequestDetailQuantity(int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
+    {
+        ConnectToDatabase();
+        
+        pst = con.prepareStatement("UPDATE stationery SET Stock = Stock + ? WHERE StationeryCode = ?");
+        pst.setInt(1, quantity);
+        pst.setInt(2, stationeryCode);
+        pst.executeUpdate();
+
+        CloseConnection();
+    }
+
+    public static void DeleteRequest(int requestID) throws SQLException, ClassNotFoundException // REGISTER
+    {
+        ConnectToDatabase();
+        
+        pst = con.prepareStatement("DELETE FROM requestDetails WHERE RequestID = ?");
+        pst.setInt(1, requestID);
+        pst.executeUpdate();
+
+        pst = con.prepareStatement("DELETE FROM request WHERE RequestID = ?");
+        pst.setInt(1, requestID);
+        pst.executeUpdate();
+
+        CloseConnection();
+    }
     // </editor-fold>
 
     // <editor-fold desc="Address"> 
