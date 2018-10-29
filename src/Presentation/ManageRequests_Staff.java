@@ -5,7 +5,14 @@
  */
 package Presentation;
 
+import BusinessLogic.Request;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,6 +28,8 @@ public class ManageRequests_Staff extends javax.swing.JFrame
     {
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        requests = new ArrayList<>();
     }
 
     /**
@@ -33,7 +42,7 @@ public class ManageRequests_Staff extends javax.swing.JFrame
     private void initComponents()
     {
 
-        cmbSort = new javax.swing.JComboBox<>();
+        cmbView = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
@@ -47,18 +56,25 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(650, 500));
         setSize(new java.awt.Dimension(650, 500));
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowActivated(java.awt.event.WindowEvent evt)
+            {
+                formWindowActivated(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
-        cmbSort.setName("cmbStationery"); // NOI18N
-        cmbSort.addActionListener(new java.awt.event.ActionListener()
+        cmbView.setName("cmbView"); // NOI18N
+        cmbView.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                cmbSortActionPerformed(evt);
+                cmbViewActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbSort);
-        cmbSort.setBounds(230, 80, 260, 20);
+        getContentPane().add(cmbView);
+        cmbView.setBounds(230, 80, 260, 20);
 
         jLabel3.setText("VIEW :");
         jLabel3.setName(""); // NOI18N
@@ -89,13 +105,13 @@ public class ManageRequests_Staff extends javax.swing.JFrame
             },
             new String []
             {
-                "Code", "Category", "Description", "Quantity"
+                "RequestID", "Code", "Category", "Description", "Quantity"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
 
             public Class getColumnClass(int columnIndex)
@@ -105,6 +121,15 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         });
         tblRequestDetails.setName("tblRequestDetails"); // NOI18N
         jScrollPane1.setViewportView(tblRequestDetails);
+        if (tblRequestDetails.getColumnModel().getColumnCount() > 0)
+        {
+            tblRequestDetails.getColumnModel().getColumn(0).setMinWidth(100);
+            tblRequestDetails.getColumnModel().getColumn(0).setMaxWidth(100);
+            tblRequestDetails.getColumnModel().getColumn(1).setMinWidth(100);
+            tblRequestDetails.getColumnModel().getColumn(1).setMaxWidth(100);
+            tblRequestDetails.getColumnModel().getColumn(4).setMinWidth(100);
+            tblRequestDetails.getColumnModel().getColumn(4).setMaxWidth(100);
+        }
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(30, 260, 590, 140);
@@ -116,13 +141,13 @@ public class ManageRequests_Staff extends javax.swing.JFrame
             },
             new String []
             {
-                "Code", "Category", "Description", "Quantity"
+                "RequestID", "AdminID", "RequestDate", "ReceiveDate", "Accepted"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
 
             public Class getColumnClass(int columnIndex)
@@ -132,12 +157,18 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         });
         tblRequests.setName("tblStationery"); // NOI18N
         jScrollPane2.setViewportView(tblRequests);
+        if (tblRequests.getColumnModel().getColumnCount() > 0)
+        {
+            tblRequests.getColumnModel().getColumn(0).setMinWidth(100);
+            tblRequests.getColumnModel().getColumn(0).setMaxWidth(100);
+            tblRequests.getColumnModel().getColumn(4).setMinWidth(100);
+            tblRequests.getColumnModel().getColumn(4).setMaxWidth(100);
+        }
 
         getContentPane().add(jScrollPane2);
         jScrollPane2.setBounds(30, 110, 590, 140);
 
         btnCancelRequest.setText("CANCEL REQUEST");
-        btnCancelRequest.setActionCommand("CANCEL REQUEST");
         btnCancelRequest.setName("btnCancelRequest"); // NOI18N
         btnCancelRequest.addActionListener(new java.awt.event.ActionListener()
         {
@@ -157,10 +188,10 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cmbSortActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbSortActionPerformed
-    {//GEN-HEADEREND:event_cmbSortActionPerformed
+    private void cmbViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbViewActionPerformed
+    {//GEN-HEADEREND:event_cmbViewActionPerformed
         
-    }//GEN-LAST:event_cmbSortActionPerformed
+    }//GEN-LAST:event_cmbViewActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackActionPerformed
     {//GEN-HEADEREND:event_btnBackActionPerformed
@@ -174,6 +205,49 @@ public class ManageRequests_Staff extends javax.swing.JFrame
 
     }//GEN-LAST:event_btnCancelRequestActionPerformed
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
+    {//GEN-HEADEREND:event_formWindowActivated
+        cmbView.removeAllItems();
+        
+        cmbView.addItem("ALL REQUESTS");    
+        cmbView.addItem("COMPLETED REQUESTS");   
+        cmbView.addItem("UNCOMPLETED REQUESTS");  
+        
+        try
+        {
+            SetRequestsTableValues();
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowActivated
+
+    List<Request> requests; 
+    
+    private void SetRequestsTableValues() throws SQLException, ClassNotFoundException
+    {
+        requests = Request.GetRequests();
+        
+        DefaultTableModel model = (DefaultTableModel) tblRequests.getModel();
+        model.setRowCount(0);
+        
+        Object[] rowData = new Object[5];
+        
+        for (int i = 0; i < requests.size(); i++)
+        {
+            rowData[0] = requests.get(i).getRequestID();
+            rowData[1] = requests.get(i).getAdminID();
+            rowData[2] = requests.get(i).getRequestDate();
+            rowData[3] = requests.get(i).getReceiveDate();
+            rowData[4] = requests.get(i).isRequestAccepted();
+            
+            model.addRow(rowData);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -229,7 +303,7 @@ public class ManageRequests_Staff extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCancelRequest;
-    private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JComboBox<String> cmbView;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;

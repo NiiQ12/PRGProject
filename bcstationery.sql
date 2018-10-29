@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 28, 2018 at 05:43 PM
+-- Generation Time: Oct 29, 2018 at 01:35 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -221,7 +221,7 @@ INSERT INTO `orderdetails` (`OrderID`, `StationeryCode`, `Quantity`) VALUES
 CREATE TABLE `request` (
   `RequestID` int(11) NOT NULL,
   `StaffID` varchar(13) NOT NULL,
-  `AdministratorID` varchar(13) NOT NULL,
+  `AdministratorID` varchar(13) DEFAULT NULL,
   `RequestDate` date NOT NULL,
   `ReceiveDate` date DEFAULT NULL,
   `accepted` bit(1) DEFAULT NULL

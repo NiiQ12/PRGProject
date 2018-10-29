@@ -6,6 +6,7 @@
 package DataAccess;
 
 import BusinessLogic.EmployeeType;
+import BusinessLogic.Staff;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -324,6 +325,26 @@ public class DataHandler
         pst.setInt(2, stationeryCode);
         pst.setInt(3, quantity);
         pst.executeUpdate();
+    }
+    
+    public static ResultSet GetRequestDetails() throws SQLException, ClassNotFoundException // REGISTER
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = " + Staff.loggedInStaffID);
+        
+        return rs;
+    }
+    
+    public static ResultSet GetRequests() throws SQLException, ClassNotFoundException // REGISTER
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT * FROM request WHERE StaffID = " + Staff.loggedInStaffID);
+        
+        return rs;
     }
     // </editor-fold>
 }
