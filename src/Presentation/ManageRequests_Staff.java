@@ -6,6 +6,8 @@
 package Presentation;
 
 import BusinessLogic.Request;
+import BusinessLogic.RequestDetail;
+import BusinessLogic.RequestType;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         this.setLocationRelativeTo(null);
         
         requests = new ArrayList<>();
+        requestDetails = new ArrayList<>();
     }
 
     /**
@@ -113,13 +116,23 @@ public class ManageRequests_Staff extends javax.swing.JFrame
             {
                 java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex)
             {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
         });
         tblRequestDetails.setName("tblRequestDetails"); // NOI18N
+        tblRequestDetails.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tblRequestDetails);
         if (tblRequestDetails.getColumnModel().getColumnCount() > 0)
         {
@@ -149,13 +162,30 @@ public class ManageRequests_Staff extends javax.swing.JFrame
             {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex)
             {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
         });
         tblRequests.setName("tblStationery"); // NOI18N
+        tblRequests.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblRequests.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                tblRequestsMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tblRequests);
         if (tblRequests.getColumnModel().getColumnCount() > 0)
         {
@@ -188,9 +218,33 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    RequestType rt = RequestType.All;
+    
     private void cmbViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbViewActionPerformed
     {//GEN-HEADEREND:event_cmbViewActionPerformed
+        switch (cmbView.getSelectedIndex())
+        {
+            case 0:
+                rt = RequestType.All;
+                break;
+            case 1:
+                rt = RequestType.Completed;
+                break;
+            case 2:
+                rt = RequestType.Uncompleted;
+                break;
+        }
         
+        try
+        {
+            SetRequestsTableValues();
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_cmbViewActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackActionPerformed
@@ -225,11 +279,28 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         }
     }//GEN-LAST:event_formWindowActivated
 
+    private void tblRequestsMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_tblRequestsMouseClicked
+    {//GEN-HEADEREND:event_tblRequestsMouseClicked
+        if (tblRequests.getSelectedRow() >= 0)
+        {
+            try
+            {
+                SetRequestDetailsTableValues();
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }     
+    }//GEN-LAST:event_tblRequestsMouseClicked
+
     List<Request> requests; 
     
     private void SetRequestsTableValues() throws SQLException, ClassNotFoundException
     {
-        requests = Request.GetRequests();
+        requests = Request.GetRequests(rt);
         
         DefaultTableModel model = (DefaultTableModel) tblRequests.getModel();
         model.setRowCount(0);
@@ -243,6 +314,40 @@ public class ManageRequests_Staff extends javax.swing.JFrame
             rowData[2] = requests.get(i).getRequestDate();
             rowData[3] = requests.get(i).getReceiveDate();
             rowData[4] = requests.get(i).isRequestAccepted();
+            
+            model.addRow(rowData);
+        }
+    }
+    
+    List<RequestDetail> requestDetails; 
+    
+    private void SetRequestDetailsTableValues() throws SQLException, ClassNotFoundException
+    {
+        requestDetails.clear();
+        
+        int rowIndex = tblRequests.getSelectedRow();
+        int requestID = requests.get(rowIndex).getRequestID();
+        
+        for (RequestDetail requestDetail : requests.get(rowIndex).getRequestDetails())
+        {
+            if (requestDetail.getId() == requestID)
+            {
+                requestDetails.add(requestDetail);
+            }
+        }
+        
+        DefaultTableModel model = (DefaultTableModel) tblRequestDetails.getModel();
+        model.setRowCount(0);
+        
+        Object[] rowData = new Object[5];
+        
+        for (int i = 0; i < requestDetails.size(); i++)
+        {
+            rowData[0] = requestDetails.get(i).getId();
+            rowData[1] = requestDetails.get(i).getStationeryCode();
+            rowData[2] = requestDetails.get(i).getCategory();
+            rowData[3] = requestDetails.get(i).getDescription();
+            rowData[4] = requestDetails.get(i).getQuantity();
             
             model.addRow(rowData);
         }

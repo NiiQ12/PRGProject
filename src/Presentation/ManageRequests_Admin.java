@@ -98,13 +98,23 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex)
             {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
         });
         tblRequests.setName("tblRequests"); // NOI18N
+        tblRequests.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tblRequests);
 
         getContentPane().add(jScrollPane1);
@@ -125,13 +135,23 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex)
             {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
         });
         tblRequestDetails.setName("tblStationery"); // NOI18N
+        tblRequestDetails.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane2.setViewportView(tblRequestDetails);
 
         getContentPane().add(jScrollPane2);

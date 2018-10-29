@@ -78,11 +78,11 @@ public class RequestDetail
         DataHandler.AddRequestDetail(requestID, this.stationeryCode, this.quantity);
     }
     
-    public static List<RequestDetail> GetRequestDetails() throws SQLException, ClassNotFoundException
+    public static List<RequestDetail> GetRequestDetails(RequestType rt) throws SQLException, ClassNotFoundException
     {
         List<RequestDetail> requestDetails = new ArrayList<>();
         
-        ResultSet rs = DataHandler.GetRequestDetails();
+        ResultSet rs = DataHandler.GetRequestDetails(rt);
         
         while (rs.next())
         {            

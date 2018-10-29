@@ -115,13 +115,13 @@ public class Request
         DataHandler.CloseConnection();
     }
     
-    public static List<Request> GetRequests() throws SQLException, ClassNotFoundException
+    public static List<Request> GetRequests(RequestType rt) throws SQLException, ClassNotFoundException
     {
         List<Request> requests = new ArrayList<>();
         
-        ResultSet rs = DataHandler.GetRequests();
+        ResultSet rs = DataHandler.GetRequests(rt);
         
-        List<RequestDetail> requestDetails = RequestDetail.GetRequestDetails();
+        List<RequestDetail> requestDetails = RequestDetail.GetRequestDetails(rt);
         
         while (rs.next())
         {            
