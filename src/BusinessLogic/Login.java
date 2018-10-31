@@ -70,24 +70,25 @@ public class Login
         if (lst.isEmpty())
         {
             JOptionPane.showMessageDialog(null, "Invalid login details!");
-            
+
             isValidLogin = false;
         } else
         {
             EmployeeType et = (EmployeeType) lst.get(1);
 
             isValidLogin = true;
-            
+
             switch (et)
             {
                 case Staff:
-                    Staff.loggedInStaffID = lst.get(0).toString();
-
                     if (lst.get(2).equals(false))
                     {
                         JOptionPane.showMessageDialog(null, "This account has not been registered by an admin!");
-                        
+
                         isValidLogin = false;
+                    } else
+                    {
+                        Staff.loggedInStaffID = lst.get(0).toString();
                     }
                     break;
                 case Admin:
@@ -124,7 +125,7 @@ public class Login
         this.password = password;
         this.registered = registered;
     }
-        
+
     @Override
     public String toString()
     {

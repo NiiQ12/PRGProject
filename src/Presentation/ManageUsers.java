@@ -179,13 +179,16 @@ public class ManageUsers extends javax.swing.JFrame
 
     private void btnRegisterUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRegisterUserActionPerformed
     {//GEN-HEADEREND:event_btnRegisterUserActionPerformed
-        if (tblStaff.getSelectedRow() < 0)
+        if (tblStaff.getSelectedRow() >= 0)
         {
             if (tblStaff.getValueAt(tblStaff.getSelectedRow(), 6).equals(false))
             {
                 try
                 {
-                    Staff.RegisterStaff((String) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0));
+                    if (JOptionPane.showConfirmDialog(null, "Are you sure you want to register " + tblStaff.getValueAt(tblStaff.getSelectedRow(), 1) + "?") == JOptionPane.OK_OPTION)
+                    {
+                        Staff.RegisterStaff((String) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0));
+                    }
                 } catch (ClassNotFoundException ex)
                 {
                     Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
@@ -198,7 +201,7 @@ public class ManageUsers extends javax.swing.JFrame
                 }
             } else
             {
-                JOptionPane.showMessageDialog(null, "This staff has already been registered!");
+                JOptionPane.showMessageDialog(null, "This staff member has already been registered!");
             }
         } else
         {
@@ -251,23 +254,29 @@ public class ManageUsers extends javax.swing.JFrame
 
     private void btnUnregisterUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnUnregisterUserActionPerformed
     {//GEN-HEADEREND:event_btnUnregisterUserActionPerformed
-        if (tblStaff.getSelectedRow() < 0)
+        if (tblStaff.getSelectedRow() >= 0)
         {
             if (tblStaff.getValueAt(tblStaff.getSelectedRow(), 6).equals(true))
             {
                 try
                 {
-                    Staff.UnregisterStaff((String) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0));
+                    if (JOptionPane.showConfirmDialog(null, "Are you sure you want to unregister " + tblStaff.getValueAt(tblStaff.getSelectedRow(), 1) + "?") == JOptionPane.OK_OPTION)
+                    {
+                        Staff.UnregisterStaff((String) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0));
+                    }
                 } catch (ClassNotFoundException ex)
                 {
                     Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (SQLException ex)
                 {
                     Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+                } finally
+                {
+                    SetTableValues();
                 }
             } else
             {
-                JOptionPane.showMessageDialog(null, "This staff has not been registered!");
+                JOptionPane.showMessageDialog(null, "This staff member is not registered!");
             }
         } else
         {
