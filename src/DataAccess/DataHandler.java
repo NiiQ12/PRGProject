@@ -370,6 +370,7 @@ public class DataHandler
     }
 
     // </editor-fold>
+    
     // <editor-fold desc="Requests">   
     public static void AddRequest(String staffID, Date requestDate) throws SQLException, ClassNotFoundException // REGISTER
     {
@@ -574,4 +575,15 @@ public class DataHandler
     }
 
     // </editor-fold> 
+    
+    // <editor-fold desc="Order"> 
+    
+//    public static int GetLastOrderID()
+//    {
+//        ConnectToDatabase();
+//        
+//        
+//    }
+    
+    // </editor-fold>
 }

@@ -5,8 +5,12 @@
  */
 package Presentation;
 
+import BusinessLogic.Administrator;
+import BusinessLogic.Order;
+import BusinessLogic.OrderDetail;
 import BusinessLogic.Stationery;
 import DataAccess.DataHandler;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -224,45 +228,69 @@ public class OrderStocks extends javax.swing.JFrame
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddActionPerformed
     {//GEN-HEADEREND:event_btnAddActionPerformed
         String description = cmbStationery.getSelectedItem().toString();
+        boolean validQuantity = false;
 
-        int quantity = Integer.parseInt(JOptionPane.showInputDialog("How Many Would You Like To Order?"));
+        int quantity = 0;
+        String answer = "";
 
-        boolean alreadyOrdered = false;
-        int index = 0;
+        answer = JOptionPane.showInputDialog("How Many Would You Like To Order?");
 
-        if (!stationery.isEmpty())
+        if (answer == null)
         {
-            for (int i = 0; i < stationery.size(); i++)
-            {
-                if (stationery.get(i).getDescription().equals(description))
-                {
-                    alreadyOrdered = true;
-                    index = i;
-                }
-            }
-        }
-
-        if (alreadyOrdered)
+            validQuantity = false;
+        } else if (answer.equals(""))
         {
-            stationery.get(index).setQuantity(stationery.get(index).getQuantity() + quantity);
+            JOptionPane.showMessageDialog(null, "Invalid Value");
+            validQuantity = false;
         } else
         {
-            try
-            {
-                stationery.add(Stationery.GetStationery(description, 0).get(0));
-                stationery.get(stationery.size() - 1).setQuantity(quantity);
-            } catch (SQLException ex)
-            {
-                Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex)
-            {
-                Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            quantity = Integer.parseInt(answer);
+            validQuantity = true;
         }
 
-        alreadyOrdered = false;
+        if (validQuantity)
+        {
+            boolean alreadyOrdered = false;
+            int index = 0;
 
-        PopulateTable();
+            if (!stationery.isEmpty())
+            {
+                for (int i = 0; i < stationery.size(); i++)
+                {
+                    if (stationery.get(i).getDescription().equals(description))
+                    {
+                        alreadyOrdered = true;
+                        index = i;
+                    }
+                }
+            }
+
+            if (alreadyOrdered)
+            {
+                if (JOptionPane.showConfirmDialog(null, "You Already Added " + stationery.get(index).getQuantity() + " '" + stationery.get(index).getDescription() + "' Are You Sure You Want To Add " + quantity + " More?", "WARNING",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION)
+                {
+                    stationery.get(index).setQuantity(stationery.get(index).getQuantity() + quantity);
+                }
+            } else
+            {
+                try
+                {
+                    stationery.add(Stationery.GetStationery(description, 0).get(0));
+                    stationery.get(stationery.size() - 1).setQuantity(quantity);
+                } catch (SQLException ex)
+                {
+                    Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+            alreadyOrdered = false;
+
+            PopulateTable();
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void PopulateTable()
@@ -283,20 +311,20 @@ public class OrderStocks extends javax.swing.JFrame
 
             model.addRow(rowData);
         }
-        
+
         CalculateTotal();
     }
-    
+
     private void CalculateTotal()
     {
         double total = 0;
-        
+
         for (int i = 0; i < stationery.size(); i++)
         {
             total += stationery.get(i).getQuantity() * stationery.get(i).getPrice();
         }
-        
-        lblTotal.setText("R " + total);
+
+        lblTotal.setText(String.format("%s%1.2f", "R", total));
     }
 
     private void cmbStationeryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbStationeryActionPerformed
@@ -341,13 +369,17 @@ public class OrderStocks extends javax.swing.JFrame
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnPlaceOrderActionPerformed
     {//GEN-HEADEREND:event_btnPlaceOrderActionPerformed
-        if (tblStationery.getSelectedRow() >= 0)
+        long millis = System.currentTimeMillis();
+        Date date = new Date(millis);
+        
+        List<OrderDetail> orderDetails = new ArrayList<>(); 
+        
+        for (int i = 0; i < stationery.size(); i++)
         {
-
-        } else
-        {
-            JOptionPane.showMessageDialog(null, "Select items to order!");
+            orderDetails.add(new OrderDetail(0, stationery.get(i).getStationeryCode(), stationery.get(i).getQuantity()));
         }
+        
+        Order order = new Order(0, date, Administrator.loggedInAdminID, orderDetails);
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
