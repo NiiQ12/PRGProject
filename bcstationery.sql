@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2018 at 01:35 PM
+-- Generation Time: Oct 31, 2018 at 02:29 PM
 -- Server version: 5.7.14
 -- PHP Version: 5.6.25
 
@@ -169,26 +169,6 @@ INSERT INTO `manufacturer` (`ManufacturerID`, `Name`, `CellNo`, `Email`, `Addres
 -- --------------------------------------------------------
 
 --
--- Table structure for table `order`
---
-
-CREATE TABLE `order` (
-  `OrderID` int(11) NOT NULL,
-  `Date` date NOT NULL,
-  `AdministratorID` varchar(13) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `order`
---
-
-INSERT INTO `order` (`OrderID`, `Date`, `AdministratorID`) VALUES
-(1, '2018-10-01', '9610285023088'),
-(2, '2018-10-02', '9705025023088');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `orderdetails`
 --
 
@@ -275,16 +255,17 @@ CREATE TABLE `staff` (
   `CellNo` varchar(10) NOT NULL,
   `Email` varchar(100) NOT NULL,
   `AddressID` int(11) NOT NULL,
-  `LoginID` int(11) NOT NULL
+  `LoginID` int(11) NOT NULL,
+  `Registered` bit(1) NOT NULL DEFAULT b'0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `staff`
 --
 
-INSERT INTO `staff` (`StaffID`, `DepartmentID`, `Name`, `Surname`, `CellNo`, `Email`, `AddressID`, `LoginID`) VALUES
-('9601015023088', 1, 'Jozehan', 'Grobler', '0721894567', 'grobies@gmail.com', 9, 3),
-('9702055023088', 2, 'Tyrone', 'du Plessis', '0834567890', 'tdp@gmail.com', 10, 4);
+INSERT INTO `staff` (`StaffID`, `DepartmentID`, `Name`, `Surname`, `CellNo`, `Email`, `AddressID`, `LoginID`, `Registered`) VALUES
+('9601015023088', 1, 'Jozehan', 'Grobler', '0721894567', 'grobies@gmail.com', 9, 3, b'0'),
+('9702055023088', 2, 'Tyrone', 'du Plessis', '0834567890', 'tdp@gmail.com', 10, 4, b'0');
 
 -- --------------------------------------------------------
 
@@ -315,9 +296,29 @@ INSERT INTO `stationery` (`StationeryCode`, `CategoryID`, `Description`, `Stock`
 (7, 4, 'Centropen 4 piece', 3, 20, 4),
 (8, 4, 'Stabilo 4 piece', 1, 30, 4),
 (9, 5, 'Croxley mottled board', 40, 32, 5),
-(10, 5, 'Waltons corrugated file storage box', 5, 39, 5),
-(11, 6, 'Mondi Rotatrim A4 X 500', 5, 150, 6),
+(10, 5, 'Waltons file storage box', 5, 39, 5),
+(11, 6, 'Mondi A4 X 500', 5, 150, 6),
 (12, 6, 'Typek A4 X 200', 10, 200, 6);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tblorder`
+--
+
+CREATE TABLE `tblorder` (
+  `OrderID` int(11) NOT NULL,
+  `Date` date NOT NULL,
+  `AdministratorID` varchar(13) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `tblorder`
+--
+
+INSERT INTO `tblorder` (`OrderID`, `Date`, `AdministratorID`) VALUES
+(1, '2018-10-01', '9610285023088'),
+(2, '2018-10-02', '9705025023088');
 
 --
 -- Indexes for dumped tables
@@ -363,13 +364,6 @@ ALTER TABLE `manufacturer`
   ADD KEY `AddressID` (`AddressID`);
 
 --
--- Indexes for table `order`
---
-ALTER TABLE `order`
-  ADD PRIMARY KEY (`OrderID`),
-  ADD UNIQUE KEY `AdministratorID` (`AdministratorID`);
-
---
 -- Indexes for table `orderdetails`
 --
 ALTER TABLE `orderdetails`
@@ -411,6 +405,13 @@ ALTER TABLE `stationery`
   ADD KEY `ManufacturerID` (`ManufacturerID`);
 
 --
+-- Indexes for table `tblorder`
+--
+ALTER TABLE `tblorder`
+  ADD PRIMARY KEY (`OrderID`),
+  ADD UNIQUE KEY `AdministratorID` (`AdministratorID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -430,11 +431,6 @@ ALTER TABLE `login`
 ALTER TABLE `manufacturer`
   MODIFY `ManufacturerID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT for table `order`
---
-ALTER TABLE `order`
-  MODIFY `OrderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
 -- AUTO_INCREMENT for table `request`
 --
 ALTER TABLE `request`
@@ -444,6 +440,11 @@ ALTER TABLE `request`
 --
 ALTER TABLE `stationery`
   MODIFY `StationeryCode` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+--
+-- AUTO_INCREMENT for table `tblorder`
+--
+ALTER TABLE `tblorder`
+  MODIFY `OrderID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Constraints for dumped tables
 --
@@ -462,16 +463,10 @@ ALTER TABLE `manufacturer`
   ADD CONSTRAINT `manufacturer_address_fk` FOREIGN KEY (`AddressID`) REFERENCES `address` (`AddressID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints for table `order`
---
-ALTER TABLE `order`
-  ADD CONSTRAINT `order_administrator_fk` FOREIGN KEY (`AdministratorID`) REFERENCES `administrator` (`AdministratorID`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints for table `orderdetails`
 --
 ALTER TABLE `orderdetails`
-  ADD CONSTRAINT `orderdetails_order_fk` FOREIGN KEY (`OrderID`) REFERENCES `order` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `orderdetails_order_fk` FOREIGN KEY (`OrderID`) REFERENCES `tblorder` (`OrderID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `orderdetails_stationery_fk` FOREIGN KEY (`StationeryCode`) REFERENCES `stationery` (`StationeryCode`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -502,6 +497,12 @@ ALTER TABLE `staff`
 ALTER TABLE `stationery`
   ADD CONSTRAINT `stationery_category_fk` FOREIGN KEY (`CategoryID`) REFERENCES `category` (`CategoryID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `stationery_manufacturer_fk` FOREIGN KEY (`ManufacturerID`) REFERENCES `manufacturer` (`ManufacturerID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `tblorder`
+--
+ALTER TABLE `tblorder`
+  ADD CONSTRAINT `order_administrator_fk` FOREIGN KEY (`AdministratorID`) REFERENCES `administrator` (`AdministratorID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
