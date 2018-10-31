@@ -601,12 +601,22 @@ public class DataHandler
     
     // <editor-fold desc="Order"> 
     
-//    public static int GetLastOrderID()
-//    {
-//        ConnectToDatabase();
-//        
-//        
-//    }
+    public static int GetLastOrderID() throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+        
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT OrderID FROM tblOrder ORDER BY OrderID DESC LIMIT 1");
+        
+        int latestOrderID = 0;
+        
+        if (rs.next())
+        {
+            latestOrderID = rs.getInt(1);
+        }
+        
+        return latestOrderID;
+    }
     
     // </editor-fold>
 }
