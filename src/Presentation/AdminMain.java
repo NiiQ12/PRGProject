@@ -198,6 +198,8 @@ public class AdminMain extends javax.swing.JFrame
         try
         {
             Report.GenerateOrderReport(rt);
+            
+            JOptionPane.showMessageDialog(null, "The order report has successfully been generated!");
         } catch (SQLException ex)
         {
             Logger.getLogger(AdminMain.class.getName()).log(Level.SEVERE, null, ex);
@@ -235,7 +237,21 @@ public class AdminMain extends javax.swing.JFrame
 
     private void btnGenerateStockReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnGenerateStockReportActionPerformed
     {//GEN-HEADEREND:event_btnGenerateStockReportActionPerformed
-        // TODO add your handling code here:
+        try
+        {
+            Report.GenerateStockReport();
+            
+            JOptionPane.showMessageDialog(null, "The stock report has successfully been generated!");
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(AdminMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(AdminMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(AdminMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnGenerateStockReportActionPerformed
 
     /**
