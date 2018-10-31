@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class Order
 {
+
     private int orderID;
     private Date date;
     private String adminID;
@@ -67,23 +68,41 @@ public class Order
     public void AddOrder() throws ClassNotFoundException, SQLException
     {
         DataHandler.AddOrder(this.date);
-    }
-    
-    public void AddOrderDetails() throws ClassNotFoundException, SQLException
-    {
-        for (int i = 0; i < orderDetails.size(); i++)
+        
+        int orderID = Order.GetLastOrderID();
+        
+        for (OrderDetail orderDetail : this.orderDetails)
         {
-            DataHandler.AddOrderDetails(orderDetails.get(i).getId(), orderDetails.get(i).getStationeryCode(), orderDetails.get(i).getQuantity());
+            orderDetail.setId(orderID);
         }
+        
+        OrderDetail.AddOrderDetails(this.orderDetails);
     }
-    
+
     public static int GetLastOrderID() throws ClassNotFoundException, SQLException
     {
         int latestOrderID = DataHandler.GetLastOrderID();
-        
+
         return latestOrderID;
     }
-    
+
+    public static List<Order> GetOrders(ReportType rt) throws SQLException, ClassNotFoundException
+    {
+        List<Order> orders = new ArrayList<>();
+
+        ResultSet rs = DataHandler.GetOrders(rt);
+
+        while (rs.next())
+        {
+            List<OrderDetail> orderDetails = OrderDetail.GetOrderDetails(rs.getInt(1));
+            orders.add(new Order(rs.getInt(1), rs.getDate(2), rs.getString(3), orderDetails));
+        }
+
+        DataHandler.CloseConnection();
+
+        return orders;
+    }
+
     public Order()
     {
 
@@ -99,7 +118,7 @@ public class Order
 
     @Override
     public String toString()
-    {                                      
+    {
         return String.format("ORDER ID : %d\nDATE     : %s\nADMIN ID : %s", this.orderID, this.date, this.adminID);
     }
 

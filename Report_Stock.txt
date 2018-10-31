@@ -1,0 +1,46 @@
+			============================
+			|  AVAILABLE STOCK REPORT  |
+			============================
+
+CATEGORY : Pens
+---------------------------------------------------------------------------------
+CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
+---------------------------------------------------------------------------------
+1         Bic Blue 4 pack               20        $   5.00  Pens4U
+2         Bic Black 4 pack              15        $   7.00  Pens4U
+
+CATEGORY : Pencils
+---------------------------------------------------------------------------------
+CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
+---------------------------------------------------------------------------------
+3         HB 2B X 2                     10        $   3.00  Pencils Unite
+4         Staedtler HB X 4              2         $  10.00  Pencils Unite
+
+CATEGORY : Erasers
+---------------------------------------------------------------------------------
+CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
+---------------------------------------------------------------------------------
+5         Mon Ami                       26        $   3.00  Problem Erasers
+6         Staedtler 7 piece             5         $  15.00  Problem Erasers
+
+CATEGORY : Highlighters
+---------------------------------------------------------------------------------
+CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
+---------------------------------------------------------------------------------
+7         Centropen 4 piece             3         $  20.00  Highlighting Life
+8         Stabilo 4 piece               1         $  30.00  Highlighting Life
+
+CATEGORY : Files
+---------------------------------------------------------------------------------
+CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
+---------------------------------------------------------------------------------
+9         Croxley mottled board         40        $  32.00  File Specialists
+10        Waltons file storage box      5         $  39.00  File Specialists
+
+CATEGORY : Printing Paper
+---------------------------------------------------------------------------------
+CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
+---------------------------------------------------------------------------------
+11        Mondi A4 X 500                5         $ 150.00  PrintAway
+12        Typek A4 X 200                10        $ 200.00  PrintAway
+

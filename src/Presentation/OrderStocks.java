@@ -358,6 +358,8 @@ public class OrderStocks extends javax.swing.JFrame
         model.setRowCount(0);
 
         stationery.clear();
+        
+        lblTotal.setText("R 0.00");
     }
 
     private void btnClearItemsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClearItemsActionPerformed
@@ -380,41 +382,17 @@ public class OrderStocks extends javax.swing.JFrame
         List<OrderDetail> orderDetails = new ArrayList<>();
 
         Order order = new Order(0, date, Administrator.loggedInAdminID, null);
-
-        try
-        {
-            order.AddOrder();
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        int lastOrderID = 0;
-
-        try
-        {
-            lastOrderID = Order.GetLastOrderID();
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
+        
         for (int i = 0; i < stationery.size(); i++)
         {
-            orderDetails.add(new OrderDetail(lastOrderID, stationery.get(i).getStationeryCode(), stationery.get(i).getQuantity()));
+            orderDetails.add(new OrderDetail(0, stationery.get(i).getStationeryCode(), stationery.get(i).getQuantity()));
         }
 
         order.setOrderDetails(orderDetails);
-
+        
         try
         {
-            order.AddOrderDetails();
+            order.AddOrder();
         } catch (ClassNotFoundException ex)
         {
             Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);

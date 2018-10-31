@@ -19,13 +19,14 @@ import java.util.List;
  */
 public class OrderDetail
 {
+
     private int id;
     private int stationeryCode;
     private String category;
     private String description;
     private double price;
     private int quantity;
-    
+
     public int getStationeryCode()
     {
         return stationeryCode;
@@ -85,11 +86,32 @@ public class OrderDetail
     {
         this.description = description;
     }
-        
-    
+
+    public static List<OrderDetail> GetOrderDetails(int id) throws SQLException, ClassNotFoundException
+    {
+        List<OrderDetail> orderDetails = new ArrayList<>();
+
+        ResultSet rs = DataHandler.GetOrderDetails(id);
+
+        while (rs.next())
+        {
+            orderDetails.add(new OrderDetail(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getDouble(5), rs.getInt(6)));
+        }
+
+        return orderDetails;
+    }
+
+    public static void AddOrderDetails(List<OrderDetail> orderDetails) throws ClassNotFoundException, SQLException
+    {
+        for (int i = 0; i < orderDetails.size(); i++)
+        {
+            DataHandler.AddOrderDetails(orderDetails.get(i).getId(), orderDetails.get(i).getStationeryCode(), orderDetails.get(i).getQuantity());
+        }
+    }
+
     public OrderDetail()
     {
-        
+
     }
 
     public OrderDetail(int id, int stationeryCode, int quantity)
@@ -108,12 +130,11 @@ public class OrderDetail
         this.price = price;
         this.quantity = quantity;
     }
-    
+
     @Override
     public String toString()
     {
         return String.format("%-10d%-15s%-20s%s %6.2f   %-10d", this.stationeryCode, this.category, this.description, NumberFormat.getCurrencyInstance().getCurrency().getSymbol(), this.price, this.quantity);
     }
-    
-    
+
 }

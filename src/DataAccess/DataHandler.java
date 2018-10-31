@@ -7,6 +7,7 @@ package DataAccess;
 
 import BusinessLogic.Administrator;
 import BusinessLogic.EmployeeType;
+import BusinessLogic.ReportType;
 import BusinessLogic.RequestType;
 import BusinessLogic.Staff;
 import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
@@ -192,7 +193,7 @@ public class DataHandler
         ConnectToDatabase();
 
         st = con.createStatement();
-        
+
         rs = st.executeQuery("SELECT Description FROM stationery");
 
         return rs;
@@ -357,26 +358,26 @@ public class DataHandler
 
         CloseConnection();
     }
-    
+
     public static void RegisterStaff(String staffID) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
-        
+
         pst = con.prepareStatement("UPDATE staff SET registered = 1 WHERE StaffID = ?");
         pst.setString(1, staffID);
         pst.executeUpdate();
-        
+
         CloseConnection();
     }
-    
+
     public static void UnregisterStaff(String staffID) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
-        
+
         pst = con.prepareStatement("UPDATE staff SET registered = 0 WHERE StaffID = ?");
         pst.setString(1, staffID);
         pst.executeUpdate();
-        
+
         CloseConnection();
     }
     // </editor-fold>
@@ -393,7 +394,6 @@ public class DataHandler
     }
 
     // </editor-fold>
-    
     // <editor-fold desc="Requests">   
     public static void AddRequest(String staffID, Date requestDate) throws SQLException, ClassNotFoundException // REGISTER
     {
@@ -598,50 +598,78 @@ public class DataHandler
     }
 
     // </editor-fold> 
-    
     // <editor-fold desc="Order"> 
-    
     public static int GetLastOrderID() throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
-        
+
         st = con.createStatement();
         rs = st.executeQuery("SELECT OrderID FROM tblOrder ORDER BY OrderID DESC LIMIT 1");
-        
+
         int latestOrderID = 0;
-        
+
         if (rs.next())
         {
             latestOrderID = rs.getInt(1);
         }
-        
+
         return latestOrderID;
     }
-    
+
     public static void AddOrder(Date date) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
-        
+
         pst = con.prepareStatement("INSERT INTO tblOrder(Date, AdministratorID) VALUES(?,?)");
         pst.setDate(1, date);
         pst.setString(2, Administrator.loggedInAdminID);
         pst.executeUpdate();
-        
+
         CloseConnection();
     }
-    
+
     public static void AddOrderDetails(int orderID, int stationeryCode, int quantity) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
-        
+
         pst = con.prepareStatement("INSERT INTO orderdetails VALUES(?,?,?)");
         pst.setInt(1, orderID);
         pst.setInt(2, stationeryCode);
         pst.setInt(3, quantity);
         pst.executeUpdate();
-        
+
         CloseConnection();
     }
-    
+
+    public static ResultSet GetOrders(ReportType rt) throws SQLException, ClassNotFoundException // REGISTER
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+
+        switch (rt)
+        {
+            case Daily:
+                rs = st.executeQuery("SELECT * FROM tblOrder WHERE Date = CURDATE()");
+                break;
+            case Weekly:
+                rs = st.executeQuery("SELECT * FROM tblOrder WHERE WEEK(Date) = WEEK(NOW())");
+                break;
+            case Monthly:
+                rs = st.executeQuery("SELECT * FROM tblOrder WHERE MONTH(Date) = MONTH(NOW())");
+                break;
+        }
+
+        return rs;
+    }
+
+    public static ResultSet GetOrderDetails(int id) throws SQLException, ClassNotFoundException // REGISTER
+    {
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT orderdetails.OrderID, orderdetails.StationeryCode, category.Description, stationery.Description, Price, Quantity FROM orderdetails INNER JOIN stationery ON orderdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN tblorder ON tblOrder.OrderID = orderdetails.OrderID WHERE tblOrder.OrderID = " + id);
+
+        return rs;
+    }
+
     // </editor-fold>
 }

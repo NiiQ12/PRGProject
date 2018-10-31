@@ -6,7 +6,29 @@
 package Presentation;
 
 import BusinessLogic.Administrator;
+import BusinessLogic.Category;
+import BusinessLogic.Order;
+import BusinessLogic.OrderDetail;
+import BusinessLogic.Report;
+import BusinessLogic.ReportType;
+import BusinessLogic.Request;
+import BusinessLogic.RequestType;
 import BusinessLogic.Staff;
+import BusinessLogic.Stationery;
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,9 +57,10 @@ public class AdminMain extends javax.swing.JFrame
     {
 
         btnManageStock = new javax.swing.JButton();
-        btnGenerateReports = new javax.swing.JButton();
+        btnGenerateOrderReport = new javax.swing.JButton();
         btnManageUsers = new javax.swing.JButton();
         btnManageRequests = new javax.swing.JButton();
+        btnGenerateStockReport = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -59,19 +82,19 @@ public class AdminMain extends javax.swing.JFrame
             }
         });
         getContentPane().add(btnManageStock);
-        btnManageStock.setBounds(240, 130, 160, 40);
+        btnManageStock.setBounds(240, 100, 160, 40);
 
-        btnGenerateReports.setLabel("GENERATE REPORTS");
-        btnGenerateReports.setName("btnGenerateReports"); // NOI18N
-        btnGenerateReports.addActionListener(new java.awt.event.ActionListener()
+        btnGenerateOrderReport.setLabel("ORDER REPORT");
+        btnGenerateOrderReport.setName("btnGenerateOrderReport"); // NOI18N
+        btnGenerateOrderReport.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                btnGenerateReportsActionPerformed(evt);
+                btnGenerateOrderReportActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGenerateReports);
-        btnGenerateReports.setBounds(240, 310, 160, 40);
+        getContentPane().add(btnGenerateOrderReport);
+        btnGenerateOrderReport.setBounds(240, 340, 160, 40);
 
         btnManageUsers.setText("MANAGE USERS");
         btnManageUsers.setName("btnManageUsers"); // NOI18N
@@ -83,7 +106,7 @@ public class AdminMain extends javax.swing.JFrame
             }
         });
         getContentPane().add(btnManageUsers);
-        btnManageUsers.setBounds(240, 190, 160, 40);
+        btnManageUsers.setBounds(240, 160, 160, 40);
 
         btnManageRequests.setText("MANAGE REQUESTS");
         btnManageRequests.setName("btnManageRequests"); // NOI18N
@@ -95,7 +118,20 @@ public class AdminMain extends javax.swing.JFrame
             }
         });
         getContentPane().add(btnManageRequests);
-        btnManageRequests.setBounds(240, 250, 160, 40);
+        btnManageRequests.setBounds(240, 220, 160, 40);
+
+        btnGenerateStockReport.setText("STOCK REPORT");
+        btnGenerateStockReport.setActionCommand("GENERATE STOCK REPORT");
+        btnGenerateStockReport.setName("btnGenerateStockReport"); // NOI18N
+        btnGenerateStockReport.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnGenerateStockReportActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnGenerateStockReport);
+        btnGenerateStockReport.setBounds(240, 280, 160, 40);
 
         btnBack.setText("LOG OUT");
         btnBack.setMaximumSize(null);
@@ -129,10 +165,50 @@ public class AdminMain extends javax.swing.JFrame
         this.setVisible(false);
     }//GEN-LAST:event_btnManageStockActionPerformed
 
-    private void btnGenerateReportsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnGenerateReportsActionPerformed
-    {//GEN-HEADEREND:event_btnGenerateReportsActionPerformed
+
+    private void btnGenerateOrderReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnGenerateOrderReportActionPerformed
+    {//GEN-HEADEREND:event_btnGenerateOrderReportActionPerformed
+        boolean validReportOption = false;
+
+        ReportType rt = null;
         
-    }//GEN-LAST:event_btnGenerateReportsActionPerformed
+        do
+        {
+            String reportOption = JOptionPane.showInputDialog("Daily (D)\nWeekly (W)\nMonthly (M)");
+
+            switch (reportOption.toUpperCase())
+            {
+                case "D":
+                    validReportOption = true;
+                    rt = ReportType.Daily;
+                    break;
+                case "W":
+                    validReportOption = true;
+                    rt = ReportType.Weekly;
+                    break;
+                case "M":
+                    validReportOption = true;
+                    rt = ReportType.Monthly;
+                    break;
+                default:
+                    JOptionPane.showMessageDialog(null, "Invalid option!");
+            }
+        } while (!validReportOption);
+
+        try
+        {
+            Report.GenerateOrderReport(rt);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(AdminMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(AdminMain.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex)
+        {
+            Logger.getLogger(AdminMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnGenerateOrderReportActionPerformed
 
     private void btnManageUsersActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnManageUsersActionPerformed
     {//GEN-HEADEREND:event_btnManageUsersActionPerformed
@@ -157,6 +233,11 @@ public class AdminMain extends javax.swing.JFrame
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
+    private void btnGenerateStockReportActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnGenerateStockReportActionPerformed
+    {//GEN-HEADEREND:event_btnGenerateStockReportActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGenerateStockReportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -175,20 +256,28 @@ public class AdminMain extends javax.swing.JFrame
                 {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex)
         {
-            java.util.logging.Logger.getLogger(AdminMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminMain.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex)
         {
-            java.util.logging.Logger.getLogger(AdminMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminMain.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex)
         {
-            java.util.logging.Logger.getLogger(AdminMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminMain.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
-            java.util.logging.Logger.getLogger(AdminMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(AdminMain.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -205,7 +294,8 @@ public class AdminMain extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnGenerateReports;
+    private javax.swing.JButton btnGenerateOrderReport;
+    private javax.swing.JButton btnGenerateStockReport;
     private javax.swing.JButton btnManageRequests;
     private javax.swing.JButton btnManageStock;
     private javax.swing.JButton btnManageUsers;
