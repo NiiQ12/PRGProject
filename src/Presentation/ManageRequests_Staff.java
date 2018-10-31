@@ -53,6 +53,8 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         jScrollPane2 = new javax.swing.JScrollPane();
         tblRequests = new javax.swing.JTable();
         btnCancelRequest = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        txtTotalItems = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -209,6 +211,22 @@ public class ManageRequests_Staff extends javax.swing.JFrame
         getContentPane().add(btnCancelRequest);
         btnCancelRequest.setBounds(250, 410, 180, 35);
 
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel6.setText("TOTAL ITEMS : ");
+        jLabel6.setName("lbl"); // NOI18N
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(480, 410, 100, 20);
+
+        txtTotalItems.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        txtTotalItems.setForeground(new java.awt.Color(255, 255, 255));
+        txtTotalItems.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        txtTotalItems.setText("___");
+        txtTotalItems.setToolTipText("");
+        txtTotalItems.setName("lblTotal"); // NOI18N
+        getContentPane().add(txtTotalItems);
+        txtTotalItems.setBounds(500, 410, 110, 20);
+
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BG.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
         getContentPane().add(jLabel1);
@@ -221,6 +239,8 @@ public class ManageRequests_Staff extends javax.swing.JFrame
     
     private void cmbViewActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbViewActionPerformed
     {//GEN-HEADEREND:event_cmbViewActionPerformed
+        txtTotalItems.setText("___");
+        
         ClearRequestDetailsTable();
         
         switch (cmbView.getSelectedIndex())
@@ -332,6 +352,15 @@ public class ManageRequests_Staff extends javax.swing.JFrame
             try
             {
                 SetRequestDetailsTableValues();
+                
+                int total = 0;
+                
+                for (int i = 0; i < tblRequestDetails.getRowCount(); i++)
+                {
+                    total += (int) tblRequestDetails.getValueAt(i, 4);
+                }
+                
+                txtTotalItems.setText(Integer.toString(total));
             } catch (SQLException ex)
             {
                 Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
@@ -464,9 +493,11 @@ public class ManageRequests_Staff extends javax.swing.JFrame
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblRequestDetails;
     private javax.swing.JTable tblRequests;
+    private javax.swing.JLabel txtTotalItems;
     // End of variables declaration//GEN-END:variables
 }

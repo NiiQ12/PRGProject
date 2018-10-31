@@ -330,10 +330,10 @@ public class RequestStationery extends javax.swing.JFrame
             }
 
             selectedStationeries.remove(rowIndex);
-            
+
             DefaultTableModel model = (DefaultTableModel) tblRequestDetails.getModel();
             model.setRowCount(0);
-            
+
             Object[] rowData = new Object[6];
 
             for (int i = 0; i < selectedStationeries.size(); i++)
@@ -407,20 +407,20 @@ public class RequestStationery extends javax.swing.JFrame
         if (model.getRowCount() > 0)
         {
             List<RequestDetail> requestDetails = new ArrayList<>();
-            
+
             for (Stationery stationery : selectedStationeries)
             {
                 requestDetails.add(new RequestDetail(stationery.getStationeryCode(), stationery.getQuantity()));
             }
-            
+
             Request request = new Request(Staff.loggedInStaffID, requestDetails);
-            
+
             try
             {
                 request.AddRequest();
-                
+
                 JOptionPane.showMessageDialog(null, "Request submitted successfully!");
-                
+
                 StaffMain frame = new StaffMain();
                 frame.setVisible(true);
                 this.setVisible(false);
@@ -549,7 +549,7 @@ public class RequestStationery extends javax.swing.JFrame
         {
             JOptionPane.showMessageDialog(null, "Select an item to add to the list!");
         }
-        
+
         txtSearchDescription.setText("");
     }//GEN-LAST:event_btnAddItemActionPerformed
 
@@ -625,6 +625,13 @@ public class RequestStationery extends javax.swing.JFrame
         try
         {
             SetTableValues(description, categoryID);
+            
+            if (tblStationery.getRowCount() == 0)
+            {
+                JOptionPane.showMessageDialog(null, "No items found!");
+                
+                txtSearchDescription.setText("");
+            }
         } catch (SQLException ex)
         {
             Logger.getLogger(ManageStocks.class.getName()).log(Level.SEVERE, null, ex);
@@ -669,6 +676,7 @@ public class RequestStationery extends javax.swing.JFrame
 
             model.addRow(rowData);
         }
+
     }
 
     /**
