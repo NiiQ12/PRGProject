@@ -5,7 +5,15 @@
  */
 package Presentation;
 
+import BusinessLogic.Stationery;
+import DataAccess.DataHandler;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -33,7 +41,7 @@ public class OrderStocks extends javax.swing.JFrame
     private void initComponents()
     {
 
-        cmbSort = new javax.swing.JComboBox<>();
+        cmbStationery = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
@@ -52,18 +60,25 @@ public class OrderStocks extends javax.swing.JFrame
         setMinimumSize(new java.awt.Dimension(650, 500));
         setPreferredSize(new java.awt.Dimension(650, 500));
         setSize(new java.awt.Dimension(650, 500));
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowActivated(java.awt.event.WindowEvent evt)
+            {
+                formWindowActivated(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
-        cmbSort.setName("cmbStationery"); // NOI18N
-        cmbSort.addActionListener(new java.awt.event.ActionListener()
+        cmbStationery.setName("cmbStationery"); // NOI18N
+        cmbStationery.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                cmbSortActionPerformed(evt);
+                cmbStationeryActionPerformed(evt);
             }
         });
-        getContentPane().add(cmbSort);
-        cmbSort.setBounds(230, 80, 260, 20);
+        getContentPane().add(cmbStationery);
+        cmbStationery.setBounds(230, 80, 260, 20);
 
         jLabel3.setText("STATIONERY : ");
         jLabel3.setName(""); // NOI18N
@@ -197,15 +212,71 @@ public class OrderStocks extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    List<Stationery> stationery = new ArrayList<>();
+    
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddActionPerformed
     {//GEN-HEADEREND:event_btnAddActionPerformed
+        String description = cmbStationery.getSelectedItem().toString();
         
+        int quantity = Integer.parseInt(JOptionPane.showInputDialog("How Many Would You Like To Order?"));
+
+        boolean alreadyOrdered = false;
+        int index = 0;
+
+        if (!stationery.isEmpty())
+        {
+            for (int i = 0; i < stationery.size(); i++)
+            {
+                if (stationery.get(i).getDescription().equals(description))
+                {
+                    alreadyOrdered = true;
+                    index = i;
+                }
+            }
+        }
+
+        if (alreadyOrdered)
+        {
+            stationery.get(index).setQuantity(stationery.get(index).getQuantity() + quantity);
+        } else
+        {
+            try
+            {
+                stationery.add(Stationery.GetStationery(description, 0).get(0));
+                stationery.get(stationery.size() - 1).setQuantity(quantity);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        alreadyOrdered = false;
+
+        DefaultTableModel model = (DefaultTableModel) tblStationery.getModel();
+        model.setRowCount(0);
+
+        Object[] rowData = new Object[6];
+
+        for (int i = 0; i < stationery.size(); i++)
+        {
+            rowData[0] = stationery.get(i).getStationeryCode();
+            rowData[1] = stationery.get(i).getCategory();
+            rowData[2] = stationery.get(i).getDescription();
+            rowData[3] = stationery.get(i).getQuantity();
+            rowData[4] = stationery.get(i).getPrice();
+            rowData[5] = stationery.get(i).getManufacturer();
+
+            model.addRow(rowData);
+        }
     }//GEN-LAST:event_btnAddActionPerformed
 
-    private void cmbSortActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbSortActionPerformed
-    {//GEN-HEADEREND:event_cmbSortActionPerformed
-        
-    }//GEN-LAST:event_cmbSortActionPerformed
+    private void cmbStationeryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbStationeryActionPerformed
+    {//GEN-HEADEREND:event_cmbStationeryActionPerformed
+
+    }//GEN-LAST:event_cmbStationeryActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackActionPerformed
     {//GEN-HEADEREND:event_btnBackActionPerformed
@@ -230,12 +301,36 @@ public class OrderStocks extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnPlaceOrderActionPerformed
         if (tblStationery.getSelectedRow() >= 0)
         {
-            
+
         } else
         {
             JOptionPane.showMessageDialog(null, "Select items to order!");
         }
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
+    {//GEN-HEADEREND:event_formWindowActivated
+
+        List<String> descriptions = new ArrayList<>();
+        try
+        {
+            descriptions = Stationery.GetStationeryDescriptions();
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        if (cmbStationery.getItemCount() == 0)
+        {
+            for (int i = 0; i < descriptions.size(); i++)
+            {
+                cmbStationery.addItem(descriptions.get(i));
+            }
+        }
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -288,7 +383,7 @@ public class OrderStocks extends javax.swing.JFrame
     private javax.swing.JButton btnClearItems;
     private javax.swing.JButton btnPlaceOrder;
     private javax.swing.JButton btnRemoveItem;
-    private javax.swing.JComboBox<String> cmbSort;
+    private javax.swing.JComboBox<String> cmbStationery;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;

@@ -5,7 +5,16 @@
  */
 package Presentation;
 
+import BusinessLogic.Request;
+import BusinessLogic.RequestDetail;
+import BusinessLogic.RequestType;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -21,6 +30,9 @@ public class ManageRequests_Admin extends javax.swing.JFrame
     {
         initComponents();
         this.setLocationRelativeTo(null);
+
+        requests = new ArrayList<>();
+        requestDetails = new ArrayList<>();
     }
 
     /**
@@ -48,6 +60,13 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(650, 500));
         setSize(new java.awt.Dimension(650, 500));
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowActivated(java.awt.event.WindowEvent evt)
+            {
+                formWindowActivated(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
         cmbSort.setName("cmbStationery"); // NOI18N
@@ -198,9 +217,35 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    RequestType rt = RequestType.All;
+
     private void cmbSortActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbSortActionPerformed
     {//GEN-HEADEREND:event_cmbSortActionPerformed
-        
+        ClearRequestDetailsTable();
+
+        switch (cmbSort.getSelectedIndex())
+        {
+            case 0:
+                rt = RequestType.All;
+                break;
+            case 1:
+                rt = RequestType.Completed;
+                break;
+            case 2:
+                rt = RequestType.Uncompleted;
+                break;
+        }
+
+        try
+        {
+            SetRequestsTableValues();
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_cmbSortActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackActionPerformed
@@ -212,18 +257,183 @@ public class ManageRequests_Admin extends javax.swing.JFrame
 
     private void btnRejectRequestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRejectRequestActionPerformed
     {//GEN-HEADEREND:event_btnRejectRequestActionPerformed
+        try
+        {
+            Request.RejectRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()));
 
+            Request request = new Request();
+            List<RequestDetail> newRequestDetails = new ArrayList<>();
+
+            for (int i = 0; i < requests.size(); i++)
+            {
+                if (requests.get(i).getRequestID() == (Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString())))
+                {
+                    request = requests.get(i);
+
+                    for (int j = 0; j < request.getRequestDetails().size(); j++)
+                    {
+                        if (request.getRequestDetails().get(j).getId() == (Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString())))
+                        {
+                            newRequestDetails.add(request.getRequestDetails().get(j));
+                        }
+                    }
+                    break;
+                }
+            }
+
+            request.setRequestDetails(newRequestDetails);
+
+            request.RefillCancelledRequestQuantities();
+
+            JOptionPane.showMessageDialog(null, request.getRequestDetails().size());
+
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnRejectRequestActionPerformed
+
+    int rowIndex = 0;
 
     private void tblRequestsMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_tblRequestsMouseClicked
     {//GEN-HEADEREND:event_tblRequestsMouseClicked
-        
+        if (tblRequests.getSelectedRow() >= 0)
+        {
+            try
+            {
+                SetRequestDetailsTableValues();
+
+                rowIndex = tblRequests.getSelectedRow();
+
+                if (tblRequests.getValueAt(rowIndex, 4).toString().equals("true"))
+                {
+                    btnAcceptRequest.setEnabled(false);
+                    btnRejectRequest.setEnabled(false);
+                }
+                if (tblRequests.getValueAt(rowIndex, 4).toString().equals("false"))
+                {
+                    btnAcceptRequest.setEnabled(true);
+                    btnRejectRequest.setEnabled(true);
+                } 
+                if ((tblRequests.getValueAt(rowIndex, 4).toString().equals("false")) && (!(tblRequests.getValueAt(rowIndex, 1).toString().isEmpty())))
+                {
+                    btnAcceptRequest.setEnabled(false);
+                    btnRejectRequest.setEnabled(false);
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_tblRequestsMouseClicked
+
+    List<Request> requests;
+
+    private void SetRequestsTableValues() throws SQLException, ClassNotFoundException
+    {
+        btnAcceptRequest.setEnabled(true);
+        btnRejectRequest.setEnabled(true);
+
+        requests = Request.GetRequests(rt);
+
+        DefaultTableModel model = (DefaultTableModel) tblRequests.getModel();
+        model.setRowCount(0);
+
+        Object[] rowData = new Object[5];
+
+        for (int i = 0; i < requests.size(); i++)
+        {
+            rowData[0] = requests.get(i).getRequestID();
+            rowData[1] = requests.get(i).getAdminID();
+            rowData[2] = requests.get(i).getRequestDate();
+            rowData[3] = requests.get(i).getReceiveDate();
+            rowData[4] = requests.get(i).isRequestAccepted();
+
+            model.addRow(rowData);
+        }
+    }
+
+    List<RequestDetail> requestDetails;
+
+    private void SetRequestDetailsTableValues() throws SQLException, ClassNotFoundException
+    {
+        requestDetails.clear();
+
+        int rowIndex = tblRequests.getSelectedRow();
+        int requestID = requests.get(rowIndex).getRequestID();
+
+        for (RequestDetail requestDetail : requests.get(rowIndex).getRequestDetails())
+        {
+            if (requestDetail.getId() == requestID)
+            {
+                requestDetails.add(requestDetail);
+            }
+        }
+
+        DefaultTableModel model = (DefaultTableModel) tblRequestDetails.getModel();
+        model.setRowCount(0);
+
+        Object[] rowData = new Object[5];
+
+        for (int i = 0; i < requestDetails.size(); i++)
+        {
+            rowData[0] = requestDetails.get(i).getId();
+            rowData[1] = requestDetails.get(i).getStationeryCode();
+            rowData[2] = requestDetails.get(i).getCategory();
+            rowData[3] = requestDetails.get(i).getDescription();
+            rowData[4] = requestDetails.get(i).getQuantity();
+
+            model.addRow(rowData);
+        }
+    }
 
     private void btnAcceptRequestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAcceptRequestActionPerformed
     {//GEN-HEADEREND:event_btnAcceptRequestActionPerformed
-        // TODO add your handling code here:
+        try
+        {
+            Request.AcceptRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()));
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnAcceptRequestActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
+    {//GEN-HEADEREND:event_formWindowActivated
+        cmbSort.removeAllItems();
+
+        cmbSort.addItem("ALL REQUESTS");
+        cmbSort.addItem("COMPLETED REQUESTS");
+        cmbSort.addItem("UNCOMPLETED REQUESTS");
+
+        cmbSort.setSelectedIndex(0);
+
+        try
+        {
+            SetRequestsTableValues();
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_formWindowActivated
+
+    private void ClearRequestDetailsTable()
+    {
+        DefaultTableModel model = (DefaultTableModel) tblRequestDetails.getModel();
+        model.setRowCount(0);
+    }
 
     /**
      * @param args the command line arguments
