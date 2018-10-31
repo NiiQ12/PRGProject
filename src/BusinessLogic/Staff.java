@@ -29,7 +29,6 @@ public class Staff extends Employee
     {
         this.department = department;
     }
-    
     public static ArrayList<Staff> GetStaffFromDatabase() throws SQLException, ClassNotFoundException
     {
         ArrayList<Staff> staffMembers = new ArrayList<>();
@@ -38,7 +37,7 @@ public class Staff extends Employee
 
         while (rs.next())
         {
-            staffMembers.add(new Staff(rs.getString("StaffID"), new Department(rs.getInt("DepartmentID"), rs.getString("Description")), rs.getString("Name"), rs.getString("Surname"), rs.getString("CellNo"), rs.getString("Email"), new Address(rs.getInt("AddressID"), rs.getString("City"), rs.getString("Suburb"), rs.getString("Street"), rs.getString("Port")), new Login(rs.getInt("LoginID"), rs.getString("Username"), rs.getString("Password"))));
+            staffMembers.add(new Staff(rs.getString("StaffID"), new Department(rs.getInt("DepartmentID"), rs.getString("Description")), rs.getString("Name"), rs.getString("Surname"), rs.getString("CellNo"), rs.getString("Email"), new Address(rs.getInt("AddressID"), rs.getString("City"), rs.getString("Suburb"), rs.getString("Street"), rs.getString("Port")), new Login(rs.getInt("LoginID"), rs.getString("Username"), rs.getString("Password"), rs.getBoolean("Registered"))));
         }
 
         DataHandler.CloseConnection();
@@ -54,7 +53,7 @@ public class Staff extends Employee
 
         rs.first();
 
-        staff = new Staff(rs.getString("StaffID"), new Department(rs.getInt("DepartmentID"), rs.getString("Description")), rs.getString("Name"), rs.getString("Surname"), rs.getString("CellNo"), rs.getString("Email"), new Address(rs.getInt("AddressID"), rs.getString("City"), rs.getString("Suburb"), rs.getString("Street"), rs.getString("Port")), new Login(rs.getInt("LoginID"), rs.getString("Username"), rs.getString("Password")));
+        staff = new Staff(rs.getString("StaffID"), new Department(rs.getInt("DepartmentID"), rs.getString("Description")), rs.getString("Name"), rs.getString("Surname"), rs.getString("CellNo"), rs.getString("Email"), new Address(rs.getInt("AddressID"), rs.getString("City"), rs.getString("Suburb"), rs.getString("Street"), rs.getString("Port")), new Login(rs.getInt("LoginID"), rs.getString("Username"), rs.getString("Password"), rs.getBoolean("Registered")));
 
         DataHandler.CloseConnection();
 
@@ -69,6 +68,16 @@ public class Staff extends Employee
     public void UpdateStaffMember() throws ClassNotFoundException, SQLException
     {
         DataHandler.UpdateStaff(loggedInStaffID, this.department.getDepartmentID(), this.getName(), this.getSurname(), this.getCellNo(), this.getEmail(), this.getAddress().getAddressID(), this.getAddress().getCity(), this.getAddress().getSuburb(), this.getAddress().getStreet(), this.getAddress().getPort(), this.getLogin().getLoginID(), this.getLogin().getUsername(), this.getLogin().getPassword());
+    }
+    
+    public static void RegisterStaff(String staffID) throws ClassNotFoundException, SQLException
+    {
+        DataHandler.RegisterStaff(staffID);
+    }
+    
+    public static void UnregisterStaff(String staffID) throws ClassNotFoundException, SQLException
+    {
+        DataHandler.UnregisterStaff(staffID);
     }
 
     public Staff()

@@ -341,7 +341,7 @@ public class ManageAccount extends javax.swing.JFrame
             JOptionPane.showMessageDialog(null, errorMessage, "Some Fields Are Incorrect", JOptionPane.WARNING_MESSAGE);
         } else
         {
-            Staff staff = new Staff(txtID.getText(), new Department(department, ""), name, surname, cellNo, email, new Address(addressID, city, suburb, street, port), new BusinessLogic.Login(loginID, username, password));
+            Staff staff = new Staff(txtID.getText(), new Department(department, ""), name, surname, cellNo, email, new Address(addressID, city, suburb, street, port), new BusinessLogic.Login(loginID, username, password, false));
 
             try
             {

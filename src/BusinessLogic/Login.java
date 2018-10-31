@@ -8,6 +8,7 @@ package BusinessLogic;
 import DataAccess.DataHandler;
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,13 +19,7 @@ public class Login
     private int loginID;
     private String username;
     private String password;
-
-    public Login(int loginID, String username, String password)
-    {
-        this.loginID = loginID;
-        this.username = username;
-        this.password = password;
-    }
+    private boolean registered;
 
     public int getLoginID()
     {
@@ -55,54 +50,81 @@ public class Login
     {
         this.password = password;
     }
-    
+
+    public boolean isRegistered()
+    {
+        return registered;
+    }
+
+    public void setRegistered(boolean registered)
+    {
+        this.registered = registered;
+    }
+
     public static boolean TestLogin(String username, String password) throws SQLException, ClassNotFoundException
     {
         boolean isValidLogin;
-               
+
         List<Object> lst = DataHandler.Login(username, password);
-        
+
         if (lst.isEmpty())
         {
+            JOptionPane.showMessageDialog(null, "Invalid login details!");
+            
             isValidLogin = false;
         } else
         {
             EmployeeType et = (EmployeeType) lst.get(1);
+
+            isValidLogin = true;
             
             switch (et)
             {
                 case Staff:
                     Staff.loggedInStaffID = lst.get(0).toString();
+
+                    if (lst.get(2).equals(false))
+                    {
+                        JOptionPane.showMessageDialog(null, "This account has not been registered by an admin!");
+                        
+                        isValidLogin = false;
+                    }
                     break;
                 case Admin:
                     Administrator.loggedInAdminID = lst.get(0).toString();
                     break;
             }
-            
-            isValidLogin = true;
         }
-        
+
         DataHandler.CloseConnection();
-        
+
         return isValidLogin;
     }
 
     public static boolean CheckLogin(String username) throws SQLException, ClassNotFoundException
     {
         boolean isAvailable = DataHandler.CheckLogin(username);
-        
+
         DataHandler.CloseConnection();
-        
+
         return isAvailable;
     }
-    
+
     public static int GetLoginID(String username, String password) throws ClassNotFoundException, SQLException
     {
         int loginID = DataHandler.GetLoginID(username, password);
-        
+
         return loginID;
     }
-    
+
+    public Login(int loginID, String username, String password, boolean registered)
+    {
+        this.loginID = loginID;
+        this.username = username;
+        this.password = password;
+        this.registered = registered;
+    }
+        
     @Override
     public String toString()
     {

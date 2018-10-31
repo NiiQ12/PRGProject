@@ -53,12 +53,13 @@ public class DataHandler
         List<Object> lst = new ArrayList<>();
 
         st = con.createStatement();
-        rs = st.executeQuery("SELECT StaffID FROM staff INNER JOIN login ON staff.LoginID = login.LoginID WHERE Username = '" + username + "' AND Password = '" + password + "'");
+        rs = st.executeQuery("SELECT StaffID, Registered FROM staff INNER JOIN login ON staff.LoginID = login.LoginID WHERE Username = '" + username + "' AND Password = '" + password + "'");
 
         if (rs.next())
         {
             lst.add(rs.getString(1));
             lst.add(EmployeeType.Staff);
+            lst.add(rs.getBoolean(2));
         } else
         {
             st = con.createStatement();
@@ -310,7 +311,7 @@ public class DataHandler
         ConnectToDatabase();
 
         st = con.createStatement();
-        rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID");
+        rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password, Registered FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID");
 
         return rs;
     }
@@ -320,7 +321,7 @@ public class DataHandler
         ConnectToDatabase();
 
         st = con.createStatement();
-        rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID WHERE staff.StaffID = '" + id + "'");
+        rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password, Registered FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID WHERE staff.StaffID = '" + id + "'");
 
         return rs;
     }
@@ -354,6 +355,28 @@ public class DataHandler
 
         JOptionPane.showMessageDialog(null, "Profile successfully updated!", "Success!", JOptionPane.INFORMATION_MESSAGE);
 
+        CloseConnection();
+    }
+    
+    public static void RegisterStaff(String staffID) throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+        
+        pst = con.prepareStatement("UPDATE staff SET registered = 1 WHERE StaffID = ?");
+        pst.setString(1, staffID);
+        pst.executeUpdate();
+        
+        CloseConnection();
+    }
+    
+    public static void UnregisterStaff(String staffID) throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+        
+        pst = con.prepareStatement("UPDATE staff SET registered = 0 WHERE StaffID = ?");
+        pst.setString(1, staffID);
+        pst.executeUpdate();
+        
         CloseConnection();
     }
     // </editor-fold>

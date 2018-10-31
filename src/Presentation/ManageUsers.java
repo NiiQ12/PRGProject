@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -42,7 +43,9 @@ public class ManageUsers extends javax.swing.JFrame
         tblStaff = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
+        btnRegisterUser = new javax.swing.JButton();
         btnAddUser = new javax.swing.JButton();
+        btnUnregisterUser = new javax.swing.JButton();
         jLabel15 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,17 +66,17 @@ public class ManageUsers extends javax.swing.JFrame
             },
             new String []
             {
-                "ID", "Name", "Surname", "Cell No", "Email", "Department"
+                "ID", "Name", "Surname", "Cell No", "Email", "Department", "*"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex)
@@ -88,6 +91,21 @@ public class ManageUsers extends javax.swing.JFrame
         });
         tblStaff.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tblStaff);
+        if (tblStaff.getColumnModel().getColumnCount() > 0)
+        {
+            tblStaff.getColumnModel().getColumn(0).setMinWidth(110);
+            tblStaff.getColumnModel().getColumn(0).setMaxWidth(110);
+            tblStaff.getColumnModel().getColumn(1).setMinWidth(70);
+            tblStaff.getColumnModel().getColumn(1).setMaxWidth(70);
+            tblStaff.getColumnModel().getColumn(2).setMinWidth(70);
+            tblStaff.getColumnModel().getColumn(2).setMaxWidth(70);
+            tblStaff.getColumnModel().getColumn(4).setMinWidth(110);
+            tblStaff.getColumnModel().getColumn(4).setMaxWidth(110);
+            tblStaff.getColumnModel().getColumn(5).setMinWidth(110);
+            tblStaff.getColumnModel().getColumn(5).setMaxWidth(110);
+            tblStaff.getColumnModel().getColumn(6).setMinWidth(25);
+            tblStaff.getColumnModel().getColumn(6).setMaxWidth(25);
+        }
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(20, 70, 600, 320);
@@ -109,6 +127,18 @@ public class ManageUsers extends javax.swing.JFrame
         getContentPane().add(btnBack);
         btnBack.setBounds(530, 20, 90, 30);
 
+        btnRegisterUser.setText("✓");
+        btnRegisterUser.setName("btnRegisterUser"); // NOI18N
+        btnRegisterUser.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnRegisterUserActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRegisterUser);
+        btnRegisterUser.setBounds(570, 400, 50, 35);
+
         btnAddUser.setText("ADD USER");
         btnAddUser.setName("btnAddUser"); // NOI18N
         btnAddUser.addActionListener(new java.awt.event.ActionListener()
@@ -120,6 +150,18 @@ public class ManageUsers extends javax.swing.JFrame
         });
         getContentPane().add(btnAddUser);
         btnAddUser.setBounds(250, 400, 141, 35);
+
+        btnUnregisterUser.setText("X");
+        btnUnregisterUser.setName("btnUnregisterUser"); // NOI18N
+        btnUnregisterUser.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                btnUnregisterUserActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnUnregisterUser);
+        btnUnregisterUser.setBounds(510, 400, 50, 35);
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/BG.jpg"))); // NOI18N
         getContentPane().add(jLabel15);
@@ -135,22 +177,50 @@ public class ManageUsers extends javax.swing.JFrame
         this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
-    private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddUserActionPerformed
-    {//GEN-HEADEREND:event_btnAddUserActionPerformed
-        AddUser frame = new AddUser();
-        frame.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_btnAddUserActionPerformed
+    private void btnRegisterUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRegisterUserActionPerformed
+    {//GEN-HEADEREND:event_btnRegisterUserActionPerformed
+        if (tblStaff.getSelectedRow() < 0)
+        {
+            if (tblStaff.getValueAt(tblStaff.getSelectedRow(), 6).equals(false))
+            {
+                try
+                {
+                    Staff.RegisterStaff((String) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0));
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex)
+                {
+                    Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+                } finally
+                {
+                    SetTableValues();
+                }
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "This staff has already been registered!");
+            }
+        } else
+        {
+            JOptionPane.showMessageDialog(null, "Select a staff member!");
+        }
+    }//GEN-LAST:event_btnRegisterUserActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
     {//GEN-HEADEREND:event_formWindowActivated
+        SetTableValues();
+    }//GEN-LAST:event_formWindowActivated
+
+    public void SetTableValues()
+    {
         try
         {
             List<Staff> staff = Staff.GetStaffFromDatabase();
 
             DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
+            model.setRowCount(0);
 
-            Object rowData[] = new Object[6];
+            Object rowData[] = new Object[7];
 
             for (int i = 0; i < staff.size(); i++)
             {
@@ -160,6 +230,7 @@ public class ManageUsers extends javax.swing.JFrame
                 rowData[3] = staff.get(i).getCellNo();
                 rowData[4] = staff.get(i).getEmail();
                 rowData[5] = staff.get(i).getDepartment().getDescription();
+                rowData[6] = staff.get(i).getLogin().isRegistered();
                 model.addRow(rowData);
             }
         } catch (SQLException ex)
@@ -169,7 +240,40 @@ public class ManageUsers extends javax.swing.JFrame
         {
             Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_formWindowActivated
+    }
+
+    private void btnAddUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddUserActionPerformed
+    {//GEN-HEADEREND:event_btnAddUserActionPerformed
+        AddUser frame = new AddUser();
+        frame.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnAddUserActionPerformed
+
+    private void btnUnregisterUserActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnUnregisterUserActionPerformed
+    {//GEN-HEADEREND:event_btnUnregisterUserActionPerformed
+        if (tblStaff.getSelectedRow() < 0)
+        {
+            if (tblStaff.getValueAt(tblStaff.getSelectedRow(), 6).equals(true))
+            {
+                try
+                {
+                    Staff.UnregisterStaff((String) tblStaff.getValueAt(tblStaff.getSelectedRow(), 0));
+                } catch (ClassNotFoundException ex)
+                {
+                    Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex)
+                {
+                    Logger.getLogger(ManageUsers.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "This staff has not been registered!");
+            }
+        } else
+        {
+            JOptionPane.showMessageDialog(null, "Select a staff member!");
+        }
+    }//GEN-LAST:event_btnUnregisterUserActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,6 +323,8 @@ public class ManageUsers extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnRegisterUser;
+    private javax.swing.JButton btnUnregisterUser;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JScrollPane jScrollPane1;
