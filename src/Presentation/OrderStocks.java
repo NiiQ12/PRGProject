@@ -352,14 +352,19 @@ public class OrderStocks extends javax.swing.JFrame
         PopulateTable();
     }//GEN-LAST:event_btnRemoveItemActionPerformed
 
+    private void ClearTable()
+    {
+        DefaultTableModel model = (DefaultTableModel) tblStationery.getModel();
+        model.setRowCount(0);
+
+        stationery.clear();
+    }
+
     private void btnClearItemsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClearItemsActionPerformed
     {//GEN-HEADEREND:event_btnClearItemsActionPerformed
         if (tblStationery.getRowCount() > 0)
         {
-            DefaultTableModel model = (DefaultTableModel) tblStationery.getModel();
-            model.setRowCount(0);
-
-            stationery.clear();
+            ClearTable();
         } else
         {
             JOptionPane.showMessageDialog(null, "Table Is Empty", "Warning!", JOptionPane.WARNING_MESSAGE);
@@ -387,36 +392,38 @@ public class OrderStocks extends javax.swing.JFrame
             Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-//        int lastOrderID = 0;
-//        
-//        try
-//        {
-//            lastOrderID = Order.GetLastOrderID();
-//        } catch (ClassNotFoundException ex)
-//        {
-//            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (SQLException ex)
-//        {
-//            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        for (int i = 0; i < stationery.size(); i++)
-//        {
-//            orderDetails.add(new OrderDetail(lastOrderID, stationery.get(i).getStationeryCode(), stationery.get(i).getQuantity()));
-//        }
-//        
-//        order.setOrderDetails(orderDetails);
-//        
-//        try
-//        {
-//            order.AddOrderDetails();
-//        } catch (ClassNotFoundException ex)
-//        {
-//            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (SQLException ex)
-//        {
-//            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        int lastOrderID = 0;
+
+        try
+        {
+            lastOrderID = Order.GetLastOrderID();
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        for (int i = 0; i < stationery.size(); i++)
+        {
+            orderDetails.add(new OrderDetail(lastOrderID, stationery.get(i).getStationeryCode(), stationery.get(i).getQuantity()));
+        }
+
+        order.setOrderDetails(orderDetails);
+
+        try
+        {
+            order.AddOrderDetails();
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        ClearTable();
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
