@@ -254,6 +254,13 @@ public class ManageStocks extends javax.swing.JFrame
         try
         {
             SetTableValues(description, categoryID);
+            
+            if (tblStocks.getRowCount() == 0)
+            {
+                JOptionPane.showMessageDialog(null, "No items found!");
+                
+                txtSearchDescription.setText("");
+            }
         } catch (SQLException ex)
         {
             Logger.getLogger(ManageStocks.class.getName()).log(Level.SEVERE, null, ex);
