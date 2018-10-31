@@ -108,7 +108,7 @@ public class OrderDetail
         this.price = price;
         this.quantity = quantity;
     }
-
+    
     @Override
     public String toString()
     {

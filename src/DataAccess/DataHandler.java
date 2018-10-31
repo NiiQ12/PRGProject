@@ -618,5 +618,30 @@ public class DataHandler
         return latestOrderID;
     }
     
+    public static void AddOrder(Date date) throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+        
+        pst = con.prepareStatement("INSERT INTO tblOrder(Date, AdministratorID) VALUES(?,?)");
+        pst.setDate(1, date);
+        pst.setString(2, Administrator.loggedInAdminID);
+        pst.executeUpdate();
+        
+        CloseConnection();
+    }
+    
+    public static void AddOrderDetails(int orderID, int stationeryCode, int quantity) throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+        
+        pst = con.prepareStatement("INSERT INTO orderdetails VALUES(?,?,?)");
+        pst.setInt(1, orderID);
+        pst.setInt(2, stationeryCode);
+        pst.setInt(3, quantity);
+        pst.executeUpdate();
+        
+        CloseConnection();
+    }
+    
     // </editor-fold>
 }

@@ -64,9 +64,24 @@ public class Order
         this.orderDetails = orderDetails;
     }
 
-    public static void GetLastOrderID()
+    public void AddOrder() throws ClassNotFoundException, SQLException
     {
+        DataHandler.AddOrder(this.date);
+    }
+    
+    public void AddOrderDetails() throws ClassNotFoundException, SQLException
+    {
+        for (int i = 0; i < orderDetails.size(); i++)
+        {
+            DataHandler.AddOrderDetails(orderDetails.get(i).getId(), orderDetails.get(i).getStationeryCode(), orderDetails.get(i).getQuantity());
+        }
+    }
+    
+    public static int GetLastOrderID() throws ClassNotFoundException, SQLException
+    {
+        int latestOrderID = DataHandler.GetLastOrderID();
         
+        return latestOrderID;
     }
     
     public Order()

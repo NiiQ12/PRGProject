@@ -371,15 +371,52 @@ public class OrderStocks extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnPlaceOrderActionPerformed
         long millis = System.currentTimeMillis();
         Date date = new Date(millis);
-        
-        List<OrderDetail> orderDetails = new ArrayList<>(); 
-        
-        for (int i = 0; i < stationery.size(); i++)
+
+        List<OrderDetail> orderDetails = new ArrayList<>();
+
+        Order order = new Order(0, date, Administrator.loggedInAdminID, null);
+
+        try
         {
-            orderDetails.add(new OrderDetail(0, stationery.get(i).getStationeryCode(), stationery.get(i).getQuantity()));
+            order.AddOrder();
+        } catch (ClassNotFoundException ex)
+        {
+            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        Order order = new Order(0, date, Administrator.loggedInAdminID, orderDetails);
+
+//        int lastOrderID = 0;
+//        
+//        try
+//        {
+//            lastOrderID = Order.GetLastOrderID();
+//        } catch (ClassNotFoundException ex)
+//        {
+//            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (SQLException ex)
+//        {
+//            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//        for (int i = 0; i < stationery.size(); i++)
+//        {
+//            orderDetails.add(new OrderDetail(lastOrderID, stationery.get(i).getStationeryCode(), stationery.get(i).getQuantity()));
+//        }
+//        
+//        order.setOrderDetails(orderDetails);
+//        
+//        try
+//        {
+//            order.AddOrderDetails();
+//        } catch (ClassNotFoundException ex)
+//        {
+//            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+//        } catch (SQLException ex)
+//        {
+//            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
