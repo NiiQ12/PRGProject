@@ -140,10 +140,7 @@ public class Login extends javax.swing.JFrame
                 }
                 
                 this.setVisible(false);
-            } else
-            {
-                JOptionPane.showMessageDialog(null, "Invalid login details!");
-            }
+            } 
         } catch (SQLException ex)
         {
             Logger.getLogger(BusinessLogic.Login.class.getName()).log(Level.SEVERE, null, ex);
