@@ -186,6 +186,17 @@ public class DataHandler
         return rs;
     }
 
+    public static ResultSet GetStationeryDescriptions() throws SQLException, ClassNotFoundException
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+        
+        rs = st.executeQuery("SELECT Description FROM stationery");
+
+        return rs;
+    }
+
     public static ResultSet GetLastStationeryCode() throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
@@ -521,25 +532,25 @@ public class DataHandler
     public static void RejectRequest(int id) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
-        
+
         pst = con.prepareStatement("UPDATE request SET AdministratorID = ?, ReceiveDate =  NULL, Accepted = ? WHERE RequestID = ?");
         pst.setString(1, Administrator.loggedInAdminID);
         pst.setBoolean(2, false);
         pst.setInt(3, id);
         pst.executeUpdate();
-        
+
         CloseConnection();
     }
-    
+
     public static void RefillCancelledRequestQuantities(int stationeryCode, int amount) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
-        
+
         pst = con.prepareStatement("UPDATE stationery SET Stock = Stock + ? WHERE StationeryCode = ?");
         pst.setInt(1, amount);
         pst.setInt(2, stationeryCode);
         pst.executeUpdate();
-        
+
         CloseConnection();
     }
     // </editor-fold>

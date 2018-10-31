@@ -18,15 +18,16 @@ import DataAccess.DataHandler;
  */
 public class Stationery
 {
+
     private int stationeryCode;
     private String category;
     private String Description;
     private int stock;
     private double price;
     private String manufacturer;
-    
+
     private int quantity;
-    
+
     public int getStationeryCode()
     {
         return stationeryCode;
@@ -86,7 +87,7 @@ public class Stationery
     {
         this.manufacturer = manufacturer;
     }
-    
+
     public int getQuantity()
     {
         return quantity;
@@ -96,56 +97,72 @@ public class Stationery
     {
         this.quantity = quantity;
     }
-    
+
     public static void AddStationery(int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException
     {
         DataHandler.AddStationery(categoryID, description, stock, price, manufactureID);
     }
-    
+
     public static void UpdateStationery(int stationeryCode, int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException
     {
         DataHandler.UpdateStationery(stationeryCode, categoryID, description, stock, price, manufactureID);
     }
-    
+
     public void UpdateStationeryStock(int newStock) throws SQLException, ClassNotFoundException
     {
         DataHandler.UpdateStationeryStock(this.stationeryCode, newStock);
     }
-    
+
     public static void DeleteStationery(int stationeryCode) throws SQLException, ClassNotFoundException
     {
         DataHandler.DeleteStationery(stationeryCode);
     }
-    
+
     public static List<Stationery> GetStationery(String description, int categoryID) throws SQLException, ClassNotFoundException
     {
         List<Stationery> stationeries = new ArrayList<>();
-        
+
         ResultSet rs = DataHandler.GetStationery(description, categoryID);
-            
+
         while (rs.next())
-        {            
+        {
             stationeries.add(new Stationery(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5), rs.getString(6)));
         }
-        
+
         DataHandler.CloseConnection();
-        
+
         return stationeries;
     }
-    
+
+    public static List<String> GetStationeryDescriptions() throws SQLException, ClassNotFoundException
+    {
+        List<String> descriptions = new ArrayList<>();
+
+        ResultSet rs = DataHandler.GetStationeryDescriptions();
+
+        while (rs.next())
+        {
+            descriptions.add(rs.getString(1));
+        }
+
+        DataHandler.CloseConnection();
+
+        return descriptions;
+    }
+
     public static int GetLastStationeryCode() throws ClassNotFoundException, SQLException
     {
         int code = 0;
-        
+
         ResultSet rs = DataHandler.GetLastStationeryCode();
-                
+
         while (rs.next())
-        {            
+        {
             code = rs.getInt(1) + 1;
         }
-        
+
         DataHandler.CloseConnection();
-        
+
         return code;
     }
 
@@ -162,7 +179,18 @@ public class Stationery
         this.price = price;
         this.manufacturer = manufacturer;
     }
-    
+
+    public Stationery(int stationeryCode, String category, String Description, int stock, double price, String manufacturer, int quantity)
+    {
+        this.stationeryCode = stationeryCode;
+        this.category = category;
+        this.Description = Description;
+        this.stock = stock;
+        this.price = price;
+        this.manufacturer = manufacturer;
+        this.quantity = quantity;
+    }
+
     @Override
     public String toString()
     {
