@@ -51,7 +51,7 @@ public class OrderStocks extends javax.swing.JFrame
         btnRemoveItem = new javax.swing.JButton();
         btnClearItems = new javax.swing.JButton();
         btnPlaceOrder = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
+        lblTotal = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -146,6 +146,13 @@ public class OrderStocks extends javax.swing.JFrame
         });
         tblStationery.setName("tblStationery"); // NOI18N
         tblStationery.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblStationery.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                tblStationeryMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblStationery);
 
         getContentPane().add(jScrollPane1);
@@ -189,13 +196,13 @@ public class OrderStocks extends javax.swing.JFrame
         getContentPane().add(btnPlaceOrder);
         btnPlaceOrder.setBounds(500, 400, 120, 35);
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        jLabel5.setText("R 100.00");
-        jLabel5.setName("lblTotal"); // NOI18N
-        getContentPane().add(jLabel5);
-        jLabel5.setBounds(370, 414, 120, 20);
+        lblTotal.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        lblTotal.setForeground(new java.awt.Color(255, 255, 255));
+        lblTotal.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        lblTotal.setText("R 0.00");
+        lblTotal.setName("lblTotal"); // NOI18N
+        getContentPane().add(lblTotal);
+        lblTotal.setBounds(370, 414, 120, 20);
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -212,12 +219,12 @@ public class OrderStocks extends javax.swing.JFrame
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    List<Stationery> stationery = new ArrayList<>();
-    
+    ArrayList<Stationery> stationery = new ArrayList<>();
+
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAddActionPerformed
     {//GEN-HEADEREND:event_btnAddActionPerformed
         String description = cmbStationery.getSelectedItem().toString();
-        
+
         int quantity = Integer.parseInt(JOptionPane.showInputDialog("How Many Would You Like To Order?"));
 
         boolean alreadyOrdered = false;
@@ -252,9 +259,14 @@ public class OrderStocks extends javax.swing.JFrame
                 Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         alreadyOrdered = false;
 
+        PopulateTable();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void PopulateTable()
+    {
         DefaultTableModel model = (DefaultTableModel) tblStationery.getModel();
         model.setRowCount(0);
 
@@ -271,7 +283,21 @@ public class OrderStocks extends javax.swing.JFrame
 
             model.addRow(rowData);
         }
-    }//GEN-LAST:event_btnAddActionPerformed
+        
+        CalculateTotal();
+    }
+    
+    private void CalculateTotal()
+    {
+        double total = 0;
+        
+        for (int i = 0; i < stationery.size(); i++)
+        {
+            total += stationery.get(i).getQuantity() * stationery.get(i).getPrice();
+        }
+        
+        lblTotal.setText("R " + total);
+    }
 
     private void cmbStationeryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbStationeryActionPerformed
     {//GEN-HEADEREND:event_cmbStationeryActionPerformed
@@ -287,14 +313,30 @@ public class OrderStocks extends javax.swing.JFrame
 
     private void btnRemoveItemActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRemoveItemActionPerformed
     {//GEN-HEADEREND:event_btnRemoveItemActionPerformed
+        if (stationery.size() > 0)
+        {
+            stationery.remove(rowIndex);
+        } else
+        {
+            JOptionPane.showMessageDialog(null, "No Items Selected", "Warning!", JOptionPane.WARNING_MESSAGE);
+        }
 
+        PopulateTable();
     }//GEN-LAST:event_btnRemoveItemActionPerformed
 
     private void btnClearItemsActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnClearItemsActionPerformed
     {//GEN-HEADEREND:event_btnClearItemsActionPerformed
-        AddStocks frame = new AddStocks();
-        frame.setVisible(true);
-        this.setVisible(false);
+        if (tblStationery.getRowCount() > 0)
+        {
+            DefaultTableModel model = (DefaultTableModel) tblStationery.getModel();
+            model.setRowCount(0);
+
+            stationery.clear();
+        } else
+        {
+            JOptionPane.showMessageDialog(null, "Table Is Empty", "Warning!", JOptionPane.WARNING_MESSAGE);
+        }
+
     }//GEN-LAST:event_btnClearItemsActionPerformed
 
     private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnPlaceOrderActionPerformed
@@ -315,12 +357,16 @@ public class OrderStocks extends javax.swing.JFrame
         try
         {
             descriptions = Stationery.GetStationeryDescriptions();
+
         } catch (SQLException ex)
         {
-            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderStocks.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (ClassNotFoundException ex)
         {
-            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(OrderStocks.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
         if (cmbStationery.getItemCount() == 0)
@@ -331,6 +377,16 @@ public class OrderStocks extends javax.swing.JFrame
             }
         }
     }//GEN-LAST:event_formWindowActivated
+
+    int rowIndex;
+
+    private void tblStationeryMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_tblStationeryMouseClicked
+    {//GEN-HEADEREND:event_tblStationeryMouseClicked
+        if (tblStationery.getSelectedRow() >= 0)
+        {
+            rowIndex = tblStationery.getSelectedRow();
+        }
+    }//GEN-LAST:event_tblStationeryMouseClicked
 
     /**
      * @param args the command line arguments
@@ -350,20 +406,28 @@ public class OrderStocks extends javax.swing.JFrame
                 {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex)
         {
-            java.util.logging.Logger.getLogger(OrderStocks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OrderStocks.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex)
         {
-            java.util.logging.Logger.getLogger(OrderStocks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OrderStocks.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex)
         {
-            java.util.logging.Logger.getLogger(OrderStocks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OrderStocks.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex)
         {
-            java.util.logging.Logger.getLogger(OrderStocks.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(OrderStocks.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -387,9 +451,9 @@ public class OrderStocks extends javax.swing.JFrame
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblStationery;
     // End of variables declaration//GEN-END:variables
 }
