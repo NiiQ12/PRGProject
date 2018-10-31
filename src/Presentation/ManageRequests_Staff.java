@@ -22,7 +22,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class ManageRequests_Staff extends javax.swing.JFrame
 {
-
     /**
      * Creates new form OrderStocks
      */

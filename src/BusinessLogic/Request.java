@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class Request
 {
+
     private int requestID;
     private String staffID;
     private String adminID;
@@ -95,44 +97,44 @@ public class Request
     {
         this.requestDetails = requestDetails;
     }
-    
+
     public void AddRequest() throws SQLException, ClassNotFoundException
     {
         DataHandler.AddRequest(this.staffID, this.requestDate);
-        
+
         ResultSet rs = DataHandler.GetLastRequestID();
-        
+
         while (rs.next())
-        {            
+        {
             this.requestID = rs.getInt(1);
         }
-        
+
         for (RequestDetail requestDetail : requestDetails)
         {
             requestDetail.AddRequestDetail(requestID);
         }
-        
+
         DataHandler.CloseConnection();
     }
-    
+
     public static List<Request> GetRequests(RequestType rt) throws SQLException, ClassNotFoundException
     {
         List<Request> requests = new ArrayList<>();
-        
+
         ResultSet rs = DataHandler.GetRequests(rt);
-        
+
         List<RequestDetail> requestDetails = RequestDetail.GetRequestDetails(rt);
-        
+
         while (rs.next())
-        {            
+        {
             requests.add(new Request(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDate(5), rs.getBoolean(6), requestDetails));
         }
-        
+
         DataHandler.CloseConnection();
-        
-        return requests;        
+
+        return requests;
     }
-    
+
     public void CancelRequest() throws SQLException, ClassNotFoundException
     {
         for (RequestDetail requestDetail : this.requestDetails)
@@ -140,26 +142,44 @@ public class Request
             System.out.println(requestDetail.getStationeryCode());
             requestDetail.UpdateCancelledRequestDetailQuantity(requestDetail.getId(), requestDetail.getQuantity());
         }
-        
+
         DataHandler.DeleteRequest(this.requestID);
+    }
+
+    public static void AcceptRequest(int requestID) throws SQLException, ClassNotFoundException
+    {
+        DataHandler.AcceptRequest(requestID);
+    }
+
+    public static void RejectRequest(int requestID) throws SQLException, ClassNotFoundException
+    {
+        DataHandler.RejectRequest(requestID);
+    }
+
+    public void RefillCancelledRequestQuantities() throws ClassNotFoundException, SQLException
+    {
+        for (int i = 0; i < this.requestDetails.size(); i++)
+        {
+            DataHandler.RefillCancelledRequestQuantities(requestDetails.get(i).getStationeryCode(), requestDetails.get(i).getQuantity());
+        }
     }
 
     public Request()
     {
-        
+
     }
 
     public Request(String staffID, List<RequestDetail> requestDetails)
     {
         this.staffID = staffID;
-        
-        long millis = System.currentTimeMillis();        
+
+        long millis = System.currentTimeMillis();
         Date date = new Date(millis);
-        
+
         this.requestDate = date;
         this.requestDetails = requestDetails;
     }
-    
+
     public Request(int requestID, String staffID, String adminID, Date requestDate, Date receiveDate, boolean requestAccepted, List<RequestDetail> requestDetails)
     {
         this.requestID = requestID;

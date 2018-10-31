@@ -5,9 +5,11 @@
  */
 package DataAccess;
 
+import BusinessLogic.Administrator;
 import BusinessLogic.EmployeeType;
 import BusinessLogic.RequestType;
 import BusinessLogic.Staff;
+import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -25,6 +27,7 @@ import javax.swing.JOptionPane;
  */
 public class DataHandler
 {
+
     static Connection con;
     static PreparedStatement pst;
     static Statement st;
@@ -86,21 +89,21 @@ public class DataHandler
             return false;
         }
     }
-    
+
     public static int GetLoginID(String username, String password) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
-        
+
         st = con.createStatement();
-        rs = st.executeQuery("SELECT LoginID FROM login WHERE Username = '"+ username +"' AND Password = '"+ password +"'");
-        
+        rs = st.executeQuery("SELECT LoginID FROM login WHERE Username = '" + username + "' AND Password = '" + password + "'");
+
         int loginID = 0;
-        
+
         if (rs.next())
         {
             loginID = rs.getInt("LoginID");
         }
-        
+
         return loginID;
     }
     // </editor-fold>
@@ -356,7 +359,6 @@ public class DataHandler
     }
 
     // </editor-fold>
-    
     // <editor-fold desc="Requests">   
     public static void AddRequest(String staffID, Date requestDate) throws SQLException, ClassNotFoundException // REGISTER
     {
@@ -394,20 +396,38 @@ public class DataHandler
         switch (rt)
         {
             case All:
-                rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = " + Staff.loggedInStaffID);
+                if (Staff.loggedInStaffID.equals(""))
+                {
+                    rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID");
+                } else
+                {
+                    rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = " + Staff.loggedInStaffID);
+                }
                 break;
             case Completed:
-                rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = '" + Staff.loggedInStaffID + "' AND request.accepted IS NOT NULL");
+                if (Staff.loggedInStaffID.equals(""))
+                {
+                    rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE request.accepted IS NOT NULL");
+                } else
+                {
+                    rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = '" + Staff.loggedInStaffID + "' AND request.accepted IS NOT NULL");
+                }
                 break;
             case Uncompleted:
-                rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = '" + Staff.loggedInStaffID + "' AND request.accepted IS NULL");
+                if (Staff.loggedInStaffID.equals(""))
+                {
+                    rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE AdministratorID IS NULL AND request.accepted IS NULL");
+                } else
+                {
+                    rs = st.executeQuery("SELECT requestdetails.RequestID, requestdetails.StationeryCode, category.Description, stationery.Description, Quantity FROM requestdetails INNER JOIN stationery ON requestdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN request ON request.RequestID = requestdetails.RequestID WHERE StaffID = '" + Staff.loggedInStaffID + "' AND request.accepted IS NULL");
+                }
                 break;
         }
 
         return rs;
     }
 
-    public static ResultSet GetRequests(RequestType rt) throws SQLException, ClassNotFoundException // REGISTER
+    public static ResultSet GetRequests(RequestType rt) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -416,23 +436,41 @@ public class DataHandler
         switch (rt)
         {
             case All:
-                rs = st.executeQuery("SELECT * FROM request WHERE StaffID = " + Staff.loggedInStaffID);
+                if (Staff.loggedInStaffID.equals(""))
+                {
+                    rs = st.executeQuery("SELECT * FROM request");
+                } else
+                {
+                    rs = st.executeQuery("SELECT * FROM request WHERE StaffID = " + Staff.loggedInStaffID);
+                }
                 break;
             case Completed:
-                rs = st.executeQuery("SELECT * FROM request WHERE StaffID = '" + Staff.loggedInStaffID + "' AND accepted IS NOT NULL");
+                if (Staff.loggedInStaffID.equals(""))
+                {
+                    rs = st.executeQuery("SELECT * FROM request WHERE accepted IS NOT NULL");
+                } else
+                {
+                    rs = st.executeQuery("SELECT * FROM request WHERE StaffID = '" + Staff.loggedInStaffID + "' AND accepted IS NOT NULL");
+                }
                 break;
             case Uncompleted:
-                rs = st.executeQuery("SELECT * FROM request WHERE StaffID = '" + Staff.loggedInStaffID + "' AND accepted IS NULL");
+                if (Staff.loggedInStaffID.equals(""))
+                {
+                    rs = st.executeQuery("SELECT * FROM request WHERE AdministratorID IS NULL AND accepted IS NULL AND ReceiveDate IS NULL");
+                } else
+                {
+                    rs = st.executeQuery("SELECT * FROM request WHERE StaffID = '" + Staff.loggedInStaffID + "' AND accepted IS NULL");
+                }
                 break;
         }
 
         return rs;
     }
-    
+
     public static void UpdateCancelledRequestDetailQuantity(int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
-        
+
         pst = con.prepareStatement("UPDATE stationery SET Stock = Stock + ? WHERE StationeryCode = ?");
         pst.setInt(1, quantity);
         pst.setInt(2, stationeryCode);
@@ -444,7 +482,7 @@ public class DataHandler
     public static void DeleteRequest(int requestID) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
-        
+
         pst = con.prepareStatement("DELETE FROM requestDetails WHERE RequestID = ?");
         pst.setInt(1, requestID);
         pst.executeUpdate();
@@ -455,13 +493,62 @@ public class DataHandler
 
         CloseConnection();
     }
+
+    public static void AcceptRequest(int id) throws SQLException, ClassNotFoundException
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT DATE_ADD(request.RequestDate, INTERVAL 10 DAY) FROM request WHERE RequestID = '" + id + "'");
+
+        Date date = null;
+
+        if (rs.next())
+        {
+            date = rs.getDate(1);
+        }
+
+        pst = con.prepareStatement("UPDATE request SET AdministratorID =?, ReceiveDate = ?, Accepted = ? WHERE RequestID = ?");
+        pst.setString(1, Administrator.loggedInAdminID);
+        pst.setDate(2, date);
+        pst.setBoolean(3, true);
+        pst.setInt(4, id);
+        pst.executeUpdate();
+
+        CloseConnection();
+    }
+
+    public static void RejectRequest(int id) throws SQLException, ClassNotFoundException
+    {
+        ConnectToDatabase();
+        
+        pst = con.prepareStatement("UPDATE request SET AdministratorID = ?, ReceiveDate =  NULL, Accepted = ? WHERE RequestID = ?");
+        pst.setString(1, Administrator.loggedInAdminID);
+        pst.setBoolean(2, false);
+        pst.setInt(3, id);
+        pst.executeUpdate();
+        
+        CloseConnection();
+    }
+    
+    public static void RefillCancelledRequestQuantities(int stationeryCode, int amount) throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+        
+        pst = con.prepareStatement("UPDATE stationery SET Stock = Stock + ? WHERE StationeryCode = ?");
+        pst.setInt(1, amount);
+        pst.setInt(2, stationeryCode);
+        pst.executeUpdate();
+        
+        CloseConnection();
+    }
     // </editor-fold>
 
     // <editor-fold desc="Address"> 
     public static int GetAddressID(String city, String suburb, String street, String port) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
-        
+
         st = con.createStatement();
         rs = st.executeQuery("SELECT AddressID FROM address WHERE City = '" + city + "' AND Suburb = '" + suburb + "' AND Street = '" + street + "' AND Port = '" + port + "'");
 
@@ -471,7 +558,7 @@ public class DataHandler
         {
             addressID = rs.getInt("AddressID");
         }
-        
+
         return addressID;
     }
 

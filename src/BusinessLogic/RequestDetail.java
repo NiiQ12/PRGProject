@@ -17,12 +17,13 @@ import java.util.List;
  */
 public class RequestDetail
 {
+
     private int id;
     private int stationeryCode;
     private String category;
     private String description;
     private int quantity;
-    
+
     public int getStationeryCode()
     {
         return stationeryCode;
@@ -72,26 +73,26 @@ public class RequestDetail
     {
         this.description = description;
     }
-        
+
     public void AddRequestDetail(int requestID) throws SQLException, ClassNotFoundException
     {
         DataHandler.AddRequestDetail(requestID, this.stationeryCode, this.quantity);
     }
-    
+
     public static List<RequestDetail> GetRequestDetails(RequestType rt) throws SQLException, ClassNotFoundException
     {
         List<RequestDetail> requestDetails = new ArrayList<>();
-        
+
         ResultSet rs = DataHandler.GetRequestDetails(rt);
-        
+
         while (rs.next())
-        {            
+        {
             requestDetails.add(new RequestDetail(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
         }
-        
+
         return requestDetails;
     }
-    
+
     public void UpdateCancelledRequestDetailQuantity(int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
     {
         DataHandler.UpdateCancelledRequestDetailQuantity(this.stationeryCode, this.quantity);
@@ -99,7 +100,7 @@ public class RequestDetail
     
     public RequestDetail()
     {
-        
+
     }
 
     public RequestDetail(int stationeryCode, int quantity)
