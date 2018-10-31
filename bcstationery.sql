@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 31, 2018 at 03:01 PM
+-- Generation Time: Oct 31, 2018 at 04:09 PM
 -- Server version: 5.7.23
 -- PHP Version: 7.2.10
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `bcstationery`
 --
+CREATE DATABASE IF NOT EXISTS `bcstationery` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `bcstationery`;
 
 -- --------------------------------------------------------
 
@@ -211,7 +213,14 @@ INSERT INTO `orderdetails` (`OrderID`, `StationeryCode`, `Quantity`) VALUES
 (2, 4, 2),
 (2, 5, 5),
 (2, 7, 1),
-(2, 8, 6);
+(2, 8, 6),
+(3, 1, 2),
+(4, 1, 2),
+(4, 5, 2),
+(4, 8, 2),
+(4, 12, 2),
+(5, 1, 2),
+(6, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -351,7 +360,7 @@ CREATE TABLE IF NOT EXISTS `tblorder` (
   `AdministratorID` varchar(13) NOT NULL,
   PRIMARY KEY (`OrderID`),
   KEY `AdministratorID` (`AdministratorID`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tblorder`
@@ -359,7 +368,11 @@ CREATE TABLE IF NOT EXISTS `tblorder` (
 
 INSERT INTO `tblorder` (`OrderID`, `Date`, `AdministratorID`) VALUES
 (1, '2018-10-01', '9610285023088'),
-(2, '2018-10-02', '9705025023088');
+(2, '2018-10-02', '9705025023088'),
+(3, '2018-10-31', '9610285023088'),
+(4, '2018-10-31', '9610285023088'),
+(5, '2018-10-01', '9610285023088'),
+(6, '2018-09-03', '9610285023088');
 
 --
 -- Constraints for dumped tables
