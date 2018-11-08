@@ -412,9 +412,11 @@ public class DataHandler
     {
         ConnectToDatabase();
 
-        pst = con.prepareStatement("INSERT INTO request(StaffID, RequestDate) VALUES(?,?)");
+        pst = con.prepareStatement("INSERT INTO request(StaffID, RequestDate, AdminResponse, AdminResponseReceived) VALUES(?,?,?,?)");
         pst.setString(1, staffID);
         pst.setDate(2, requestDate);
+        pst.setString(3, "");
+        pst.setBoolean(4, false);
         pst.executeUpdate();
     }
 
@@ -542,12 +544,12 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void AcceptRequest(int id) throws SQLException, ClassNotFoundException
+    public static void AcceptRequest(int id, String message, int days) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
         st = con.createStatement();
-        rs = st.executeQuery("SELECT DATE_ADD(request.RequestDate, INTERVAL 10 DAY) FROM request WHERE RequestID = '" + id + "'");
+        rs = st.executeQuery("SELECT DATE_ADD(request.RequestDate, INTERVAL '"+ days +"' DAY) FROM request WHERE RequestID = '" + id + "'");
 
         Date date = null;
 
@@ -556,24 +558,28 @@ public class DataHandler
             date = rs.getDate(1);
         }
 
-        pst = con.prepareStatement("UPDATE request SET AdministratorID =?, ReceiveDate = ?, Accepted = ? WHERE RequestID = ?");
+        pst = con.prepareStatement("UPDATE request SET AdministratorID =?, ReceiveDate = ?, Accepted = ?, AdminResponse = ?, AdminResponseReceived = ? WHERE RequestID = ?");
         pst.setString(1, Administrator.loggedInAdminID);
         pst.setDate(2, date);
         pst.setBoolean(3, true);
-        pst.setInt(4, id);
+        pst.setString(4, message);
+        pst.setBoolean(5, false);
+        pst.setInt(6, id);
         pst.executeUpdate();
 
         CloseConnection();
     }
 
-    public static void RejectRequest(int id) throws SQLException, ClassNotFoundException
+    public static void RejectRequest(int id, String message) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
-        pst = con.prepareStatement("UPDATE request SET AdministratorID = ?, ReceiveDate =  NULL, Accepted = ? WHERE RequestID = ?");
+        pst = con.prepareStatement("UPDATE request SET AdministratorID = ?, ReceiveDate =  NULL, Accepted = ?, AdminResponse = ?, AdminResponseReceived = ? WHERE RequestID = ?");
         pst.setString(1, Administrator.loggedInAdminID);
         pst.setBoolean(2, false);
-        pst.setInt(3, id);
+        pst.setString(3, message);
+        pst.setBoolean(4, false);
+        pst.setInt(5, id);
         pst.executeUpdate();
 
         CloseConnection();

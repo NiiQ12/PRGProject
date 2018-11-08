@@ -259,7 +259,9 @@ public class ManageRequests_Admin extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnRejectRequestActionPerformed
         try
         {
-            Request.RejectRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()));
+            String message = JOptionPane.showInputDialog("Reason For Cancellation?");
+            
+            Request.RejectRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()), message);
 
             Request request = new Request();
             List<RequestDetail> newRequestDetails = new ArrayList<>();
@@ -284,8 +286,6 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             request.setRequestDetails(newRequestDetails);
 
             request.RefillCancelledRequestQuantities();
-
-            JOptionPane.showMessageDialog(null, request.getRequestDetails().size());
 
         } catch (SQLException ex)
         {
@@ -397,7 +397,10 @@ public class ManageRequests_Admin extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnAcceptRequestActionPerformed
         try
         {
-            Request.AcceptRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()));
+            String message = JOptionPane.showInputDialog("Feedback Regarding Accepting?");
+            int days = Integer.parseInt(JOptionPane.showInputDialog("How Many Days Will The Order Take?"));
+            
+            Request.AcceptRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()), message, days);
         } catch (SQLException ex)
         {
             Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
