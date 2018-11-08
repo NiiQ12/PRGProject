@@ -6,8 +6,8 @@ CATEGORY : Pens
 ---------------------------------------------------------------------------------
 CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
 ---------------------------------------------------------------------------------
-1         Bic Blue 4 pack               20        $   5.00  Pens4U
-2         Bic Black 4 pack              15        $   7.00  Pens4U
+1         Bic Blue 4 pack               18        $   5.00  Pens4U
+2         Bic Black 4 pack              13        $   7.00  Pens4U
 
 CATEGORY : Pencils
 ---------------------------------------------------------------------------------
