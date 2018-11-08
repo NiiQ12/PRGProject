@@ -65,7 +65,7 @@ public class Login
     {
         boolean isValidLogin;
 
-        List<Object> lst = DataHandler.Login(username, password);
+        List<Object> lst = DataHandler.GetInstance().Login(username, password);
 
         if (lst.isEmpty())
         {
@@ -97,23 +97,23 @@ public class Login
             }
         }
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return isValidLogin;
     }
 
     public static boolean CheckLogin(String username) throws SQLException, ClassNotFoundException
     {
-        boolean isAvailable = DataHandler.CheckLogin(username);
+        boolean isAvailable = DataHandler.GetInstance().CheckLogin(username);
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return isAvailable;
     }
 
     public static int GetLoginID(String username, String password) throws ClassNotFoundException, SQLException
     {
-        int loginID = DataHandler.GetLoginID(username, password);
+        int loginID = DataHandler.GetInstance().GetLoginID(username, password);
 
         return loginID;
     }

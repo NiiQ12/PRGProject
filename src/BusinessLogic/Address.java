@@ -81,7 +81,7 @@ public class Address
 
     public static int GetAddressID(String city, String suburb, String street, String port) throws SQLException, ClassNotFoundException
     {
-        int addressID = DataHandler.GetAddressID(city, suburb, street, port);
+        int addressID = DataHandler.GetInstance().GetAddressID(city, suburb, street, port);
         
         return addressID;
     }

@@ -100,36 +100,36 @@ public class Stationery
 
     public static void AddStationery(int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException
     {
-        DataHandler.AddStationery(categoryID, description, stock, price, manufactureID);
+        DataHandler.GetInstance().AddStationery(categoryID, description, stock, price, manufactureID);
     }
 
     public static void UpdateStationery(int stationeryCode, int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException
     {
-        DataHandler.UpdateStationery(stationeryCode, categoryID, description, stock, price, manufactureID);
+        DataHandler.GetInstance().UpdateStationery(stationeryCode, categoryID, description, stock, price, manufactureID);
     }
 
     public void UpdateStationeryStock(int newStock) throws SQLException, ClassNotFoundException
     {
-        DataHandler.UpdateStationeryStock(this.stationeryCode, newStock);
+        DataHandler.GetInstance().UpdateStationeryStock(this.stationeryCode, newStock);
     }
 
     public static void DeleteStationery(int stationeryCode) throws SQLException, ClassNotFoundException
     {
-        DataHandler.DeleteStationery(stationeryCode);
+        DataHandler.GetInstance().DeleteStationery(stationeryCode);
     }
 
     public static List<Stationery> GetStationery(String description, int categoryID) throws SQLException, ClassNotFoundException
     {
         List<Stationery> stationeries = new ArrayList<>();
 
-        ResultSet rs = DataHandler.GetStationery(description, categoryID);
+        ResultSet rs = DataHandler.GetInstance().GetStationery(description, categoryID);
 
         while (rs.next())
         {
             stationeries.add(new Stationery(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5), rs.getString(6)));
         }
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return stationeries;
     }
@@ -138,14 +138,14 @@ public class Stationery
     {
         List<String> descriptions = new ArrayList<>();
 
-        ResultSet rs = DataHandler.GetStationeryDescriptions();
+        ResultSet rs = DataHandler.GetInstance().GetStationeryDescriptions();
 
         while (rs.next())
         {
             descriptions.add(rs.getString(1));
         }
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return descriptions;
     }
@@ -154,14 +154,14 @@ public class Stationery
     {
         int code = 0;
 
-        ResultSet rs = DataHandler.GetLastStationeryCode();
+        ResultSet rs = DataHandler.GetInstance().GetLastStationeryCode();
 
         while (rs.next())
         {
             code = rs.getInt(1) + 1;
         }
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return code;
     }

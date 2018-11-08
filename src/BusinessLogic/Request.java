@@ -100,9 +100,9 @@ public class Request
 
     public void AddRequest() throws SQLException, ClassNotFoundException
     {
-        DataHandler.AddRequest(this.staffID, this.requestDate);
+        DataHandler.GetInstance().AddRequest(this.staffID, this.requestDate);
 
-        ResultSet rs = DataHandler.GetLastRequestID();
+        ResultSet rs = DataHandler.GetInstance().GetLastRequestID();
 
         while (rs.next())
         {
@@ -114,14 +114,14 @@ public class Request
             requestDetail.AddRequestDetail(requestID);
         }
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
     }
 
     public static List<Request> GetRequests(RequestType rt) throws SQLException, ClassNotFoundException
     {
         List<Request> requests = new ArrayList<>();
 
-        ResultSet rs = DataHandler.GetRequests(rt);
+        ResultSet rs = DataHandler.GetInstance().GetRequests(rt);
 
         List<RequestDetail> requestDetails = RequestDetail.GetRequestDetails(rt);
 
@@ -130,7 +130,7 @@ public class Request
             requests.add(new Request(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDate(5), rs.getBoolean(6), requestDetails));
         }
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return requests;
     }
@@ -143,24 +143,24 @@ public class Request
             requestDetail.UpdateCancelledRequestDetailQuantity(requestDetail.getId(), requestDetail.getQuantity());
         }
 
-        DataHandler.DeleteRequest(this.requestID);
+        DataHandler.GetInstance().DeleteRequest(this.requestID);
     }
 
     public static void AcceptRequest(int requestID, String message, int days) throws SQLException, ClassNotFoundException
     {
-        DataHandler.AcceptRequest(requestID, message, days);
+        DataHandler.GetInstance().AcceptRequest(requestID, message, days);
     }
 
     public static void RejectRequest(int requestID, String message) throws SQLException, ClassNotFoundException
     {
-        DataHandler.RejectRequest(requestID, message);
+        DataHandler.GetInstance().RejectRequest(requestID, message);
     }
 
     public void RefillCancelledRequestQuantities() throws ClassNotFoundException, SQLException
     {
         for (int i = 0; i < this.requestDetails.size(); i++)
         {
-            DataHandler.RefillCancelledRequestQuantities(requestDetails.get(i).getStationeryCode(), requestDetails.get(i).getQuantity());
+            DataHandler.GetInstance().RefillCancelledRequestQuantities(requestDetails.get(i).getStationeryCode(), requestDetails.get(i).getQuantity());
         }
     }
 

@@ -91,7 +91,7 @@ public class OrderDetail
     {
         List<OrderDetail> orderDetails = new ArrayList<>();
 
-        ResultSet rs = DataHandler.GetOrderDetails(id);
+        ResultSet rs = DataHandler.GetInstance().GetOrderDetails(id);
 
         while (rs.next())
         {
@@ -105,7 +105,7 @@ public class OrderDetail
     {
         for (int i = 0; i < orderDetails.size(); i++)
         {
-            DataHandler.AddOrderDetails(orderDetails.get(i).getId(), orderDetails.get(i).getStationeryCode(), orderDetails.get(i).getQuantity());
+            DataHandler.GetInstance().AddOrderDetails(orderDetails.get(i).getId(), orderDetails.get(i).getStationeryCode(), orderDetails.get(i).getQuantity());
         }
     }
 

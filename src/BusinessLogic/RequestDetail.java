@@ -76,14 +76,14 @@ public class RequestDetail
 
     public void AddRequestDetail(int requestID) throws SQLException, ClassNotFoundException
     {
-        DataHandler.AddRequestDetail(requestID, this.stationeryCode, this.quantity);
+        DataHandler.GetInstance().AddRequestDetail(requestID, this.stationeryCode, this.quantity);
     }
 
     public static List<RequestDetail> GetRequestDetails(RequestType rt) throws SQLException, ClassNotFoundException
     {
         List<RequestDetail> requestDetails = new ArrayList<>();
 
-        ResultSet rs = DataHandler.GetRequestDetails(rt);
+        ResultSet rs = DataHandler.GetInstance().GetRequestDetails(rt);
 
         while (rs.next())
         {
@@ -95,7 +95,7 @@ public class RequestDetail
 
     public void UpdateCancelledRequestDetailQuantity(int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
     {
-        DataHandler.UpdateCancelledRequestDetailQuantity(this.stationeryCode, this.quantity);
+        DataHandler.GetInstance().UpdateCancelledRequestDetailQuantity(this.stationeryCode, this.quantity);
     }
     
     public RequestDetail()

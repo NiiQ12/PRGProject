@@ -33,14 +33,14 @@ public class Staff extends Employee
     {
         ArrayList<Staff> staffMembers = new ArrayList<>();
 
-        ResultSet rs = DataHandler.GetStaff(ct);
+        ResultSet rs = DataHandler.GetInstance().GetStaff(ct);
 
         while (rs.next())
         {
             staffMembers.add(new Staff(rs.getString("StaffID"), new Department(rs.getInt("DepartmentID"), rs.getString("Description")), rs.getString("Name"), rs.getString("Surname"), rs.getString("CellNo"), rs.getString("Email"), new Address(rs.getInt("AddressID"), rs.getString("City"), rs.getString("Suburb"), rs.getString("Street"), rs.getString("Port")), new Login(rs.getInt("LoginID"), rs.getString("Username"), rs.getString("Password"), rs.getBoolean("Registered"))));
         }
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return staffMembers;
     }
@@ -49,35 +49,35 @@ public class Staff extends Employee
     {
         Staff staff;
 
-        ResultSet rs = DataHandler.GetStaff(id);
+        ResultSet rs = DataHandler.GetInstance().GetStaff(id);
 
         rs.first();
 
         staff = new Staff(rs.getString("StaffID"), new Department(rs.getInt("DepartmentID"), rs.getString("Description")), rs.getString("Name"), rs.getString("Surname"), rs.getString("CellNo"), rs.getString("Email"), new Address(rs.getInt("AddressID"), rs.getString("City"), rs.getString("Suburb"), rs.getString("Street"), rs.getString("Port")), new Login(rs.getInt("LoginID"), rs.getString("Username"), rs.getString("Password"), rs.getBoolean("Registered")));
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return staff;
     }
 
     public void AddNewStaffMember() throws ClassNotFoundException, SQLException
     {
-        DataHandler.AddStaff(this.getId(), this.department.getDepartmentID(), this.getName(), this.getSurname(), this.getCellNo(), this.getEmail(), this.getAddress().getCity(), this.getAddress().getSuburb(), this.getAddress().getStreet(), this.getAddress().getPort(), this.getLogin().getUsername(), this.getLogin().getPassword());
+        DataHandler.GetInstance().AddStaff(this.getId(), this.department.getDepartmentID(), this.getName(), this.getSurname(), this.getCellNo(), this.getEmail(), this.getAddress().getCity(), this.getAddress().getSuburb(), this.getAddress().getStreet(), this.getAddress().getPort(), this.getLogin().getUsername(), this.getLogin().getPassword());
     }
 
     public void UpdateStaffMember() throws ClassNotFoundException, SQLException
     {
-        DataHandler.UpdateStaff(loggedInStaffID, this.department.getDepartmentID(), this.getName(), this.getSurname(), this.getCellNo(), this.getEmail(), this.getAddress().getAddressID(), this.getAddress().getCity(), this.getAddress().getSuburb(), this.getAddress().getStreet(), this.getAddress().getPort(), this.getLogin().getLoginID(), this.getLogin().getUsername(), this.getLogin().getPassword());
+        DataHandler.GetInstance().UpdateStaff(loggedInStaffID, this.department.getDepartmentID(), this.getName(), this.getSurname(), this.getCellNo(), this.getEmail(), this.getAddress().getAddressID(), this.getAddress().getCity(), this.getAddress().getSuburb(), this.getAddress().getStreet(), this.getAddress().getPort(), this.getLogin().getLoginID(), this.getLogin().getUsername(), this.getLogin().getPassword());
     }
     
     public static void RegisterStaff(String staffID) throws ClassNotFoundException, SQLException
     {
-        DataHandler.RegisterStaff(staffID);
+        DataHandler.GetInstance().RegisterStaff(staffID);
     }
     
     public static void UnregisterStaff(String staffID) throws ClassNotFoundException, SQLException
     {
-        DataHandler.UnregisterStaff(staffID);
+        DataHandler.GetInstance().UnregisterStaff(staffID);
     }
 
     public Staff()

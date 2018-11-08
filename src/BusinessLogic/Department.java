@@ -49,7 +49,7 @@ public class Department
     {
         ArrayList<String> departments = new ArrayList<>();
         
-        ResultSet rs = DataHandler.GetDepartment();
+        ResultSet rs = DataHandler.GetInstance().GetDepartment();
         
         while(rs.next())
         {

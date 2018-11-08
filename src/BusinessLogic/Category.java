@@ -43,14 +43,14 @@ public class Category
     public static List<Category> GetCategories() throws SQLException, ClassNotFoundException
     {
         List<Category> categories = new ArrayList<>();
-        ResultSet rs = DataHandler.GetCategories();
+        ResultSet rs = DataHandler.GetInstance().GetCategories();
         
         while (rs.next())
         {            
             categories.add(new Category(rs.getInt(1), rs.getString(2)));
         }
         
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
         
         return categories;
     }

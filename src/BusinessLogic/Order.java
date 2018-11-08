@@ -66,7 +66,7 @@ public class Order
 
     public void AddOrder() throws ClassNotFoundException, SQLException
     {
-        DataHandler.AddOrder(this.date);
+        DataHandler.GetInstance().AddOrder(this.date);
         
         int orderID = Order.GetLastOrderID();
         
@@ -80,7 +80,7 @@ public class Order
 
     public static int GetLastOrderID() throws ClassNotFoundException, SQLException
     {
-        int latestOrderID = DataHandler.GetLastOrderID();
+        int latestOrderID = DataHandler.GetInstance().GetLastOrderID();
 
         return latestOrderID;
     }
@@ -89,7 +89,7 @@ public class Order
     {
         List<Order> orders = new ArrayList<>();
 
-        ResultSet rs = DataHandler.GetOrders(rt);
+        ResultSet rs = DataHandler.GetInstance().GetOrders(rt);
 
         while (rs.next())
         {
@@ -97,7 +97,7 @@ public class Order
             orders.add(new Order(rs.getInt(1), rs.getDate(2), rs.getString(3), orderDetails));
         }
 
-        DataHandler.CloseConnection();
+        DataHandler.GetInstance().CloseConnection();
 
         return orders;
     }

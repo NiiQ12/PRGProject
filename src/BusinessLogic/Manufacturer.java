@@ -5,6 +5,7 @@
  */
 package BusinessLogic;
 
+import DataAccess.DataHandler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class Manufacturer
     {
         List<Manufacturer> manufacturers = new ArrayList<>();
                 
-        ResultSet rs = DataAccess.DataHandler.GetManufacturers();
+        ResultSet rs = DataHandler.GetInstance().GetManufacturers();
         
         while (rs.next())
         {            
