@@ -146,14 +146,14 @@ public class Request
         DataHandler.DeleteRequest(this.requestID);
     }
 
-    public static void AcceptRequest(int requestID) throws SQLException, ClassNotFoundException
+    public static void AcceptRequest(int requestID, String message, int days) throws SQLException, ClassNotFoundException
     {
-        DataHandler.AcceptRequest(requestID);
+        DataHandler.AcceptRequest(requestID, message, days);
     }
 
-    public static void RejectRequest(int requestID) throws SQLException, ClassNotFoundException
+    public static void RejectRequest(int requestID, String message) throws SQLException, ClassNotFoundException
     {
-        DataHandler.RejectRequest(requestID);
+        DataHandler.RejectRequest(requestID, message);
     }
 
     public void RefillCancelledRequestQuantities() throws ClassNotFoundException, SQLException

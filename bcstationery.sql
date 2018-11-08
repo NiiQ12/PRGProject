@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Oct 31, 2018 at 04:09 PM
+-- Generation Time: Nov 08, 2018 at 10:02 AM
 -- Server version: 5.7.23
 -- PHP Version: 7.2.10
 
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `bcstationery`
 --
-CREATE DATABASE IF NOT EXISTS `bcstationery` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `bcstationery`;
 
 -- --------------------------------------------------------
 
@@ -236,6 +234,8 @@ CREATE TABLE IF NOT EXISTS `request` (
   `RequestDate` date NOT NULL,
   `ReceiveDate` date DEFAULT NULL,
   `accepted` bit(1) DEFAULT NULL,
+  `AdminResponse` varchar(50) NOT NULL,
+  `AdminResponseReceived` bit(1) NOT NULL,
   PRIMARY KEY (`RequestID`),
   KEY `AdministratorID` (`AdministratorID`),
   KEY `StaffID` (`StaffID`)
@@ -245,9 +245,9 @@ CREATE TABLE IF NOT EXISTS `request` (
 -- Dumping data for table `request`
 --
 
-INSERT INTO `request` (`RequestID`, `StaffID`, `AdministratorID`, `RequestDate`, `ReceiveDate`, `accepted`) VALUES
-(1, '9601015023088', '9610285023088', '2018-10-03', '2018-10-05', b'1'),
-(2, '9702055023088', '9705025023088', '2018-10-04', '2018-10-05', b'1');
+INSERT INTO `request` (`RequestID`, `StaffID`, `AdministratorID`, `RequestDate`, `ReceiveDate`, `accepted`, `AdminResponse`, `AdminResponseReceived`) VALUES
+(1, '9601015023088', '9610285023088', '2018-10-03', '2018-10-05', b'1', '', b'0'),
+(2, '9702055023088', '9705025023088', '2018-10-04', '2018-10-05', b'1', '', b'0');
 
 -- --------------------------------------------------------
 
@@ -307,7 +307,7 @@ CREATE TABLE IF NOT EXISTS `staff` (
 --
 
 INSERT INTO `staff` (`StaffID`, `DepartmentID`, `Name`, `Surname`, `CellNo`, `Email`, `AddressID`, `LoginID`, `Registered`) VALUES
-('9601015023088', 1, 'Jozehan', 'Grobler', '0721894567', 'grobies@gmail.com', 9, 3, b'0'),
+('9601015023088', 1, 'Jozehan', 'Grobler', '0721894567', 'grobies@gmail.com', 9, 3, b'1'),
 ('9702055023088', 2, 'Tyrone', 'du Plessis', '0834567890', 'tdp@gmail.com', 10, 4, b'0');
 
 -- --------------------------------------------------------
@@ -334,7 +334,7 @@ CREATE TABLE IF NOT EXISTS `stationery` (
 --
 
 INSERT INTO `stationery` (`StationeryCode`, `CategoryID`, `Description`, `Stock`, `Price`, `ManufacturerID`) VALUES
-(1, 1, 'Bic Blue 4 pack', 20, 5, 1),
+(1, 1, 'Bic Blue 4 pack', 18, 5, 1),
 (2, 1, 'Bic Black 4 pack', 15, 7, 1),
 (3, 2, 'HB 2B X 2', 10, 3, 2),
 (4, 2, 'Staedtler HB X 4', 2, 10, 2),
