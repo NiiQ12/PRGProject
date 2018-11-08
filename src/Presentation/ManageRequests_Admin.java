@@ -287,8 +287,6 @@ public class ManageRequests_Admin extends javax.swing.JFrame
 
             request.RefillCancelledRequestQuantities();
 
-            JOptionPane.showMessageDialog(null, request.getRequestDetails().size());
-
         } catch (SQLException ex)
         {
             Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);

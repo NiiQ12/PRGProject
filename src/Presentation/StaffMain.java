@@ -43,6 +43,13 @@ public class StaffMain extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(650, 500));
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter()
+        {
+            public void windowActivated(java.awt.event.WindowEvent evt)
+            {
+                formWindowActivated(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
         btnRequestStationery.setLabel("REQUEST STATIONERY");
@@ -137,6 +144,11 @@ public class StaffMain extends javax.swing.JFrame
         frame.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_btnManageRequestsActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
+    {//GEN-HEADEREND:event_formWindowActivated
+
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments

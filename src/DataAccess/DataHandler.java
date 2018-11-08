@@ -412,9 +412,11 @@ public class DataHandler
     {
         ConnectToDatabase();
 
-        pst = con.prepareStatement("INSERT INTO request(StaffID, RequestDate) VALUES(?,?)");
+        pst = con.prepareStatement("INSERT INTO request(StaffID, RequestDate, AdminResponse, AdminResponseReceived) VALUES(?,?,?,?)");
         pst.setString(1, staffID);
         pst.setDate(2, requestDate);
+        pst.setString(3, "");
+        pst.setBoolean(4, false);
         pst.executeUpdate();
     }
 
