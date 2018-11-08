@@ -6,6 +6,7 @@
 package DataAccess;
 
 import BusinessLogic.Administrator;
+import BusinessLogic.CampusType;
 import BusinessLogic.EmployeeType;
 import BusinessLogic.ReportType;
 import BusinessLogic.RequestType;
@@ -307,12 +308,24 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static ResultSet GetStaff() throws SQLException, ClassNotFoundException
+    public static ResultSet GetStaff(CampusType ct) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
         st = con.createStatement();
-        rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password, Registered FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID");
+
+        switch (ct)
+        {
+            case All:
+                rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password, Registered FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID");
+                break;
+            case Pretoria:
+                rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password, Registered FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID WHERE staff.CampusID = 1");
+                break;
+            case Kempton:
+                rs = st.executeQuery("SELECT StaffID, department.DepartmentID, department.Description, Name, Surname, CellNo, Email, address.AddressID, City, Suburb, Street, Port, login.LoginID, Username, Password, Registered FROM staff INNER JOIN department ON staff.DepartmentID = department.DepartmentID INNER JOIN address ON staff.AddressID = address.AddressID INNER JOIN login ON staff.LoginID = login.LoginID WHERE staff.CampusID = 2");
+                break;
+        }
 
         return rs;
     }

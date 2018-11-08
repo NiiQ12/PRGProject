@@ -5,6 +5,7 @@
  */
 package Presentation;
 
+import BusinessLogic.CampusType;
 import BusinessLogic.Staff;
 import java.sql.SQLException;
 import java.util.List;
@@ -27,6 +28,8 @@ public class ManageUsers extends javax.swing.JFrame
     {
         initComponents();
         this.setLocationRelativeTo(null);
+        
+        ct = CampusType.All;
     }
 
     /**
@@ -42,6 +45,8 @@ public class ManageUsers extends javax.swing.JFrame
         jScrollPane1 = new javax.swing.JScrollPane();
         tblStaff = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        cmbCampus = new javax.swing.JComboBox<>();
         btnBack = new javax.swing.JButton();
         btnRegisterUser = new javax.swing.JButton();
         btnAddUser = new javax.swing.JButton();
@@ -108,12 +113,29 @@ public class ManageUsers extends javax.swing.JFrame
         }
 
         getContentPane().add(jScrollPane1);
-        jScrollPane1.setBounds(20, 70, 600, 320);
+        jScrollPane1.setBounds(20, 110, 600, 280);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel10.setText("MANAGE USERS");
         getContentPane().add(jLabel10);
         jLabel10.setBounds(320, 20, 190, 29);
+
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        jLabel3.setText("CAMPUS :");
+        jLabel3.setName(""); // NOI18N
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(150, 80, 90, 20);
+
+        cmbCampus.setName("cmbCampus"); // NOI18N
+        cmbCampus.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                cmbCampusActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cmbCampus);
+        cmbCampus.setBounds(250, 80, 240, 20);
 
         btnBack.setText("BACK");
         btnBack.setName("btnBack"); // NOI18N
@@ -211,6 +233,11 @@ public class ManageUsers extends javax.swing.JFrame
 
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
     {//GEN-HEADEREND:event_formWindowActivated
+        cmbCampus.removeAllItems();
+        cmbCampus.addItem("ALL");
+        cmbCampus.addItem("PRETORIA");
+        cmbCampus.addItem("KEMPTON");
+                
         SetTableValues();
     }//GEN-LAST:event_formWindowActivated
 
@@ -218,7 +245,7 @@ public class ManageUsers extends javax.swing.JFrame
     {
         try
         {
-            List<Staff> staff = Staff.GetStaffFromDatabase();
+            List<Staff> staff = Staff.GetStaffFromDatabase(ct);
 
             DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
             model.setRowCount(0);
@@ -284,6 +311,34 @@ public class ManageUsers extends javax.swing.JFrame
         }
     }//GEN-LAST:event_btnUnregisterUserActionPerformed
 
+    private void CleatStaffTable()
+    {
+        DefaultTableModel model = (DefaultTableModel) tblStaff.getModel();
+        model.setRowCount(0);
+    }
+
+    CampusType ct;
+
+    private void cmbCampusActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_cmbCampusActionPerformed
+    {//GEN-HEADEREND:event_cmbCampusActionPerformed
+        CleatStaffTable();
+
+        switch (cmbCampus.getSelectedIndex())
+        {
+            case 0:
+                ct = CampusType.All;
+                break;
+            case 1:
+                ct = CampusType.Pretoria;
+                break;
+            case 2:
+                ct = CampusType.Kempton;
+                break;
+        }
+
+        SetTableValues();
+    }//GEN-LAST:event_cmbCampusActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -334,8 +389,10 @@ public class ManageUsers extends javax.swing.JFrame
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnRegisterUser;
     private javax.swing.JButton btnUnregisterUser;
+    private javax.swing.JComboBox<String> cmbCampus;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblStaff;
     // End of variables declaration//GEN-END:variables

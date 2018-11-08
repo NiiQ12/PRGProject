@@ -29,11 +29,11 @@ public class Staff extends Employee
     {
         this.department = department;
     }
-    public static ArrayList<Staff> GetStaffFromDatabase() throws SQLException, ClassNotFoundException
+    public static ArrayList<Staff> GetStaffFromDatabase(CampusType ct) throws SQLException, ClassNotFoundException
     {
         ArrayList<Staff> staffMembers = new ArrayList<>();
 
-        ResultSet rs = DataHandler.GetStaff();
+        ResultSet rs = DataHandler.GetStaff(ct);
 
         while (rs.next())
         {
