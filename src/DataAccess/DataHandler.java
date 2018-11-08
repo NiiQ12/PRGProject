@@ -29,26 +29,37 @@ import javax.swing.JOptionPane;
  */
 public class DataHandler
 {
+    private DataHandler()
+    {
+    
+    }
+    
+    private static DataHandler dh = new DataHandler();
+    
+    public static DataHandler GetInstance()
+    {
+        return dh;
+    }
     
     static Connection con;
     static PreparedStatement pst;
     static Statement st;
     static ResultSet rs;
 
-    public static void ConnectToDatabase() throws ClassNotFoundException, SQLException
+    public void ConnectToDatabase() throws ClassNotFoundException, SQLException
     {
         Class.forName("com.mysql.jdbc.Driver");
 
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/bcstationery?zeroDateTimeBehavior=convertToNull", "root", "");
     }
 
-    public static void CloseConnection() throws SQLException
+    public void CloseConnection() throws SQLException
     {
         con.close();
     }
 
     // <editor-fold desc="Login">
-    public static List<Object> Login(String username, String password) throws SQLException, ClassNotFoundException
+    public List<Object> Login(String username, String password) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -77,7 +88,7 @@ public class DataHandler
         return lst;
     }
 
-    public static boolean CheckLogin(String username) throws SQLException, ClassNotFoundException
+    public boolean CheckLogin(String username) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -93,7 +104,7 @@ public class DataHandler
         }
     }
 
-    public static int GetLoginID(String username, String password) throws ClassNotFoundException, SQLException
+    public int GetLoginID(String username, String password) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
 
@@ -112,7 +123,7 @@ public class DataHandler
     // </editor-fold>
 
     // <editor-fold desc="Stationery">
-    public static void AddStationery(int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException // REGISTER
+    public void AddStationery(int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -127,7 +138,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void UpdateStationery(int stationeryCode, int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException // REGISTER
+    public void UpdateStationery(int stationeryCode, int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -143,7 +154,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void UpdateStationeryStock(int stationeryCode, int stock) throws SQLException, ClassNotFoundException // REGISTER
+    public void UpdateStationeryStock(int stationeryCode, int stock) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -155,7 +166,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void DeleteStationery(int stationeryCode) throws SQLException, ClassNotFoundException // REGISTER
+    public void DeleteStationery(int stationeryCode) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -166,7 +177,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static ResultSet GetStationery(String description, int categoryID) throws SQLException, ClassNotFoundException
+    public ResultSet GetStationery(String description, int categoryID) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -189,7 +200,7 @@ public class DataHandler
         return rs;
     }
 
-    public static ResultSet GetStationeryDescriptions() throws SQLException, ClassNotFoundException
+    public ResultSet GetStationeryDescriptions() throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -200,7 +211,7 @@ public class DataHandler
         return rs;
     }
 
-    public static ResultSet GetLastStationeryCode() throws ClassNotFoundException, SQLException
+    public ResultSet GetLastStationeryCode() throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
 
@@ -210,7 +221,7 @@ public class DataHandler
         return rs;
     }
 
-    public static ResultSet GetCategories() throws SQLException, ClassNotFoundException
+    public ResultSet GetCategories() throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -224,7 +235,7 @@ public class DataHandler
     // </editor-fold>
 
     // <editor-fold desc="Manufacturer">
-    public static ResultSet GetManufacturers() throws SQLException, ClassNotFoundException
+    public ResultSet GetManufacturers() throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -238,7 +249,7 @@ public class DataHandler
     // </editor-fold>
 
     // <editor-fold desc="Staff">
-    public static void AddStaff(String staffID, int departmentID, String name, String surname, String cellNo, String email, String city, String suburb, String street, String port, String username, String password) throws ClassNotFoundException, SQLException // REGISTER
+    public void AddStaff(String staffID, int departmentID, String name, String surname, String cellNo, String email, String city, String suburb, String street, String port, String username, String password) throws ClassNotFoundException, SQLException // REGISTER
     {
         ConnectToDatabase();
 
@@ -308,7 +319,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static ResultSet GetStaff(CampusType ct) throws SQLException, ClassNotFoundException
+    public ResultSet GetStaff(CampusType ct) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -330,7 +341,7 @@ public class DataHandler
         return rs;
     }
 
-    public static ResultSet GetStaff(String id) throws SQLException, ClassNotFoundException
+    public ResultSet GetStaff(String id) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -340,7 +351,7 @@ public class DataHandler
         return rs;
     }
 
-    public static void UpdateStaff(String staffID, int departmentID, String name, String surname, String cellNo, String email, int addressID, String city, String suburb, String street, String port, int loginID, String username, String password) throws SQLException, ClassNotFoundException
+    public void UpdateStaff(String staffID, int departmentID, String name, String surname, String cellNo, String email, int addressID, String city, String suburb, String street, String port, int loginID, String username, String password) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -372,7 +383,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void RegisterStaff(String staffID) throws ClassNotFoundException, SQLException
+    public void RegisterStaff(String staffID) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
 
@@ -383,7 +394,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void UnregisterStaff(String staffID) throws ClassNotFoundException, SQLException
+    public void UnregisterStaff(String staffID) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
 
@@ -396,7 +407,7 @@ public class DataHandler
     // </editor-fold>
 
     // <editor-fold desc="Department">
-    public static ResultSet GetDepartment() throws SQLException, ClassNotFoundException
+    public ResultSet GetDepartment() throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -408,7 +419,7 @@ public class DataHandler
 
     // </editor-fold>
     // <editor-fold desc="Requests">   
-    public static void AddRequest(String staffID, Date requestDate) throws SQLException, ClassNotFoundException // REGISTER
+    public void AddRequest(String staffID, Date requestDate) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -420,7 +431,7 @@ public class DataHandler
         pst.executeUpdate();
     }
 
-    public static ResultSet GetLastRequestID() throws SQLException, ClassNotFoundException // REGISTER
+    public ResultSet GetLastRequestID() throws SQLException, ClassNotFoundException // REGISTER
     {
         st = con.createStatement();
         rs = st.executeQuery("SELECT RequestID FROM request ORDER BY RequestID DESC LIMIT 1");
@@ -428,7 +439,7 @@ public class DataHandler
         return rs;
     }
 
-    public static void AddRequestDetail(int requestID, int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
+    public void AddRequestDetail(int requestID, int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
     {
         pst = con.prepareStatement("INSERT INTO requestdetails(RequestID, StationeryCode, Quantity) VALUES(?,?,?)");
         pst.setInt(1, requestID);
@@ -437,7 +448,7 @@ public class DataHandler
         pst.executeUpdate();
     }
 
-    public static ResultSet GetRequestDetails(RequestType rt) throws SQLException, ClassNotFoundException // REGISTER
+    public ResultSet GetRequestDetails(RequestType rt) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -477,7 +488,7 @@ public class DataHandler
         return rs;
     }
 
-    public static ResultSet GetRequests(RequestType rt) throws SQLException, ClassNotFoundException
+    public ResultSet GetRequests(RequestType rt) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -517,7 +528,7 @@ public class DataHandler
         return rs;
     }
 
-    public static void UpdateCancelledRequestDetailQuantity(int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
+    public void UpdateCancelledRequestDetailQuantity(int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -529,7 +540,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void DeleteRequest(int requestID) throws SQLException, ClassNotFoundException // REGISTER
+    public void DeleteRequest(int requestID) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -544,7 +555,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void AcceptRequest(int id, String message, int days) throws SQLException, ClassNotFoundException
+    public void AcceptRequest(int id, String message, int days) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -570,7 +581,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void RejectRequest(int id, String message) throws SQLException, ClassNotFoundException
+    public void RejectRequest(int id, String message) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -585,7 +596,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void RefillCancelledRequestQuantities(int stationeryCode, int amount) throws ClassNotFoundException, SQLException
+    public void RefillCancelledRequestQuantities(int stationeryCode, int amount) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
 
@@ -599,7 +610,7 @@ public class DataHandler
     // </editor-fold>
 
     // <editor-fold desc="Address"> 
-    public static int GetAddressID(String city, String suburb, String street, String port) throws SQLException, ClassNotFoundException
+    public int GetAddressID(String city, String suburb, String street, String port) throws SQLException, ClassNotFoundException
     {
         ConnectToDatabase();
 
@@ -618,7 +629,7 @@ public class DataHandler
 
     // </editor-fold> 
     // <editor-fold desc="Order"> 
-    public static int GetLastOrderID() throws ClassNotFoundException, SQLException
+    public int GetLastOrderID() throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
 
@@ -635,7 +646,7 @@ public class DataHandler
         return latestOrderID;
     }
 
-    public static void AddOrder(Date date) throws ClassNotFoundException, SQLException
+    public void AddOrder(Date date) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
 
@@ -647,7 +658,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static void AddOrderDetails(int orderID, int stationeryCode, int quantity) throws ClassNotFoundException, SQLException
+    public void AddOrderDetails(int orderID, int stationeryCode, int quantity) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
 
@@ -660,7 +671,7 @@ public class DataHandler
         CloseConnection();
     }
 
-    public static ResultSet GetOrders(ReportType rt) throws SQLException, ClassNotFoundException // REGISTER
+    public ResultSet GetOrders(ReportType rt) throws SQLException, ClassNotFoundException // REGISTER
     {
         ConnectToDatabase();
 
@@ -682,7 +693,7 @@ public class DataHandler
         return rs;
     }
 
-    public static ResultSet GetOrderDetails(int id) throws SQLException, ClassNotFoundException // REGISTER
+    public ResultSet GetOrderDetails(int id) throws SQLException, ClassNotFoundException // REGISTER
     {
         st = con.createStatement();
         rs = st.executeQuery("SELECT orderdetails.OrderID, orderdetails.StationeryCode, category.Description, stationery.Description, Price, Quantity FROM orderdetails INNER JOIN stationery ON orderdetails.StationeryCode = stationery.StationeryCode INNER JOIN category ON category.CategoryID = stationery.CategoryID INNER JOIN tblorder ON tblOrder.OrderID = orderdetails.OrderID WHERE tblOrder.OrderID = " + id);
