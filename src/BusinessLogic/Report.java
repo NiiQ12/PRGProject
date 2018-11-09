@@ -82,7 +82,6 @@ public class Report
         w.write("\t\t\t|       ORDER REPORT       |\n");
         w.write("\t\t\t============================\n\n");
 
-        // CODE, CATEGORY, DESCRPT, QTY
         for (Order order : orders)
         {
             double orderTotal = 0;
