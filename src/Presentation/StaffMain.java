@@ -6,6 +6,9 @@
 package Presentation;
 
 import BusinessLogic.Staff;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -21,6 +24,14 @@ public class StaffMain extends javax.swing.JFrame
     {
         initComponents();
         this.setLocationRelativeTo(null);
+
+        try
+        {
+            Staff.CheckAdminResponses(Staff.loggedInStaffID);
+        } catch (ClassNotFoundException | SQLException ex)
+        {
+            Logger.getLogger(StaffMain.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -118,10 +129,10 @@ public class StaffMain extends javax.swing.JFrame
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnBackActionPerformed
     {//GEN-HEADEREND:event_btnBackActionPerformed
         Staff.loggedInStaffID = "";
-        
+
         Login frame = new Login();
         frame.setVisible(true);
-        this.setVisible(false);        
+        this.setVisible(false);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void btnRequestStationeryActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRequestStationeryActionPerformed

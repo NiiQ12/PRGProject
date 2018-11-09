@@ -70,7 +70,7 @@ public class Login extends javax.swing.JFrame
         getContentPane().add(btnLogin);
         btnLogin.setBounds(290, 230, 110, 30);
 
-        txtUsername.setText("HendrikoA");
+        txtUsername.setText("JozehanS");
         txtUsername.setName(""); // NOI18N
         getContentPane().add(txtUsername);
         txtUsername.setBounds(290, 160, 150, 20);

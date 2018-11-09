@@ -29,18 +29,19 @@ import javax.swing.JOptionPane;
  */
 public class DataHandler
 {
+
     private DataHandler()
     {
-    
+
     }
-    
+
     private static DataHandler dh = new DataHandler();
-    
+
     public static DataHandler GetInstance()
     {
         return dh;
     }
-    
+
     static Connection con;
     static PreparedStatement pst;
     static Statement st;
@@ -404,6 +405,21 @@ public class DataHandler
 
         CloseConnection();
     }
+
+    public ResultSet CheckAdminResponses(String staffID) throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT RequestID, accepted, AdminResponse, AdminResponseReceived FROM request WHERE StaffID = '" + staffID + "' AND AdminResponseReceived = 0");
+
+        while (rs.next())
+        {
+            pst = con.prepareStatement("UPDATE request SET AdminResponseReceived = 1 WHERE RequestID = '"+ rs.getInt("RequestID") +"'");
+            pst.executeUpdate();
+        }
+        return rs;
+    }
     // </editor-fold>
 
     // <editor-fold desc="Department">
@@ -418,7 +434,6 @@ public class DataHandler
     }
 
     // </editor-fold>
-    
     // <editor-fold desc="Requests">   
     public void AddRequest(String staffID, Date requestDate) throws SQLException, ClassNotFoundException // REGISTER
     {
@@ -561,7 +576,7 @@ public class DataHandler
         ConnectToDatabase();
 
         st = con.createStatement();
-        rs = st.executeQuery("SELECT DATE_ADD(request.RequestDate, INTERVAL '"+ days +"' DAY) FROM request WHERE RequestID = '" + id + "'");
+        rs = st.executeQuery("SELECT DATE_ADD(request.RequestDate, INTERVAL '" + days + "' DAY) FROM request WHERE RequestID = '" + id + "'");
 
         Date date = null;
 
@@ -629,7 +644,6 @@ public class DataHandler
     }
 
     // </editor-fold> 
-    
     // <editor-fold desc="Order"> 
     public int GetLastOrderID() throws ClassNotFoundException, SQLException
     {

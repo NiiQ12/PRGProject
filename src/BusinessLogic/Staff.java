@@ -9,6 +9,7 @@ import DataAccess.DataHandler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -16,6 +17,7 @@ import java.util.ArrayList;
  */
 public class Staff extends Employee
 {
+
     public static String loggedInStaffID = "";
 
     private Department department;
@@ -29,6 +31,7 @@ public class Staff extends Employee
     {
         this.department = department;
     }
+
     public static ArrayList<Staff> GetStaffFromDatabase(CampusType ct) throws SQLException, ClassNotFoundException
     {
         ArrayList<Staff> staffMembers = new ArrayList<>();
@@ -69,22 +72,41 @@ public class Staff extends Employee
     {
         DataHandler.GetInstance().UpdateStaff(loggedInStaffID, this.department.getDepartmentID(), this.getName(), this.getSurname(), this.getCellNo(), this.getEmail(), this.getAddress().getAddressID(), this.getAddress().getCity(), this.getAddress().getSuburb(), this.getAddress().getStreet(), this.getAddress().getPort(), this.getLogin().getLoginID(), this.getLogin().getUsername(), this.getLogin().getPassword());
     }
-    
+
     public static void RegisterStaff(String staffID) throws ClassNotFoundException, SQLException
     {
         DataHandler.GetInstance().RegisterStaff(staffID);
     }
-    
+
     public static void UnregisterStaff(String staffID) throws ClassNotFoundException, SQLException
     {
         DataHandler.GetInstance().UnregisterStaff(staffID);
+    }
+
+    public static void CheckAdminResponses(String staffID) throws ClassNotFoundException, SQLException
+    {
+        ResultSet rs = DataHandler.GetInstance().CheckAdminResponses(staffID);
+
+        rs.first();
+        while (rs.next())
+        {
+            if (!rs.getBoolean("AdminResponseReceived"))
+            {
+                JOptionPane.showMessageDialog(null, "Request Number: " + rs.getInt("RequestID") + " Has Been Cancelled: " + rs.getString("AdminResponse"));
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "Request Number: " + rs.getInt("RequestID") + " Has Been Accepted!: " + rs.getString("AdminResponse"));
+            }
+        }
+
+        DataHandler.GetInstance().CloseConnection();
     }
 
     public Staff()
     {
         super();
     }
-    
+
     public Staff(String staffID, Department department, String name, String surname, String cellNo, String email, Address address, Login login)
     {
         super(staffID, name, surname, cellNo, email, address, login);

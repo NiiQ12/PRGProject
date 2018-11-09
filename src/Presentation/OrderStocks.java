@@ -358,7 +358,7 @@ public class OrderStocks extends javax.swing.JFrame
         model.setRowCount(0);
 
         stationery.clear();
-        
+
         lblTotal.setText("R 0.00");
     }
 
@@ -382,26 +382,33 @@ public class OrderStocks extends javax.swing.JFrame
         List<OrderDetail> orderDetails = new ArrayList<>();
 
         Order order = new Order(0, date, Administrator.loggedInAdminID, null);
-        
+
         for (int i = 0; i < stationery.size(); i++)
         {
             orderDetails.add(new OrderDetail(0, stationery.get(i).getStationeryCode(), stationery.get(i).getQuantity()));
         }
 
         order.setOrderDetails(orderDetails);
-        
+
         try
         {
-            order.AddOrder();
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex)
+            if (!orderDetails.isEmpty())
+            {
+                order.AddOrder();
+                JOptionPane.showMessageDialog(null, "Order Has Been Successfully Made!");
+
+                ManageStocks frame = new ManageStocks();
+                frame.setVisible(true);
+                this.setVisible(false);
+            } else
+            {
+                JOptionPane.showMessageDialog(null, "No Items To Order!");
+            }
+
+        } catch (ClassNotFoundException | SQLException ex)
         {
             Logger.getLogger(OrderStocks.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        ClearTable();
     }//GEN-LAST:event_btnPlaceOrderActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt)//GEN-FIRST:event_formWindowActivated
