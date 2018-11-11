@@ -99,4 +99,21 @@ public class ImpStationery extends UnicastRemoteObject implements IStationery
 
         return code;
     }
+
+    @Override
+    public int GetStockOfStationery(int stationeryCode) throws ClassNotFoundException, SQLException, RemoteException
+    {
+        int stock = 0;
+
+        ResultSet rs = DataHandler.GetInstance().GetStockOfStationery(stationeryCode);
+
+        while (rs.next())
+        {
+            stock = rs.getInt(1);
+        }
+
+        DataHandler.GetInstance().CloseConnection();
+
+        return stock;
+    }
 }
