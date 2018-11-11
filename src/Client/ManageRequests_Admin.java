@@ -6,9 +6,11 @@
 package Client;
 
 import BusinessLogic.IRequest;
+import BusinessLogic.IStationery;
 import BusinessLogic.Request;
 import BusinessLogic.RequestDetail;
 import BusinessLogic.RequestType;
+import Server.ImpStationery;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -41,9 +43,11 @@ public class ManageRequests_Admin extends javax.swing.JFrame
 
         Registry r = LocateRegistry.getRegistry("localhost", 420);
         ir = (IRequest) r.lookup("Request");
+        is = (IStationery) r.lookup("Stationery");
     }
 
     IRequest ir;
+    IStationery is;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -152,6 +156,10 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             }
         });
         jScrollPane2.setViewportView(tblRequests);
+        if (tblRequests.getColumnModel().getColumnCount() > 0)
+        {
+            tblRequests.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         getContentPane().add(jScrollPane2);
         jScrollPane2.setBounds(20, 110, 600, 140);
@@ -163,17 +171,17 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             },
             new String []
             {
-                "RequestID", "Code", "Category", "Description", "Quantity"
+                "RequestID", "Code", "Category", "Description", "Quantity", "Stock"
             }
         )
         {
             Class[] types = new Class []
             {
-                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean []
             {
-                false, false, false, false, false
+                false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex)
@@ -189,6 +197,17 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         tblRequestDetails.setName("tblRequestDetails"); // NOI18N
         tblRequestDetails.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tblRequestDetails);
+        if (tblRequestDetails.getColumnModel().getColumnCount() > 0)
+        {
+            tblRequestDetails.getColumnModel().getColumn(0).setMinWidth(80);
+            tblRequestDetails.getColumnModel().getColumn(0).setMaxWidth(80);
+            tblRequestDetails.getColumnModel().getColumn(3).setMinWidth(150);
+            tblRequestDetails.getColumnModel().getColumn(3).setMaxWidth(150);
+            tblRequestDetails.getColumnModel().getColumn(4).setMinWidth(80);
+            tblRequestDetails.getColumnModel().getColumn(4).setMaxWidth(80);
+            tblRequestDetails.getColumnModel().getColumn(5).setMinWidth(80);
+            tblRequestDetails.getColumnModel().getColumn(5).setMaxWidth(80);
+        }
 
         getContentPane().add(jScrollPane1);
         jScrollPane1.setBounds(20, 260, 600, 140);
@@ -354,6 +373,9 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             } catch (ClassNotFoundException ex)
             {
                 Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex)
+            {
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_tblRequestsMouseClicked
@@ -386,7 +408,7 @@ public class ManageRequests_Admin extends javax.swing.JFrame
 
     List<RequestDetail> requestDetails;
 
-    private void SetRequestDetailsTableValues() throws SQLException, ClassNotFoundException
+    private void SetRequestDetailsTableValues() throws SQLException, ClassNotFoundException, RemoteException
     {
         requestDetails.clear();
 
@@ -404,7 +426,7 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         DefaultTableModel model = (DefaultTableModel) tblRequestDetails.getModel();
         model.setRowCount(0);
 
-        Object[] rowData = new Object[5];
+        Object[] rowData = new Object[6];
 
         for (int i = 0; i < requestDetails.size(); i++)
         {
@@ -412,7 +434,8 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             rowData[1] = requestDetails.get(i).getStationeryCode();
             rowData[2] = requestDetails.get(i).getCategory();
             rowData[3] = requestDetails.get(i).getDescription();
-            rowData[4] = requestDetails.get(i).getQuantity();
+            rowData[4] = requestDetails.get(i).getQuantity();            
+            rowData[5] = is.GetStockOfStationery(requestDetails.get(i).getStationeryCode());
 
             model.addRow(rowData);
         }

@@ -220,6 +220,16 @@ public class DataHandler
 
         return rs;
     }
+    
+    public ResultSet GetStockOfStationery(int stationeryCode) throws ClassNotFoundException, SQLException
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT Stock FROM stationery WHERE StationeryCode = " + stationeryCode);
+
+        return rs;
+    }
 
     public ResultSet GetCategories() throws SQLException, ClassNotFoundException
     {

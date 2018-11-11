@@ -23,4 +23,5 @@ public interface IStationery extends Remote
     public List<Stationery> GetStationery(String description, int categoryID) throws ClassNotFoundException, SQLException, RemoteException;
     public List<String> GetStationeryDescriptions() throws ClassNotFoundException, SQLException, RemoteException;
     public int GetLastStationeryCode() throws ClassNotFoundException, SQLException, RemoteException;
+    public int GetStockOfStationery(int stationeryCode) throws ClassNotFoundException, SQLException, RemoteException;
 }
