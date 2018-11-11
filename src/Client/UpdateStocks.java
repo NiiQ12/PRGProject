@@ -47,9 +47,9 @@ public class UpdateStocks extends javax.swing.JFrame
         stationery = s;
 
         Registry r = LocateRegistry.getRegistry("localhost", 420);
-        ic = (ICategory) r.lookup("Login");
-        im = (IManufacturer) r.lookup("Staff");
-        is = (IStationery) r.lookup("Department");
+        ic = (ICategory) r.lookup("Category");
+        im = (IManufacturer) r.lookup("Manufacturer");
+        is = (IStationery) r.lookup("Stationery");
     }
 
     ICategory ic;

@@ -6,6 +6,7 @@
 package Client;
 
 import BusinessLogic.Administrator;
+import BusinessLogic.EmployeeType;
 import BusinessLogic.ILogin;
 import BusinessLogic.Staff;
 import java.awt.Color;
@@ -14,6 +15,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -139,21 +141,29 @@ public class Login extends javax.swing.JFrame
         String username = txtUsername.getText();
         String password = txtPassword.getText();
 
+        List<Object> lst;
+
         try
         {
-            if (il.TestLogin(username, password))
+            if (!(lst = il.TestLogin(username, password)).isEmpty())
             {
-                if (!Staff.loggedInStaffID.equals(""))
+                switch ((EmployeeType) lst.get(1))
                 {
-                    StaffMain frame = new StaffMain();
-                    frame.setVisible(true);
-                } else if (!Administrator.loggedInAdminID.equals(""))
-                {
-                    AdminMain frame = new AdminMain();
-                    frame.setVisible(true);
+                    case Staff:
+                        Staff.loggedInStaffID = lst.get(0).toString();
+                        
+                        StaffMain sFrame = new StaffMain();
+                        sFrame.setVisible(true);
+                        this.setVisible(false);
+                        break;
+                    case Admin:
+                        Administrator.loggedInAdminID = lst.get(0).toString();
+                        
+                        AdminMain aFrame = new AdminMain();
+                        aFrame.setVisible(true);
+                        this.setVisible(false);
+                        break;
                 }
-
-                this.setVisible(false);
             }
         } catch (SQLException ex)
         {

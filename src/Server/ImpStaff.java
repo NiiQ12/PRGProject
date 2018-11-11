@@ -94,7 +94,7 @@ public class ImpStaff extends UnicastRemoteObject implements IStaff
         rs.first();
         while (rs.next())
         {
-            if (!rs.getBoolean("AdminResponseReceived"))
+            if (!rs.getBoolean("accepted"))
             {
                 JOptionPane.showMessageDialog(null, "Request Number: " + rs.getInt("RequestID") + " Has Been Cancelled: " + rs.getString("AdminResponse"));
             } else

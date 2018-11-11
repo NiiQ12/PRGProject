@@ -12,6 +12,7 @@ import BusinessLogic.Staff;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -27,7 +28,7 @@ public class ImpLogin extends UnicastRemoteObject implements ILogin
     }
 
     @Override
-    public boolean TestLogin(String username, String password) throws SQLException, ClassNotFoundException, RemoteException
+    public List<Object> TestLogin(String username, String password) throws SQLException, ClassNotFoundException, RemoteException
     {
         boolean isValidLogin;
 
@@ -62,10 +63,10 @@ public class ImpLogin extends UnicastRemoteObject implements ILogin
                     break;
             }
         }
-        
-        DataHandler.GetInstance().CloseConnection();
 
-        return isValidLogin;
+        DataHandler.GetInstance().CloseConnection();
+        
+        return lst;
     }
 
     @Override

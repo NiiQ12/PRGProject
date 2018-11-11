@@ -8,6 +8,7 @@ package BusinessLogic;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -15,7 +16,7 @@ import java.sql.SQLException;
  */
 public interface ILogin extends Remote
 {    
-    public boolean TestLogin(String username, String password) throws SQLException, ClassNotFoundException, RemoteException;
+    public List<Object> TestLogin(String username, String password) throws SQLException, ClassNotFoundException, RemoteException;
     public boolean CheckLogin(String username) throws SQLException, ClassNotFoundException, RemoteException;
     public int GetLoginID(String username, String password) throws SQLException, ClassNotFoundException, RemoteException;
 }
