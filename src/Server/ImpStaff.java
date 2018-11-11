@@ -91,6 +91,7 @@ public class ImpStaff extends UnicastRemoteObject implements IStaff
     {
         ResultSet rs = DataHandler.GetInstance().CheckAdminResponses(staffID);
 
+        JOptionPane.showMessageDialog(null, "Hello");
         rs.first();
         while (rs.next())
         {
