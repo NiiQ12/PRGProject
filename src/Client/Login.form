@@ -52,7 +52,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtUsername">
       <Properties>
-        <Property name="text" type="java.lang.String" value="JozehanS"/>
+        <Property name="text" type="java.lang.String" value="HendrikoA"/>
         <Property name="name" type="java.lang.String" value="" noResource="true"/>
       </Properties>
       <Constraints>

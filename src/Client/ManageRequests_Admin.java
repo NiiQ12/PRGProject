@@ -352,27 +352,25 @@ public class ManageRequests_Admin extends javax.swing.JFrame
 
                 rowIndex = tblRequests.getSelectedRow();
 
-                if (tblRequests.getValueAt(rowIndex, 4).toString().equals("true"))
+                if (tblRequests.getValueAt(rowIndex, 4).toString().equals("false") && tblRequests.getValueAt(rowIndex, 1) != null)
                 {
                     btnAcceptRequest.setEnabled(false);
                     btnRejectRequest.setEnabled(false);
-                }
-                if (tblRequests.getValueAt(rowIndex, 4).toString().equals("false"))
+                } else if (tblRequests.getValueAt(rowIndex, 4).toString().equals("true"))
+                {
+                    btnAcceptRequest.setEnabled(false);
+                    btnRejectRequest.setEnabled(false);
+                } else if (tblRequests.getValueAt(rowIndex, 4).toString().equals("false"))
                 {
                     btnAcceptRequest.setEnabled(true);
                     btnRejectRequest.setEnabled(true);
                 }
-                if ((tblRequests.getValueAt(rowIndex, 4).toString().equals("false")) && (!(tblRequests.getValueAt(rowIndex, 1).toString().isEmpty())))
-                {
-                    btnAcceptRequest.setEnabled(false);
-                    btnRejectRequest.setEnabled(false);
-                }
             } catch (SQLException ex)
             {
-                Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ClassNotFoundException ex)
             {
-                Logger.getLogger(ManageRequests_Staff.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
             } catch (RemoteException ex)
             {
                 Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
@@ -434,7 +432,7 @@ public class ManageRequests_Admin extends javax.swing.JFrame
             rowData[1] = requestDetails.get(i).getStationeryCode();
             rowData[2] = requestDetails.get(i).getCategory();
             rowData[3] = requestDetails.get(i).getDescription();
-            rowData[4] = requestDetails.get(i).getQuantity();            
+            rowData[4] = requestDetails.get(i).getQuantity();
             rowData[5] = is.GetStockOfStationery(requestDetails.get(i).getStationeryCode());
 
             model.addRow(rowData);
