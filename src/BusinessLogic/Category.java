@@ -5,17 +5,13 @@
  */
 package BusinessLogic;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import DataAccess.DataHandler;
+import java.io.Serializable;
 
 /**
  *
  * @author Nicky
  */
-public class Category
+public class Category implements Serializable
 {
     private int id;
     private String description;
@@ -40,21 +36,6 @@ public class Category
         this.description = description;
     }
     
-    public static List<Category> GetCategories() throws SQLException, ClassNotFoundException
-    {
-        List<Category> categories = new ArrayList<>();
-        ResultSet rs = DataHandler.GetInstance().GetCategories();
-        
-        while (rs.next())
-        {            
-            categories.add(new Category(rs.getInt(1), rs.getString(2)));
-        }
-        
-        DataHandler.GetInstance().CloseConnection();
-        
-        return categories;
-    }
-
     public Category(int id, String description)
     {
         this.id = id;

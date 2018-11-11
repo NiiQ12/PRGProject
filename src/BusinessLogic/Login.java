@@ -5,16 +5,13 @@
  */
 package BusinessLogic;
 
-import DataAccess.DataHandler;
-import java.sql.SQLException;
-import java.util.List;
-import javax.swing.JOptionPane;
+import java.io.Serializable;
 
 /**
  *
  * @author Hendriko
  */
-public class Login
+public class Login implements Serializable
 {
     private int loginID;
     private String username;
@@ -59,63 +56,6 @@ public class Login
     public void setRegistered(boolean registered)
     {
         this.registered = registered;
-    }
-
-    public static boolean TestLogin(String username, String password) throws SQLException, ClassNotFoundException
-    {
-        boolean isValidLogin;
-
-        List<Object> lst = DataHandler.GetInstance().Login(username, password);
-
-        if (lst.isEmpty())
-        {
-            JOptionPane.showMessageDialog(null, "Invalid login details!");
-
-            isValidLogin = false;
-        } else
-        {
-            EmployeeType et = (EmployeeType) lst.get(1);
-
-            isValidLogin = true;
-
-            switch (et)
-            {
-                case Staff:
-                    if (lst.get(2).equals(false))
-                    {
-                        JOptionPane.showMessageDialog(null, "This account has not been registered by an admin!");
-
-                        isValidLogin = false;
-                    } else
-                    {
-                        Staff.loggedInStaffID = lst.get(0).toString();
-                    }
-                    break;
-                case Admin:
-                    Administrator.loggedInAdminID = lst.get(0).toString();
-                    break;
-            }
-        }
-
-        DataHandler.GetInstance().CloseConnection();
-
-        return isValidLogin;
-    }
-
-    public static boolean CheckLogin(String username) throws SQLException, ClassNotFoundException
-    {
-        boolean isAvailable = DataHandler.GetInstance().CheckLogin(username);
-
-        DataHandler.GetInstance().CloseConnection();
-
-        return isAvailable;
-    }
-
-    public static int GetLoginID(String username, String password) throws ClassNotFoundException, SQLException
-    {
-        int loginID = DataHandler.GetInstance().GetLoginID(username, password);
-
-        return loginID;
     }
 
     public Login(int loginID, String username, String password, boolean registered)

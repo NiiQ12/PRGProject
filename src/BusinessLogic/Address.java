@@ -5,14 +5,13 @@
  */
 package BusinessLogic;
 
-import DataAccess.DataHandler;
-import java.sql.SQLException;
+import java.io.Serializable;
 
 /**
  *
  * @author Hendriko
  */
-public class Address
+public class Address implements Serializable
 {
     private int addressID;
     private String city;
@@ -20,15 +19,6 @@ public class Address
     private String street;
     private String port;
 
-    public Address(int addressID, String city, String suburb, String street, String port)
-    {
-        this.addressID = addressID;
-        this.city = city;
-        this.suburb = suburb;
-        this.street = street;
-        this.port = port;
-    }
-    
     public int getAddressID()
     {
         return addressID;
@@ -78,14 +68,16 @@ public class Address
     {
         this.port = port;
     }
-
-    public static int GetAddressID(String city, String suburb, String street, String port) throws SQLException, ClassNotFoundException
-    {
-        int addressID = DataHandler.GetInstance().GetAddressID(city, suburb, street, port);
-        
-        return addressID;
-    }
     
+    public Address(int addressID, String city, String suburb, String street, String port)
+    {
+        this.addressID = addressID;
+        this.city = city;
+        this.suburb = suburb;
+        this.street = street;
+        this.port = port;
+    }
+
     @Override
     public String toString()
     {

@@ -5,19 +5,14 @@
  */
 package BusinessLogic;
 
-import DataAccess.DataHandler;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  *
  * @author Nicky
  */
-public class RequestDetail
+public class RequestDetail implements Serializable
 {
-
     private int id;
     private int stationeryCode;
     private String category;
@@ -74,30 +69,6 @@ public class RequestDetail
         this.description = description;
     }
 
-    public void AddRequestDetail(int requestID) throws SQLException, ClassNotFoundException
-    {
-        DataHandler.GetInstance().AddRequestDetail(requestID, this.stationeryCode, this.quantity);
-    }
-
-    public static List<RequestDetail> GetRequestDetails(RequestType rt) throws SQLException, ClassNotFoundException
-    {
-        List<RequestDetail> requestDetails = new ArrayList<>();
-
-        ResultSet rs = DataHandler.GetInstance().GetRequestDetails(rt);
-
-        while (rs.next())
-        {
-            requestDetails.add(new RequestDetail(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getInt(5)));
-        }
-
-        return requestDetails;
-    }
-
-    public void UpdateCancelledRequestDetailQuantity(int stationeryCode, int quantity) throws SQLException, ClassNotFoundException // REGISTER
-    {
-        DataHandler.GetInstance().UpdateCancelledRequestDetailQuantity(this.stationeryCode, this.quantity);
-    }
-    
     public RequestDetail()
     {
 

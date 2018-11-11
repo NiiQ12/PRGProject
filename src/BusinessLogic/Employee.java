@@ -5,11 +5,13 @@
  */
 package BusinessLogic;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Nicky
  */
-public abstract class Employee
+public abstract class Employee implements Serializable
 {    
     private String id;
     private String name;

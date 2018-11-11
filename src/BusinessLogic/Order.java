@@ -5,19 +5,15 @@
  */
 package BusinessLogic;
 
-import BusinessLogic.*;
-import DataAccess.DataHandler;
+import java.io.Serializable;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author Nicky
  */
-public class Order
+public class Order implements Serializable
 {
     private int orderID;
     private Date date;
@@ -62,44 +58,6 @@ public class Order
     public void setOrderDetails(List<OrderDetail> orderDetails)
     {
         this.orderDetails = orderDetails;
-    }
-
-    public void AddOrder() throws ClassNotFoundException, SQLException
-    {
-        DataHandler.GetInstance().AddOrder(this.date);
-        
-        int orderID = Order.GetLastOrderID();
-        
-        for (OrderDetail orderDetail : this.orderDetails)
-        {
-            orderDetail.setId(orderID);
-        }
-        
-        OrderDetail.AddOrderDetails(this.orderDetails);
-    }
-
-    public static int GetLastOrderID() throws ClassNotFoundException, SQLException
-    {
-        int latestOrderID = DataHandler.GetInstance().GetLastOrderID();
-
-        return latestOrderID;
-    }
-
-    public static List<Order> GetOrders(ReportType rt) throws SQLException, ClassNotFoundException
-    {
-        List<Order> orders = new ArrayList<>();
-
-        ResultSet rs = DataHandler.GetInstance().GetOrders(rt);
-
-        while (rs.next())
-        {
-            List<OrderDetail> orderDetails = OrderDetail.GetOrderDetails(rs.getInt(1));
-            orders.add(new Order(rs.getInt(1), rs.getDate(2), rs.getString(3), orderDetails));
-        }
-
-        DataHandler.GetInstance().CloseConnection();
-
-        return orders;
     }
 
     public Order()

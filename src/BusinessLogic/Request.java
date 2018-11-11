@@ -5,21 +5,16 @@
  */
 package BusinessLogic;
 
-import DataAccess.DataHandler;
+import java.io.Serializable;
 import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Nicky
  */
-public class Request
+public class Request implements Serializable
 {
-
     private int requestID;
     private String staffID;
     private String adminID;
@@ -96,72 +91,6 @@ public class Request
     public void setRequestDetails(List<RequestDetail> requestDetails)
     {
         this.requestDetails = requestDetails;
-    }
-
-    public void AddRequest() throws SQLException, ClassNotFoundException
-    {
-        DataHandler.GetInstance().AddRequest(this.staffID, this.requestDate);
-
-        ResultSet rs = DataHandler.GetInstance().GetLastRequestID();
-
-        while (rs.next())
-        {
-            this.requestID = rs.getInt(1);
-        }
-
-        for (RequestDetail requestDetail : requestDetails)
-        {
-            requestDetail.AddRequestDetail(requestID);
-        }
-
-        DataHandler.GetInstance().CloseConnection();
-    }
-
-    public static List<Request> GetRequests(RequestType rt) throws SQLException, ClassNotFoundException
-    {
-        List<Request> requests = new ArrayList<>();
-
-        ResultSet rs = DataHandler.GetInstance().GetRequests(rt);
-
-        List<RequestDetail> requestDetails = RequestDetail.GetRequestDetails(rt);
-
-        while (rs.next())
-        {
-            requests.add(new Request(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getDate(4), rs.getDate(5), rs.getBoolean(6), requestDetails));
-        }
-
-        DataHandler.GetInstance().CloseConnection();
-
-        return requests;
-    }
-
-    public void CancelRequest() throws SQLException, ClassNotFoundException
-    {
-        for (RequestDetail requestDetail : this.requestDetails)
-        {
-            System.out.println(requestDetail.getStationeryCode());
-            requestDetail.UpdateCancelledRequestDetailQuantity(requestDetail.getId(), requestDetail.getQuantity());
-        }
-
-        DataHandler.GetInstance().DeleteRequest(this.requestID);
-    }
-
-    public static void AcceptRequest(int requestID, String message, int days) throws SQLException, ClassNotFoundException
-    {
-        DataHandler.GetInstance().AcceptRequest(requestID, message, days);
-    }
-
-    public static void RejectRequest(int requestID, String message) throws SQLException, ClassNotFoundException
-    {
-        DataHandler.GetInstance().RejectRequest(requestID, message);
-    }
-
-    public void RefillCancelledRequestQuantities() throws ClassNotFoundException, SQLException
-    {
-        for (int i = 0; i < this.requestDetails.size(); i++)
-        {
-            DataHandler.GetInstance().RefillCancelledRequestQuantities(requestDetails.get(i).getStationeryCode(), requestDetails.get(i).getQuantity());
-        }
     }
 
     public Request()

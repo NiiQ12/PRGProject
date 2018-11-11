@@ -5,16 +5,13 @@
  */
 package BusinessLogic;
 
-import DataAccess.DataHandler;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.io.Serializable;
 
 /**
  *
  * @author Hendriko
  */
-public class Department
+public class Department implements Serializable
 {
     private int departmentID;
     private String description;
@@ -45,20 +42,6 @@ public class Department
         this.description = description;
     }
 
-    public static ArrayList<String> GetDepartmentsFromDatabase() throws SQLException, ClassNotFoundException
-    {
-        ArrayList<String> departments = new ArrayList<>();
-        
-        ResultSet rs = DataHandler.GetInstance().GetDepartment();
-        
-        while(rs.next())
-        {
-            departments.add(rs.getString("Description"));
-        }
-        
-        return departments;
-    }
-    
     @Override
     public String toString()
     {

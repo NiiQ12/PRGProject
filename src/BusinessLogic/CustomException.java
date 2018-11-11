@@ -5,11 +5,13 @@
  */
 package BusinessLogic;
 
+import java.io.Serializable;
+
 /**
  *
  * @author User
  */
-public class CustomException extends Exception
+public class CustomException extends Exception implements Serializable
 {
     public CustomException(String message)
     {

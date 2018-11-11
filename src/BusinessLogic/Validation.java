@@ -5,13 +5,14 @@
  */
 package BusinessLogic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author Hendriko
  */
-public class Validation
+public class Validation implements Serializable
 {
 
     static ArrayList<String> errors = new ArrayList<>();

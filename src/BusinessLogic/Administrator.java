@@ -5,11 +5,13 @@
  */
 package BusinessLogic;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Nicky
  */
-public class Administrator extends Employee
+public class Administrator extends Employee implements Serializable
 {
     public static String loggedInAdminID = "";
     

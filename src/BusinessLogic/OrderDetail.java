@@ -5,21 +5,15 @@
  */
 package BusinessLogic;
 
-import BusinessLogic.*;
-import DataAccess.DataHandler;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.Serializable;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author Nicky
  */
-public class OrderDetail
+public class OrderDetail implements Serializable
 {
-
     private int id;
     private int stationeryCode;
     private String category;
@@ -85,28 +79,6 @@ public class OrderDetail
     public void setDescription(String description)
     {
         this.description = description;
-    }
-
-    public static List<OrderDetail> GetOrderDetails(int id) throws SQLException, ClassNotFoundException
-    {
-        List<OrderDetail> orderDetails = new ArrayList<>();
-
-        ResultSet rs = DataHandler.GetInstance().GetOrderDetails(id);
-
-        while (rs.next())
-        {
-            orderDetails.add(new OrderDetail(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getString(4), rs.getDouble(5), rs.getInt(6)));
-        }
-
-        return orderDetails;
-    }
-
-    public static void AddOrderDetails(List<OrderDetail> orderDetails) throws ClassNotFoundException, SQLException
-    {
-        for (int i = 0; i < orderDetails.size(); i++)
-        {
-            DataHandler.GetInstance().AddOrderDetails(orderDetails.get(i).getId(), orderDetails.get(i).getStationeryCode(), orderDetails.get(i).getQuantity());
-        }
     }
 
     public OrderDetail()

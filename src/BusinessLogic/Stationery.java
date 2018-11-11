@@ -5,18 +5,13 @@
  */
 package BusinessLogic;
 
-import com.sun.rowset.internal.Row;
-import java.util.List;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import DataAccess.DataHandler;
+import java.io.Serializable;
 
 /**
  *
  * @author Nicky
  */
-public class Stationery
+public class Stationery implements Serializable
 {
 
     private int stationeryCode;
@@ -96,74 +91,6 @@ public class Stationery
     public void setQuantity(int quantity)
     {
         this.quantity = quantity;
-    }
-
-    public static void AddStationery(int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException
-    {
-        DataHandler.GetInstance().AddStationery(categoryID, description, stock, price, manufactureID);
-    }
-
-    public static void UpdateStationery(int stationeryCode, int categoryID, String description, int stock, double price, int manufactureID) throws SQLException, ClassNotFoundException
-    {
-        DataHandler.GetInstance().UpdateStationery(stationeryCode, categoryID, description, stock, price, manufactureID);
-    }
-
-    public void UpdateStationeryStock(int newStock) throws SQLException, ClassNotFoundException
-    {
-        DataHandler.GetInstance().UpdateStationeryStock(this.stationeryCode, newStock);
-    }
-
-    public static void DeleteStationery(int stationeryCode) throws SQLException, ClassNotFoundException
-    {
-        DataHandler.GetInstance().DeleteStationery(stationeryCode);
-    }
-
-    public static List<Stationery> GetStationery(String description, int categoryID) throws SQLException, ClassNotFoundException
-    {
-        List<Stationery> stationeries = new ArrayList<>();
-
-        ResultSet rs = DataHandler.GetInstance().GetStationery(description, categoryID);
-
-        while (rs.next())
-        {
-            stationeries.add(new Stationery(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getDouble(5), rs.getString(6)));
-        }
-
-        DataHandler.GetInstance().CloseConnection();
-
-        return stationeries;
-    }
-
-    public static List<String> GetStationeryDescriptions() throws SQLException, ClassNotFoundException
-    {
-        List<String> descriptions = new ArrayList<>();
-
-        ResultSet rs = DataHandler.GetInstance().GetStationeryDescriptions();
-
-        while (rs.next())
-        {
-            descriptions.add(rs.getString(1));
-        }
-
-        DataHandler.GetInstance().CloseConnection();
-
-        return descriptions;
-    }
-
-    public static int GetLastStationeryCode() throws ClassNotFoundException, SQLException
-    {
-        int code = 0;
-
-        ResultSet rs = DataHandler.GetInstance().GetLastStationeryCode();
-
-        while (rs.next())
-        {
-            code = rs.getInt(1) + 1;
-        }
-
-        DataHandler.GetInstance().CloseConnection();
-
-        return code;
     }
 
     public Stationery()
