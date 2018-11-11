@@ -290,7 +290,7 @@ public class ManageAccount extends javax.swing.JFrame
     {//GEN-HEADEREND:event_jButton5ActionPerformed
         try
         {
-            StaffMain frame = new StaffMain();
+            StaffMain frame = new StaffMain("");
             frame.setVisible(true);
             this.setVisible(false);
         } catch (RemoteException ex)

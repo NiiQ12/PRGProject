@@ -14,6 +14,7 @@ import java.rmi.registry.Registry;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -25,7 +26,7 @@ public class StaffMain extends javax.swing.JFrame
     /**
      * Creates new form Main
      */
-    public StaffMain() throws RemoteException, NotBoundException
+    public StaffMain(String origin) throws RemoteException, NotBoundException
     {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -33,12 +34,15 @@ public class StaffMain extends javax.swing.JFrame
         Registry r = LocateRegistry.getRegistry("localhost", 420);
         is = (IStaff) r.lookup("Staff");
 
-        try
-        {
-            is.CheckAdminResponses(Staff.loggedInStaffID);
-        } catch (ClassNotFoundException | SQLException ex)
-        {
-            Logger.getLogger(StaffMain.class.getName()).log(Level.SEVERE, null, ex);
+        if (origin.equals("Login"))
+        {            
+            try
+            {
+                is.CheckAdminResponses(Staff.loggedInStaffID);
+            } catch (ClassNotFoundException | SQLException ex)
+            {
+                Logger.getLogger(StaffMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -252,7 +256,7 @@ public class StaffMain extends javax.swing.JFrame
             {
                 try
                 {
-                    new StaffMain().setVisible(true);
+                    new StaffMain("").setVisible(true);
                 } catch (RemoteException ex)
                 {
                     Logger.getLogger(StaffMain.class.getName()).log(Level.SEVERE, null, ex);

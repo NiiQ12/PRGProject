@@ -16,6 +16,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -27,8 +28,8 @@ public class ImpStaff extends UnicastRemoteObject implements IStaff
     public ImpStaff() throws RemoteException
     {
 
-    }   
-    
+    }
+
     @Override
     public ArrayList<Staff> GetStaffFromDatabase(CampusType ct) throws SQLException, ClassNotFoundException, RemoteException
     {
@@ -63,9 +64,9 @@ public class ImpStaff extends UnicastRemoteObject implements IStaff
     }
 
     @Override
-    public void AddNewStaffMember(Staff staff) throws ClassNotFoundException, SQLException, RemoteException
+    public void AddNewStaffMember(Staff staff, String campus) throws ClassNotFoundException, SQLException, RemoteException
     {
-        DataHandler.GetInstance().AddStaff(staff.getId(), staff.getDepartment().getDepartmentID(), staff.getName(), staff.getSurname(), staff.getCellNo(), staff.getEmail(), staff.getAddress().getCity(), staff.getAddress().getSuburb(), staff.getAddress().getStreet(), staff.getAddress().getPort(), staff.getLogin().getUsername(), staff.getLogin().getPassword());
+        DataHandler.GetInstance().AddStaff(staff.getId(), staff.getDepartment().getDepartmentID(), staff.getName(), staff.getSurname(), staff.getCellNo(), staff.getEmail(), staff.getAddress().getCity(), staff.getAddress().getSuburb(), staff.getAddress().getStreet(), staff.getAddress().getPort(), staff.getLogin().getUsername(), staff.getLogin().getPassword(), campus);
     }
 
     @Override
@@ -91,19 +92,43 @@ public class ImpStaff extends UnicastRemoteObject implements IStaff
     {
         ResultSet rs = DataHandler.GetInstance().CheckAdminResponses(staffID);
 
-        JOptionPane.showMessageDialog(null, "Hello");
-        rs.first();
+        List<Integer> requestIDs = new ArrayList<>();
+
         while (rs.next())
         {
+            requestIDs.add(rs.getInt("RequestID"));
+
             if (!rs.getBoolean("accepted"))
             {
-                JOptionPane.showMessageDialog(null, "Request Number: " + rs.getInt("RequestID") + " Has Been Cancelled: " + rs.getString("AdminResponse"));
+                JOptionPane.showMessageDialog(null, "Request Number " + rs.getInt("RequestID") + " Has Been Cancelled: " + rs.getString("AdminResponse"));
             } else
             {
-                JOptionPane.showMessageDialog(null, "Request Number: " + rs.getInt("RequestID") + " Has Been Accepted!: " + rs.getString("AdminResponse"));
+                JOptionPane.showMessageDialog(null, "Request Number " + rs.getInt("RequestID") + " Has Been Accepted!: " + rs.getString("AdminResponse"));
             }
         }
 
+        for (Integer requestID : requestIDs)
+        {
+            DataHandler.GetInstance().UpdateAdminResponse(requestID);
+        }
+
         DataHandler.GetInstance().CloseConnection();
+    }
+
+    @Override
+    public List<String> GetCampuses() throws SQLException, ClassNotFoundException, RemoteException
+    {
+        List<String> campuses = new ArrayList<>();
+
+        ResultSet rs = DataHandler.GetInstance().GetCampuses();
+
+        while (rs.next())
+        {
+            campuses.add(rs.getString(1));
+        }
+
+        DataHandler.GetInstance().CloseConnection();
+
+        return campuses;
     }
 }

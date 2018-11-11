@@ -56,10 +56,12 @@ public class ImpLogin extends UnicastRemoteObject implements ILogin
                     } else
                     {
                         Staff.loggedInStaffID = lst.get(0).toString();
+                        Administrator.loggedInAdminID = "";
                     }
                     break;
                 case Admin:
                     Administrator.loggedInAdminID = lst.get(0).toString();
+                    Staff.loggedInStaffID = "";
                     break;
             }
         }

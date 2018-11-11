@@ -285,7 +285,7 @@ public class ManageRequests_Staff extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnBackActionPerformed
         try
         {
-            StaffMain frame = new StaffMain();
+            StaffMain frame = new StaffMain("");
             frame.setVisible(true);
             this.setVisible(false);
         } catch (RemoteException ex)

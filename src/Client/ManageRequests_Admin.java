@@ -38,6 +38,9 @@ public class ManageRequests_Admin extends javax.swing.JFrame
         initComponents();
         this.setLocationRelativeTo(null);
 
+        btnAcceptRequest.setEnabled(false);
+        btnRejectRequest.setEnabled(false);
+
         requests = new ArrayList<>();
         requestDetails = new ArrayList<>();
 
@@ -298,45 +301,50 @@ public class ManageRequests_Admin extends javax.swing.JFrame
 
     private void btnRejectRequestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnRejectRequestActionPerformed
     {//GEN-HEADEREND:event_btnRejectRequestActionPerformed
-        try
+        if (tblRequests.getSelectedRow() >= 0)
         {
-            String message = JOptionPane.showInputDialog("Reason For Cancellation?");
-
-            ir.RejectRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()), message);
-
-            Request request = new Request();
-            List<RequestDetail> newRequestDetails = new ArrayList<>();
-
-            for (int i = 0; i < requests.size(); i++)
+            try
             {
-                if (requests.get(i).getRequestID() == (Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString())))
+                String message = JOptionPane.showInputDialog("Reason For Cancellation?");
+
+                ir.RejectRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()), message);
+
+                Request request = new Request();
+                List<RequestDetail> newRequestDetails = new ArrayList<>();
+
+                for (int i = 0; i < requests.size(); i++)
                 {
-                    request = requests.get(i);
-
-                    for (int j = 0; j < request.getRequestDetails().size(); j++)
+                    if (requests.get(i).getRequestID() == (Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString())))
                     {
-                        if (request.getRequestDetails().get(j).getId() == (Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString())))
+                        request = requests.get(i);
+
+                        for (int j = 0; j < request.getRequestDetails().size(); j++)
                         {
-                            newRequestDetails.add(request.getRequestDetails().get(j));
+                            if (request.getRequestDetails().get(j).getId() == (Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString())))
+                            {
+                                newRequestDetails.add(request.getRequestDetails().get(j));
+                            }
                         }
+                        break;
                     }
-                    break;
                 }
+
+                request.setRequestDetails(newRequestDetails);
+
+                ir.RefillCancelledRequestQuantities(request);
+
+                btnAcceptRequest.setEnabled(false);
+                btnRejectRequest.setEnabled(false);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex)
+            {
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-            request.setRequestDetails(newRequestDetails);
-
-            ir.RefillCancelledRequestQuantities(request);
-
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex)
-        {
-            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnRejectRequestActionPerformed
 
@@ -441,21 +449,27 @@ public class ManageRequests_Admin extends javax.swing.JFrame
 
     private void btnAcceptRequestActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_btnAcceptRequestActionPerformed
     {//GEN-HEADEREND:event_btnAcceptRequestActionPerformed
-        try
+        if (tblRequests.getSelectedRow() >= 0)
         {
-            String message = JOptionPane.showInputDialog("Feedback Regarding Accepting?");
-            int days = Integer.parseInt(JOptionPane.showInputDialog("How Many Days Will The Order Take?"));
+            try
+            {
+                String message = JOptionPane.showInputDialog("Feedback Regarding Accepting?");
+                int days = Integer.parseInt(JOptionPane.showInputDialog("How Many Days Will The Order Take?"));
 
-            ir.AcceptRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()), message, days);
-        } catch (SQLException ex)
-        {
-            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex)
-        {
-            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex)
-        {
-            Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+                ir.AcceptRequest(Integer.parseInt(tblRequests.getValueAt(rowIndex, 0).toString()), message, days);
+
+                btnAcceptRequest.setEnabled(false);
+                btnRejectRequest.setEnabled(false);
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex)
+            {
+                Logger.getLogger(ManageRequests_Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnAcceptRequestActionPerformed
 

@@ -303,7 +303,7 @@ public class RequestStationery extends javax.swing.JFrame
     {//GEN-HEADEREND:event_btnBackActionPerformed
         try
         {
-            StaffMain frame = new StaffMain();
+            StaffMain frame = new StaffMain("");
             frame.setVisible(true);
             this.setVisible(false);
         } catch (RemoteException ex)
@@ -448,7 +448,7 @@ public class RequestStationery extends javax.swing.JFrame
             {
                 requestDetails.add(new RequestDetail(stationery.getStationeryCode(), stationery.getQuantity()));
             }
-
+            
             Request request = new Request(Staff.loggedInStaffID, requestDetails);
 
             try
@@ -457,7 +457,7 @@ public class RequestStationery extends javax.swing.JFrame
 
                 JOptionPane.showMessageDialog(null, "Request submitted successfully!");
 
-                StaffMain frame = new StaffMain();
+                StaffMain frame = new StaffMain("");
                 frame.setVisible(true);
                 this.setVisible(false);
             } catch (SQLException ex)

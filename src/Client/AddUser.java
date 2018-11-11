@@ -63,25 +63,16 @@ public class AddUser extends javax.swing.JFrame
     {
 
         txtSurname = new javax.swing.JTextField();
-        txtSuburb = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtCity = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtPort = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtCellNo = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtName = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        txtStreet = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
         txtID = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         btnAddUser = new javax.swing.JButton();
@@ -92,6 +83,17 @@ public class AddUser extends javax.swing.JFrame
         jLabel17 = new javax.swing.JLabel();
         btnBack = new javax.swing.JButton();
         panel = new javax.swing.JPanel();
+        txtStreet = new javax.swing.JTextField();
+        txtSuburb = new javax.swing.JTextField();
+        txtPort = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        txtCity = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        cmbCampus = new javax.swing.JComboBox<>();
         jLabel14 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -110,60 +112,48 @@ public class AddUser extends javax.swing.JFrame
 
         txtSurname.setName("txtSurname"); // NOI18N
         getContentPane().add(txtSurname);
-        txtSurname.setBounds(160, 220, 150, 20);
-
-        txtSuburb.setName("txtSuburb"); // NOI18N
-        getContentPane().add(txtSuburb);
-        txtSuburb.setBounds(160, 360, 150, 20);
+        txtSurname.setBounds(160, 210, 150, 20);
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setLabelFor(txtID);
         jLabel1.setText("ID NUMBER");
         jLabel1.setName(""); // NOI18N
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(70, 160, 90, 20);
+        jLabel1.setBounds(70, 150, 90, 20);
 
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("NAME");
         jLabel2.setName(""); // NOI18N
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(70, 190, 90, 20);
-
-        txtCity.setName("txtCity"); // NOI18N
-        getContentPane().add(txtCity);
-        txtCity.setBounds(160, 330, 150, 20);
+        jLabel2.setBounds(70, 180, 90, 20);
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("SURNAME");
         jLabel3.setName(""); // NOI18N
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(70, 220, 90, 20);
-
-        txtPort.setName("txtPort"); // NOI18N
-        getContentPane().add(txtPort);
-        txtPort.setBounds(430, 360, 150, 20);
+        jLabel3.setBounds(70, 210, 90, 20);
 
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
         jLabel4.setText("DEPARTMENT");
         jLabel4.setName(""); // NOI18N
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(70, 250, 90, 20);
+        jLabel4.setBounds(70, 240, 90, 20);
 
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("CELL NUM");
         jLabel5.setName(""); // NOI18N
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(340, 160, 90, 20);
+        jLabel5.setBounds(340, 150, 90, 20);
 
         txtCellNo.setName("txtCellNo"); // NOI18N
         getContentPane().add(txtCellNo);
-        txtCellNo.setBounds(430, 160, 150, 20);
+        txtCellNo.setBounds(430, 150, 150, 20);
 
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("EMAIL");
         jLabel6.setName(""); // NOI18N
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(340, 190, 90, 20);
+        jLabel6.setBounds(340, 180, 90, 20);
 
         jLabel7.setBackground(new java.awt.Color(0, 0, 0));
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
@@ -171,55 +161,19 @@ public class AddUser extends javax.swing.JFrame
         jLabel7.setText("STAFF DETAILS");
         jLabel7.setOpaque(true);
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(70, 120, 512, 30);
+        jLabel7.setBounds(70, 110, 512, 30);
 
         txtName.setName("txtName"); // NOI18N
         getContentPane().add(txtName);
-        txtName.setBounds(160, 190, 150, 20);
-
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("STREET");
-        jLabel8.setName(""); // NOI18N
-        getContentPane().add(jLabel8);
-        jLabel8.setBounds(340, 330, 90, 20);
-
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("PORT");
-        jLabel9.setName(""); // NOI18N
-        getContentPane().add(jLabel9);
-        jLabel9.setBounds(340, 360, 90, 20);
-
-        txtStreet.setName("txtStreet"); // NOI18N
-        getContentPane().add(txtStreet);
-        txtStreet.setBounds(430, 330, 150, 20);
+        txtName.setBounds(160, 180, 150, 20);
 
         txtEmail.setName("txtEmail"); // NOI18N
         getContentPane().add(txtEmail);
-        txtEmail.setBounds(430, 190, 150, 20);
-
-        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel11.setText("ADDRESS DETAILS");
-        jLabel11.setOpaque(true);
-        getContentPane().add(jLabel11);
-        jLabel11.setBounds(70, 290, 512, 30);
-
-        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel12.setText("CITY");
-        jLabel12.setName(""); // NOI18N
-        getContentPane().add(jLabel12);
-        jLabel12.setBounds(70, 330, 90, 20);
-
-        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel13.setText("SUBURB");
-        jLabel13.setName(""); // NOI18N
-        getContentPane().add(jLabel13);
-        jLabel13.setBounds(70, 360, 90, 20);
+        txtEmail.setBounds(430, 180, 150, 20);
 
         txtID.setName("txtID"); // NOI18N
         getContentPane().add(txtID);
-        txtID.setBounds(160, 160, 150, 20);
+        txtID.setBounds(160, 150, 150, 20);
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
@@ -241,27 +195,27 @@ public class AddUser extends javax.swing.JFrame
 
         cmbDepartment.setName("cmbDepartment"); // NOI18N
         getContentPane().add(cmbDepartment);
-        cmbDepartment.setBounds(160, 250, 150, 20);
+        cmbDepartment.setBounds(160, 240, 150, 20);
 
         txtUsername.setName("txtCity"); // NOI18N
         getContentPane().add(txtUsername);
-        txtUsername.setBounds(430, 220, 150, 20);
+        txtUsername.setBounds(430, 210, 150, 20);
 
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("PASSWORD");
         jLabel15.setName(""); // NOI18N
         getContentPane().add(jLabel15);
-        jLabel15.setBounds(340, 250, 90, 20);
+        jLabel15.setBounds(340, 240, 90, 20);
 
         txtPassword.setName("txtStreet"); // NOI18N
         getContentPane().add(txtPassword);
-        txtPassword.setBounds(430, 250, 150, 20);
+        txtPassword.setBounds(430, 240, 150, 20);
 
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("USERNAME");
         jLabel17.setName(""); // NOI18N
         getContentPane().add(jLabel17);
-        jLabel17.setBounds(340, 220, 90, 20);
+        jLabel17.setBounds(340, 210, 90, 20);
 
         btnBack.setText("BACK");
         btnBack.setName("btnBack"); // NOI18N
@@ -274,6 +228,67 @@ public class AddUser extends javax.swing.JFrame
         });
         getContentPane().add(btnBack);
         btnBack.setBounds(530, 20, 90, 30);
+
+        panel.setLayout(null);
+
+        txtStreet.setName("txtStreet"); // NOI18N
+        panel.add(txtStreet);
+        txtStreet.setBounds(380, 240, 150, 20);
+
+        txtSuburb.setName("txtSuburb"); // NOI18N
+        panel.add(txtSuburb);
+        txtSuburb.setBounds(110, 270, 150, 20);
+
+        txtPort.setName("txtPort"); // NOI18N
+        panel.add(txtPort);
+        txtPort.setBounds(380, 270, 150, 20);
+
+        jLabel11.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel11.setText("ADDRESS DETAILS");
+        jLabel11.setOpaque(true);
+        panel.add(jLabel11);
+        jLabel11.setBounds(20, 200, 512, 30);
+
+        jLabel12.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel12.setText("CITY");
+        jLabel12.setName(""); // NOI18N
+        panel.add(jLabel12);
+        jLabel12.setBounds(20, 240, 90, 20);
+
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setText("PORT");
+        jLabel9.setName(""); // NOI18N
+        panel.add(jLabel9);
+        jLabel9.setBounds(290, 270, 90, 20);
+
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("STREET");
+        jLabel8.setName(""); // NOI18N
+        panel.add(jLabel8);
+        jLabel8.setBounds(290, 240, 90, 20);
+
+        txtCity.setName("txtCity"); // NOI18N
+        panel.add(txtCity);
+        txtCity.setBounds(110, 240, 150, 20);
+
+        jLabel13.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel13.setText("SUBURB");
+        jLabel13.setName(""); // NOI18N
+        panel.add(jLabel13);
+        jLabel13.setBounds(20, 270, 90, 20);
+
+        jLabel16.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel16.setText("CAMPUS");
+        jLabel16.setName(""); // NOI18N
+        panel.add(jLabel16);
+        jLabel16.setBounds(20, 170, 90, 20);
+
+        cmbCampus.setName("cmbDepartment"); // NOI18N
+        panel.add(cmbCampus);
+        cmbCampus.setBounds(110, 170, 150, 20);
+
         getContentPane().add(panel);
         panel.setBounds(50, 100, 550, 300);
 
@@ -373,7 +388,7 @@ public class AddUser extends javax.swing.JFrame
 
             try
             {
-                is.AddNewStaffMember(staff);
+                is.AddNewStaffMember(staff, cmbCampus.getSelectedItem().toString());
             } catch (ClassNotFoundException ex)
             {
                 Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
@@ -421,6 +436,28 @@ public class AddUser extends javax.swing.JFrame
         } catch (ClassNotFoundException ex)
         {
             Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if (cmbCampus.getItemCount() == 0)
+        {
+            try
+            {
+                List<String> campuses = is.GetCampuses();
+
+                for (int i = 0; i < campuses.size(); i++)
+                {
+                    cmbCampus.addItem(campuses.get(i));
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex)
+            {
+                Logger.getLogger(AddUser.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (RemoteException ex)
+            {
+                Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_formWindowActivated
 
@@ -482,6 +519,7 @@ public class AddUser extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddUser;
     private javax.swing.JButton btnBack;
+    private javax.swing.JComboBox<String> cmbCampus;
     private javax.swing.JComboBox<String> cmbDepartment;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -490,6 +528,7 @@ public class AddUser extends javax.swing.JFrame
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

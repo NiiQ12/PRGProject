@@ -151,19 +151,24 @@ public class Login extends javax.swing.JFrame
                 {
                     case Staff:
                         Staff.loggedInStaffID = lst.get(0).toString();
-                        
-                        StaffMain sFrame = new StaffMain();
-                        sFrame.setVisible(true);
-                        this.setVisible(false);
+
+                        if (lst.get(2).equals(true))
+                        {
+                            StaffMain sFrame = new StaffMain("Login");
+                            sFrame.setVisible(true);
+                            this.setVisible(false);
+                        }
+
                         break;
                     case Admin:
                         Administrator.loggedInAdminID = lst.get(0).toString();
-                        
+
                         AdminMain aFrame = new AdminMain();
                         aFrame.setVisible(true);
                         this.setVisible(false);
                         break;
                 }
+
             }
         } catch (SQLException ex)
         {

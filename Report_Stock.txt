@@ -6,21 +6,21 @@ CATEGORY : Pens
 ---------------------------------------------------------------------------------
 CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
 ---------------------------------------------------------------------------------
-1         Bic Blue 4 pack               16        $   5.00  Pens4U
-2         Bic Black 4 pack              11        $   7.00  Pens4U
+1         Bic Blue 4 pack               18        $   5.00  Pens4U
+2         Bic Black 4 pack              13        $   7.00  Pens4U
 
 CATEGORY : Pencils
 ---------------------------------------------------------------------------------
 CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
 ---------------------------------------------------------------------------------
-3         HB 2B X 2                     5         $   3.00  Pencils Unite
-4         Staedtler HB X 4              1         $  10.00  Pencils Unite
+3         HB 2B X 2                     10        $   3.00  Pencils Unite
+4         Staedtler HB X 4              2         $  10.00  Pencils Unite
 
 CATEGORY : Erasers
 ---------------------------------------------------------------------------------
 CODE      DESCRIPTION                   STOCK     PRICE     MANUFACTURER
 ---------------------------------------------------------------------------------
-5         Mon Ami                       26        $   3.00  Problem Erasers
+5         Mon Ami                       24        $   3.00  Problem Erasers
 6         Staedtler 7 piece             5         $  15.00  Problem Erasers
 
 CATEGORY : Highlighters

@@ -220,7 +220,7 @@ public class DataHandler
 
         return rs;
     }
-    
+
     public ResultSet GetStockOfStationery(int stationeryCode) throws ClassNotFoundException, SQLException
     {
         ConnectToDatabase();
@@ -259,7 +259,7 @@ public class DataHandler
     // </editor-fold>
 
     // <editor-fold desc="Staff">
-    public void AddStaff(String staffID, int departmentID, String name, String surname, String cellNo, String email, String city, String suburb, String street, String port, String username, String password) throws ClassNotFoundException, SQLException // REGISTER
+    public void AddStaff(String staffID, int departmentID, String name, String surname, String cellNo, String email, String city, String suburb, String street, String port, String username, String password, String campus) throws ClassNotFoundException, SQLException // REGISTER
     {
         ConnectToDatabase();
 
@@ -309,7 +309,7 @@ public class DataHandler
                 }
             }
 
-            pst = con.prepareStatement("INSERT INTO staff VALUES(?, ?, ?, ?, ?, ?, ?, ?)");
+            pst = con.prepareStatement("INSERT INTO staff (StaffID, DepartmentID, Name, Surname, CellNo, Email, AddressID, LoginID, CampusID, Registered) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             pst.setString(1, staffID);
             pst.setInt(2, departmentID);
             pst.setString(3, name);
@@ -318,6 +318,17 @@ public class DataHandler
             pst.setString(6, email);
             pst.setInt(7, addressID);
             pst.setInt(8, loginID);
+
+            if (campus.equals("Pretoria"))
+            {
+                pst.setInt(9, 1);
+            } else
+            {
+                pst.setInt(9, 2);
+            }
+
+            pst.setInt(10, 0);
+
             pst.executeUpdate();
 
             JOptionPane.showMessageDialog(null, "Staff member successfully added!", "Success!", JOptionPane.INFORMATION_MESSAGE);
@@ -422,11 +433,22 @@ public class DataHandler
         st = con.createStatement();
         rs = st.executeQuery("SELECT RequestID, accepted, AdminResponse, AdminResponseReceived FROM request WHERE StaffID = '" + staffID + "' AND AdminResponseReceived = 0");
 
-        while (rs.next())
-        {
-            pst = con.prepareStatement("UPDATE request SET AdminResponseReceived = 1 WHERE RequestID = '"+ rs.getInt("RequestID") +"'");
-            pst.executeUpdate();
-        }
+        return rs;
+    }
+
+    public void UpdateAdminResponse(int requestID) throws ClassNotFoundException, SQLException
+    {
+        pst = con.prepareStatement("UPDATE request SET AdminResponseReceived = 1 WHERE RequestID = '" + requestID + "'");
+        pst.executeUpdate();
+    }
+
+    public ResultSet GetCampuses() throws SQLException, ClassNotFoundException
+    {
+        ConnectToDatabase();
+
+        st = con.createStatement();
+        rs = st.executeQuery("SELECT Location FROM campus INNER JOIN staff ON campus.ID = staff.CampusID");
+
         return rs;
     }
     // </editor-fold>
@@ -448,11 +470,10 @@ public class DataHandler
     {
         ConnectToDatabase();
 
-        pst = con.prepareStatement("INSERT INTO request(StaffID, RequestDate, AdminResponse, AdminResponseReceived) VALUES(?,?,?,?)");
+        pst = con.prepareStatement("INSERT INTO request(StaffID, RequestDate, AdminResponse) VALUES(?,?,?)");
         pst.setString(1, staffID);
         pst.setDate(2, requestDate);
         pst.setString(3, "");
-        pst.setBoolean(4, false);
         pst.executeUpdate();
     }
 
@@ -522,7 +543,7 @@ public class DataHandler
         switch (rt)
         {
             case All:
-                if (Staff.loggedInStaffID.equals(""))
+                if (!Administrator.loggedInAdminID.equals(""))
                 {
                     rs = st.executeQuery("SELECT * FROM request");
                 } else
@@ -531,7 +552,7 @@ public class DataHandler
                 }
                 break;
             case Completed:
-                if (Staff.loggedInStaffID.equals(""))
+                if (!Administrator.loggedInAdminID.equals(""))
                 {
                     rs = st.executeQuery("SELECT * FROM request WHERE accepted IS NOT NULL");
                 } else
@@ -540,7 +561,7 @@ public class DataHandler
                 }
                 break;
             case Uncompleted:
-                if (Staff.loggedInStaffID.equals(""))
+                if (!Administrator.loggedInAdminID.equals(""))
                 {
                     rs = st.executeQuery("SELECT * FROM request WHERE AdministratorID IS NULL AND accepted IS NULL AND ReceiveDate IS NULL");
                 } else
